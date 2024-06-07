@@ -1,0 +1,30 @@
+[tool.poetry]
+name = "realtime-examples"
+version = "0.1.0"
+description = ""
+authors = ["Janak <janak2@users.noreply.github.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.9 <3.12"
+realtime-client = { git = "https://github.com/xAlpha8/realtime-client.git" }
+#realtime-client = { path = "/Users/janakagrawal/Documents/GitHub/realtime-client" }
+
+[tool.poetry.group.plugins]
+optional = true
+
+[tool.poetry.group.plugins.dependencies]
+mediapipe = "^0.10.14"
+fal-client = "^0.4.0"
+elevenlabs = "^1.2.0"
+fireworks-ai = "^0.14.0"
+google-generativeai = "^0.5.3"
+openai = "^1.24.0"
+pillow = "^10.3.0"
+torch = "^2.3.0"
+torchaudio = "^2.3.0"
+opencv-python-headless = "^4.9.0.80"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
