@@ -146,7 +146,7 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML =
 
 setupRealtime(document.querySelector<HTMLDivElement>("#realtime-container"), {
   functionUrl: "",
-  offerUrl:`${import.meta.env.VITE_BACKEND_URL}/offer`,
+  offerUrl:`http://localhost:8080/offer`,
   isDataEnabled: false,
   dataParameters: { ordered: true },
   isVideoEnabled: false,
