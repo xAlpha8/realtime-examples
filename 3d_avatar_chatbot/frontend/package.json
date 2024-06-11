@@ -9,11 +9,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@adaptai/realtime-react": "^0.0.2",
+    "@adaptai/realtime-react": "^0.0.6",
     "@react-three/drei": "9.75.0",
     "@react-three/fiber": "8.13.3",
     "@react-three/xr": "^5.7.1",
     "@types/three": "0.152.1",
+    "ldrs": "^1.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "three": "0.153.0",

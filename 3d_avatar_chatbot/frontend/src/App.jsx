@@ -3,36 +3,23 @@ import { Canvas } from "@react-three/fiber";
 import { Experience } from "./components/Experience";
 import { UI } from "./components/UI";
 import { useState, useRef, useEffect, useContext } from "react";
-import { useConfig, WebRTCConnectionManager } from "@adaptai/realtime-react";
-import { RtVideo, RtAudio, RtChat } from "@adaptai/realtime-react";
+import { useConfig, useRealtime } from "@adaptai/realtime-react";
+import { RtAudio } from "@adaptai/realtime-react";
 import { ChatContext } from "./context";
+import "ldrs/square";
 
 function RealtimeComponent({ config }) {
-  const videoRef = useRef(null);
-  const audioRef = useRef(null);
-  const [isConnected, setIsConnected] = useState(false);
-  const { setMessages } = useContext(ChatContext)
+  const { isConnected, connection } = useRealtime(config);
+  const { setMessages } = useContext(ChatContext);
 
   const chat = async (message) => {
     setMessages((prevMessages) => [...prevMessages, message]);
-  }
+  };
 
   useEffect(() => {
-    WebRTCConnectionManager.setConfig(config);
-    const onStateChange = (state) => {
-      if (state == "connected") {
-        setIsConnected(true);
-      } else {
-        setIsConnected(false);
-      }
-    };
-    const conn = WebRTCConnectionManager.get();
-    conn.connect();
-    conn.on("statechange", onStateChange);
-
+    connection.connect();
     return () => {
-      conn.off("statechange", onStateChange);
-      conn.disconnect();
+      connection.disconnect();
     };
   }, []);
 
@@ -41,33 +28,33 @@ function RealtimeComponent({ config }) {
       const msg = JSON.parse(evt.data);
       console.log("onMessage", msg);
       chat(msg);
-    }
+    };
     if (isConnected) {
-      const conn = WebRTCConnectionManager.get()
-      const tracks = conn.tracks
-      tracks.forEach((track) => {
-        if (videoRef.current && track.kind == "video") {
-          videoRef.current.srcObject = track.stream
-        } else if (audioRef.current && track.kind == "audio") {
-          audioRef.current.srcObject = track.stream
-        }
-      })
-      conn.on("message", onMessage)
+      connection.on("message", onMessage);
     }
-    return () => {
-      if (videoRef.current) {
-          videoRef.current.srcObject = null
-      }
-      if (audioRef.current) {
-          audioRef.current.srcObject = null
-      }
-    }
-  }, [isConnected])
+  }, [isConnected]);
 
   return (
-    <div>
-      <RtAudio ref={audioRef} />
-    </div>
+    <>
+    {!isConnected && (
+        <div className="fixed top-0 left-0 inset-0 bg-black bg-opacity-50 z-[9999]">
+          <div className="flex flex-col items-center h-screen">
+            <l-square
+              size="160"
+              stroke="5"
+              stroke-length="0.25"
+              bg-opacity="0.1"
+              speed="2"
+              color="#ddd"
+            ></l-square>
+            <div className="text-white text-3xl m-5">Connecting</div>
+          </div>
+        </div>
+    )}
+      <div>
+        <RtAudio rtConnection={connection} />
+      </div>
+    </>
   );
 }
 
@@ -75,7 +62,7 @@ function App() {
   const [config, setConfig] = useState(null);
   const configDefault = {
     functionUrl: "",
-    offerUrl: `http://localhost:8080/offer`,
+    offerUrl: "",
     isDataEnabled: true,
     dataParameters: { ordered: true },
     isVideoEnabled: false,
@@ -91,9 +78,9 @@ function App() {
   };
 
   const { options, setters, values, dump } = useConfig(configDefault);
-  const { audioOptions, videoOptions } = options;
-  const { setAudioInput, setVideoInput, setOfferUrl } = setters;
-  const { audioInput, videoInput, offerUrl } = values;
+  const { audioOptions } = options;
+  const { setAudioInput, setFunctionUrl } = setters;
+  const { audioInput, functionUrl } = values;
 
   const dumpConfigAndRun = () => {
     const configDump = dump();
@@ -102,7 +89,7 @@ function App() {
 
   return (
     <>
-        <div className="self-start backdrop-blur-md bg-white bg-opacity-50 p-4 rounded-lg">
+      <div className="self-start backdrop-blur-md bg-white bg-opacity-50 p-4 rounded-lg">
         <>
           <div>
             <div>
@@ -119,20 +106,25 @@ function App() {
               </select>
             </div>
             <div>
-              <h2>Offer URL:</h2>
+              <h2>Function URL:</h2>
               <input
                 type="text"
-                value={offerUrl}
-                onChange={(e) => setOfferUrl(e.target.value)}
-                placeholder="Enter Offer URL"
+                value={functionUrl}
+                onChange={(e) => setFunctionUrl(e.target.value)}
+                placeholder="Enter Function URL"
               />
             </div>
             <div>
-              <button className={`bg-pink-500 hover:bg-pink-600 text-white p-4 px-10 font-semibold uppercase rounded-md opacity-30`} onClick={dumpConfigAndRun}>Run</button>
+              <button
+                className={`bg-pink-500 hover:bg-pink-600 text-white p-4 px-10 font-semibold uppercase rounded-md opacity-30`}
+                onClick={dumpConfigAndRun}
+              >
+                Run
+              </button>
             </div>
           </div>
           <div>{config && <RealtimeComponent config={config} />}</div>
-      </>
+        </>
       </div>
       <Loader />
       <UI />

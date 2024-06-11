@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@adaptai/realtime-react':
-    specifier: ^0.0.2
-    version: 0.0.2(react-dom@18.3.1)(react@18.3.1)
+    specifier: ^0.0.6
+    version: 0.0.6(react-dom@18.3.1)(react@18.3.1)
   '@react-three/drei':
     specifier: 9.75.0
     version: 9.75.0(@react-three/fiber@8.13.3)(@types/three@0.152.1)(react-dom@18.3.1)(react@18.3.1)(three@0.153.0)
@@ -20,6 +20,9 @@ dependencies:
   '@types/three':
     specifier: 0.152.1
     version: 0.152.1
+  ldrs:
+    specifier: ^1.0.2
+    version: 1.0.2
   react:
     specifier: ^18.2.0
     version: 18.3.1
@@ -58,12 +61,13 @@ devDependencies:
 
 packages:
 
-  /@adaptai/realtime-react@0.0.2(react-dom@18.3.1)(react@18.3.1):
-    resolution: {integrity: sha512-R3wBQ/6Ql6CWg6pjEtRozd+XJHVm3NBxAZn/U26g/35DOHU0YNb71Xpo2DRPa2GirWcFGRGrde7Fujq5m3T/ig==}
+  /@adaptai/realtime-react@0.0.6(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-feDz0vpaaIwJfRLScH4Xmr9a5DF9qv3bMmAU1swafTr1Y2/72wHauPKyz7pPYKtewK8bIMSFvwduWuNGWADPsQ==}
     peerDependencies:
       react: ^18.2.0
       react-dom: ^18.2.0
     dependencies:
+      audiomotion-analyzer: 4.5.0
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       zod: 3.23.8
@@ -852,6 +856,10 @@ packages:
     resolution: {integrity: sha512-PYjyFOLKQ9y57JvQ6QLo8dAgNqswh8M1RMJYdQduT6xbWSgK36P/Z/v+p888pM69jMMfS8Xd8F6I1kQ/I9HUGg==}
     dev: true
 
+  /audiomotion-analyzer@4.5.0:
+    resolution: {integrity: sha512-qnmB8TSbrxYkTbFgsQeeym0Z/suQx4c0jFg9Yh5+gaPw6J4AFLdfFpagdnDbtNEsj6K7BntgsC3bkdut5rxozg==}
+    dev: false
+
   /autoprefixer@10.4.19(postcss@8.4.38):
     resolution: {integrity: sha512-BaENR2+zBZ8xXhM4pUaKUxlVdxZ0EZhjvbopwnXmxRUfqDmwSpC2lAi/QXvx7NRdPCo1WKEcEF6mV64si1z4Ew==}
     engines: {node: ^10 || ^12 || >=14}
@@ -1266,6 +1274,10 @@ packages:
     engines: {node: '>=6'}
     hasBin: true
     dev: true
+
+  /ldrs@1.0.2:
+    resolution: {integrity: sha512-sYJmivdkIiHrUEqTrEWccBoLdaENpzbzkABI5rk8rRxTXrg9i2xVuDvUUuhOhJY3RmQyaoxs046pM1DCRdcIpg==}
+    dev: false
 
   /lil-gui@0.17.0:
     resolution: {integrity: sha512-MVBHmgY+uEbmJNApAaPbtvNh1RCAeMnKym82SBjtp5rODTYKWtM+MXHCifLe2H2Ti1HuBGBtK/5SyG4ShQ3pUQ==}
