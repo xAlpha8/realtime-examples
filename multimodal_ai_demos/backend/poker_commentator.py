@@ -65,3 +65,7 @@ class PokerCommentator:
         await self.llm_node.close()
         await self.token_aggregator_node.close()
         await self.tts_node.close()
+
+if __name__ == "__main__":
+    asyncio.run(PokerCommentator())
+

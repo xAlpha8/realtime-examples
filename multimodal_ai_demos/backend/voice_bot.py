@@ -9,7 +9,7 @@ from realtime.plugins.eleven_labs_tts import ElevenLabsTTS
 from realtime.plugins.fireworks_llm import FireworksLLM
 from realtime.plugins.silero_vad import SileroVAD
 from realtime.plugins.token_aggregator import TokenAggregator
-from realtime.streams import AudioStream, VideoStream, Stream, TextStream, BytesStream
+from realtime.streams import AudioStream, VideoStream, Stream, TextStream, ByteStream
 from realtime.plugins.audio_convertor import AudioConverter
 
 logging.basicConfig(level=logging.INFO)
@@ -58,13 +58,11 @@ class VoiceBot:
         vad_output_queue: TextStream = await self.vad_node.run(audio_input_queue_copy)
         llm_token_stream: TextStream
         chat_history_stream: TextStream
-        llm_token_stream, chat_history_stream = await self.llm_node.run(
-            deepgram_stream, asyncio.Queue()
-        )
+        llm_token_stream, chat_history_stream = await self.llm_node.run(deepgram_stream)
         token_aggregator_stream: TextStream = await self.token_aggregator_node.run(
             llm_token_stream
         )
-        tts_stream: BytesStream = await self.tts_node.run(token_aggregator_stream)
+        tts_stream: ByteStream = await self.tts_node.run(token_aggregator_stream)
         audio_stream: AudioStream = await self.audio_convertor_node.run(tts_stream)
 
         # Set the interrupts for the services
@@ -72,7 +70,6 @@ class VoiceBot:
         await self.llm_node.set_interrupt(vad_output_queue)
         await self.token_aggregator_node.set_interrupt(await vad_output_queue.clone())
         await self.tts_node.set_interrupt(await vad_output_queue.clone())
-        await self.audio_convertor_node.set_interrupt(await vad_output_queue.clone())
 
         return (audio_stream, chat_history_stream)
 
@@ -87,3 +84,8 @@ class VoiceBot:
         await self.tts_node.close()
         await self.vad_node.close()
         await self.audio_convertor_node.close()
+
+
+if __name__ == "__main__":
+    asyncio.run(VoiceBot())
+

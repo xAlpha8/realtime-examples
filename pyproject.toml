@@ -7,8 +7,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = ">=3.9 <3.12"
-realtime-client = { git = "https://github.com/xAlpha8/realtime-client.git" }
-#realtime-client = { path = "/Users/janakagrawal/Documents/GitHub/realtime-client" }
+realtime-client = {extras = ["plugins"], version = "^0.1.101"}
 
 [tool.poetry.group.plugins]
 optional = true

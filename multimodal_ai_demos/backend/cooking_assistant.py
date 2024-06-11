@@ -72,3 +72,8 @@ class CookingAssistant:
         await self.elevenlabs_node.close()
         await self.silero_vad_node.close()
         await self.audio_convertor_node.close()
+
+
+if __name__ == "__main__":
+    asyncio.run(CookingAssistant())
+
