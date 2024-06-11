@@ -126,8 +126,24 @@ async function setupInputDeviceSelect({
   });
 }
 
-function delay(ms: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, ms));
+async function delay (delayInms: number) {
+  return new Promise(resolve => setTimeout(resolve, delayInms));
+};
+
+async function retryableFetch(url: string | URL, params: RequestInit, attempts: number) {
+  let mult = 1
+  for (let i = 0; i < attempts; ++i) {
+    try {
+      let res = await fetch(url, params)
+      return res
+    } catch (err) {
+      await delay(mult * 1000)
+      mult *= 2
+      if (i == attempts - 1) {
+        throw err
+      }
+    }
+  }
 }
 
 async function negotiate(pc: RTCPeerConnection, config: Config) {
@@ -186,7 +202,7 @@ async function negotiate(pc: RTCPeerConnection, config: Config) {
       }
 
       console.log(offer.sdp);
-      return fetch(offerUrl, {
+      return retryableFetch(offerUrl, {
         body: JSON.stringify({
           sdp: offer.sdp,
           type: offer.type,
@@ -196,7 +212,7 @@ async function negotiate(pc: RTCPeerConnection, config: Config) {
           "Content-Type": "application/json",
         },
         method: "POST",
-      })
+      }, 4)
     })
     .then((response) => {
       return response?.json();
