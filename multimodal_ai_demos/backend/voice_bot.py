@@ -87,3 +87,8 @@ class VoiceBot:
         await self.tts_node.close()
         await self.vad_node.close()
         await self.audio_convertor_node.close()
+
+
+if __name__ == "__main__":
+    asyncio.run(VoiceBot())
+
