@@ -11,12 +11,13 @@ from realtime.plugins.token_aggregator import TokenAggregator
 from realtime.plugins.deepgram_stt import DeepgramSTT
 from realtime.plugins.fireworks_llm import FireworksLLM
 from realtime.plugins.audio_convertor import AudioConverter
-from realtime.plugins.lip_sync import LipSync
 from realtime.streams import AudioStream, VideoStream, Stream, TextStream, ByteStream
 from realtime.ops.combine_latest import combine_latest
 from realtime.ops.map import map
 from realtime.ops.unzip_array import unzip_array
 from realtime.ops.join import join
+from realtime.ops.merge import merge
+from realtime.plugins.azure_tts import AzureTTS
 
 
 @realtime.App()
@@ -34,12 +35,7 @@ class Chatbot:
             stream=False,
             model="accounts/fireworks/models/llama-v3-70b-instruct",
         )
-        self.lip_sync_node = LipSync(
-            rhubarb_path="/Users/janakagrawal/Documents/GitHub/realtime-examples/3d_avatar_chatbot/backend/rhubarb/rhubarb"
-        )
-        self.tts_node = ElevenLabsTTS(
-            optimize_streaming_latency=3, voice_id="iF9Lv1Pii7eCFPy5XZlZ", stream=False
-        )
+        self.tts_node = AzureTTS(stream=False)
         self.audio_convertor_node = AudioConverter()
 
     @realtime.streaming_endpoint()
@@ -50,31 +46,35 @@ class Chatbot:
         chat_history_stream: TextStream
         llm_token_stream, chat_history_stream = await self.llm_node.run(deepgram_stream)
 
-        json_stream = map(llm_token_stream, lambda x: json.loads(x).get("messages", []))
-        unzipped_json_stream = unzip_array(json_stream)
+        text_and_animation_stream = map(
+            llm_token_stream, lambda x: json.loads(x).get("messages", [])
+        )
+        unzipped_json_stream = unzip_array(text_and_animation_stream)
         json_text_stream = map(
             await unzipped_json_stream.clone(), lambda x: x.get("text")
         )
 
-        tts_stream: ByteStream = await self.tts_node.run(json_text_stream)
-
-        mouth_animation: TextStream = await self.lip_sync_node.run(
-            await tts_stream.clone()
-        )
+        tts_stream: ByteStream
+        viseme_stream: TextStream
+        tts_stream, viseme_stream = await self.tts_node.run(json_text_stream)
 
         json_with_mouth_stream = join(
-            [unzipped_json_stream, mouth_animation], lambda x, y: {**x, "lipsync": y}
+            [unzipped_json_stream, viseme_stream],
+            lambda x, y: {**x, "lipsync": json.loads(y)},
         )
+        json_with_mouth_stream = map(json_with_mouth_stream, lambda x: json.dumps(x))
 
-        tts_stream, json_with_mouth_stream = combine_latest(
+        tts_stream, animation_with_viseme_stream = combine_latest(
             [tts_stream, json_with_mouth_stream]
         )
         audio_stream: AudioStream = await self.audio_convertor_node.run(tts_stream)
-        json_with_mouth_stream = map(json_with_mouth_stream, lambda x: json.dumps(x))
-
-        return audio_stream, json_with_mouth_stream
+        return audio_stream, animation_with_viseme_stream
 
     async def teardown(self):
         await self.deepgram_node.close()
         await self.llm_node.close()
         await self.tts_node.close()
+
+
+if __name__ == "__main__":
+    asyncio.run(Chatbot())
