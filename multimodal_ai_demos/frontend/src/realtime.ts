@@ -212,7 +212,7 @@ async function negotiate(pc: RTCPeerConnection, config: Config) {
           "Content-Type": "application/json",
         },
         method: "POST",
-      }, 4)
+      }, 5)
     })
     .then((response) => {
       return response?.json();
