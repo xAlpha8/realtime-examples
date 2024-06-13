@@ -1,4 +1,5 @@
 import asyncio
+import json
 from fastapi import FastAPI, File, UploadFile, Request
 import os
 import google.generativeai as genai
@@ -9,7 +10,7 @@ import realtime
 @realtime.App()
 class VideoSurveillanceApp:
     @realtime.web_endpoint(method="POST", path="/submit")
-    async def run(file: UploadFile = File(None)):
+    async def run(file: UploadFile = File(None), prompt: str = ""):
         directory = "data"
         filename = file.filename
         file_path = os.path.join(directory, filename)
@@ -44,10 +45,16 @@ class VideoSurveillanceApp:
                 time.time() - start_time,
             )
 
-            prompt = "Detect if an accident happened in the video. Output a JSON with 'accident' set to True/False, 'time' in the video the accident happened and 'description' of the accident."
+            if not prompt:
+                prompt = "Detect if an accident happened in the video."
+
+            prompt += " Output a JSON with 'accident' set to True/False, 'time' in the video the accident happened and 'description' of the accident."
 
             # Set the model to Gemini 1.5 Flash.
-            model = genai.GenerativeModel(model_name="models/gemini-1.5-flash")
+            model = genai.GenerativeModel(
+                model_name="models/gemini-1.5-flash",
+                generation_config={"response_mime_type": "application/json"},
+            )
 
             # Make the LLM request.
             print("Making LLM inference request...", time.time() - start_time)
@@ -58,7 +65,10 @@ class VideoSurveillanceApp:
         except Exception as e:
             return {"message": f"There was an error processing the file {e}"}
 
-        return {"file": file.filename, "response": response.text}
+        return {
+            "file": file.filename,
+            "response": json.dumps(json.loads(response.text), indent=4),
+        }
 
 
 if __name__ == "__main__":
