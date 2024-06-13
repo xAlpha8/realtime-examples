@@ -58,7 +58,7 @@ class VideoSurveillanceApp:
         except Exception as e:
             return {"message": f"There was an error processing the file {e}"}
 
-        return {"File Uploaded": file.filename, "Response": response.text}
+        return {"file": file.filename, "response": response.text}
 
 
 if __name__ == "__main__":

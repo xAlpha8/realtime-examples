@@ -1,29 +1,13 @@
-<!DOCTYPE html>
-<html>
-   <body>
-        <div id="output"></div> <!-- Element to display the output -->
-        <input type="file" id="fileInput" name="file"><br>
-      <input type="button" value="Upload video file" onclick="submit()">
-      <script>
-         function submit() {
-             var fileInput = document.getElementById('fileInput');
-             if (fileInput.files[0]) {
-                var formData = new FormData();
-                formData.append('file', fileInput.files[0]);
-                
-                 fetch('http://localhost:8080/submit', {
-                       method: 'POST',
-                       body: formData,
-                     })
-                     .then(res => res.text())
-                     .then(data => {
-                        document.getElementById('output').textContent = data;
-                     })
-                     .catch(error => {
-                        document.getElementById('output').textContent = 'Error: ' + error;
-                     });
-             }
-         }
-      </script>
-   </body>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + React + TS</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>
