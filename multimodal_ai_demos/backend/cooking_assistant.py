@@ -10,7 +10,7 @@ from realtime.plugins.deepgram_stt import DeepgramSTT
 from realtime.plugins.eleven_labs_tts import ElevenLabsTTS
 from realtime.plugins.openai_vision import OpenAIVision
 from realtime.plugins.token_aggregator import TokenAggregator
-from realtime.streams import AudioStream, VideoStream, Stream, TextStream, BytesStream
+from realtime.streams import AudioStream, VideoStream, Stream, TextStream, ByteStream
 from realtime.plugins.silero_vad import SileroVAD
 from realtime.plugins.audio_convertor import AudioConverter
 
@@ -51,7 +51,7 @@ class CookingAssistant:
         token_aggregator_stream: TextStream = await self.token_aggregator_node.run(
             openai_stream
         )
-        elevenlabs_stream: BytesStream = await self.elevenlabs_node.run(
+        elevenlabs_stream: ByteStream = await self.elevenlabs_node.run(
             token_aggregator_stream
         )
         audio_stream: AudioStream = await self.audio_convertor_node.run(
@@ -76,4 +76,3 @@ class CookingAssistant:
 
 if __name__ == "__main__":
     asyncio.run(CookingAssistant())
-

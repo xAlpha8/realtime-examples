@@ -10,7 +10,7 @@ from realtime.plugins.token_aggregator import TokenAggregator
 from realtime.plugins.deepgram_stt import DeepgramSTT
 from realtime.plugins.gemini_vision import GeminiVision
 from realtime.plugins.key_frame_detector import KeyFrameDetector
-from realtime.streams import AudioStream, VideoStream, Stream, TextStream, BytesStream
+from realtime.streams import AudioStream, VideoStream, Stream, TextStream, ByteStream
 from realtime.plugins.audio_convertor import AudioConverter
 
 
@@ -52,7 +52,7 @@ class PokerCommentator:
             llm_token_stream
         )
 
-        tts_stream: BytesStream = await self.tts_node.run(token_aggregator_stream)
+        tts_stream: ByteStream = await self.tts_node.run(token_aggregator_stream)
 
         output_video_stream = await video_input_stream.clone()
         audio_stream: AudioStream = await self.audio_convertor_node.run(tts_stream)
@@ -66,6 +66,6 @@ class PokerCommentator:
         await self.token_aggregator_node.close()
         await self.tts_node.close()
 
+
 if __name__ == "__main__":
     asyncio.run(PokerCommentator())
-
