@@ -26,8 +26,9 @@ class Chatbot:
         self.deepgram_node = DeepgramSTT(sample_rate=8000)
         self.llm_node = FireworksLLM(
             system_prompt="You are a virtual girlfriend.\
-            You will always reply with a JSON array of messages. With a maximum of 1 message.\
+            You will always reply with a JSON object.\
             Each message has a text, facialExpression, and animation property.\
+            The text property is a short response to the user.\
             The different facial expressions are: smile, sad, angry, surprised, funnyFace, and default.\
             The different animations are: Talking_0, Talking_1, Talking_2, Crying, Laughing, Rumba, Idle, Terrified, and Angry.",
             temperature=0.9,
@@ -46,12 +47,9 @@ class Chatbot:
         chat_history_stream: TextStream
         llm_token_stream, chat_history_stream = await self.llm_node.run(deepgram_stream)
 
-        text_and_animation_stream = map(
-            llm_token_stream, lambda x: json.loads(x).get("messages", [])
-        )
-        unzipped_json_stream = unzip_array(text_and_animation_stream)
+        text_and_animation_stream = map(llm_token_stream, lambda x: json.loads(x))
         json_text_stream = map(
-            await unzipped_json_stream.clone(), lambda x: x.get("text")
+            await text_and_animation_stream.clone(), lambda x: x.get("text")
         )
 
         tts_stream: ByteStream
@@ -59,7 +57,7 @@ class Chatbot:
         tts_stream, viseme_stream = await self.tts_node.run(json_text_stream)
 
         json_with_mouth_stream = join(
-            [unzipped_json_stream, viseme_stream],
+            [text_and_animation_stream, viseme_stream],
             lambda x, y: {**x, "lipsync": json.loads(y)},
         )
         json_with_mouth_stream = map(json_with_mouth_stream, lambda x: json.dumps(x))
