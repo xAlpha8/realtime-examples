@@ -61,7 +61,7 @@ function RealtimeComponent({ config }) {
 function App() {
   const [config, setConfig] = useState(null);
   const configDefault = {
-    functionUrl: "",
+    functionUrl: "https://infra.getadapt.ai/run/f5a918c27d35c60ac471efccef0d4d08",
     offerUrl: "",
     isDataEnabled: true,
     dataParameters: { ordered: true },
@@ -135,4 +135,12 @@ function App() {
   );
 }
 
-export default App;
+function Avatar() {
+  return (
+    <ChatProvider>
+      <App />
+    </ChatProvider>
+  )
+}
+
+export default Avatar;
