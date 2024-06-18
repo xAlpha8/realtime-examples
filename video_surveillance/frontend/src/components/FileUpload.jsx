@@ -1,11 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import './form.css';
 
+async function delay (delayInms) {
+  return new Promise(resolve => setTimeout(resolve, delayInms));
+};
+
+async function retryableFetch(url, params, attempts) {
+  let mult = 1
+  for (let i = 0; i < attempts; ++i) {
+    try {
+      let res = await fetch(url, params)
+      return res
+    } catch (err) {
+      await delay(mult * 1000)
+      mult *= 2
+      if (i == attempts - 1) {
+        throw err
+      }
+    }
+  }
+}
+
 const FileUpload = () => {
   const [file, setFile] = useState('');
   const [filename, setFilename] = useState('');
   const [message, setMessage] = useState('');
   const [prompt, setPrompt] = useState('');
+  const [offerUrl, setOfferUrl] = useState('')
+  const [functionUrl, setFunctionUrl] = useState('https://infra.getadapt.ai/run/db68da48f00b62e7fdf47eb2a9316d1b')
   const [uploading, setUploading] = useState(false);
   const [preloadedVideos, setPreloadedVideos] = useState([
     { name: 'Video_1.mp4', url: 'data/1.mp4' },
@@ -18,7 +40,6 @@ const FileUpload = () => {
     setFile(e.target.files[0]);
     setFilename(e.target.files[0].name);
   };
-
   const onSubmit = async e => {
     e.preventDefault();
     const formData = new FormData();
@@ -28,6 +49,7 @@ const FileUpload = () => {
     }
     formData.append('file', file);
     formData.append('prompt', prompt);
+
 
     try {
       setUploading(true);
@@ -53,18 +75,39 @@ const FileUpload = () => {
       formData.append('file', file);
       formData.append('prompt', prompt);
 
-      const res = await fetch('http://localhost:8080/submit', {
-        method: 'POST',
-        body: formData,
-      });
-
-      const data = await res.json();
-      console.log(data);
-      setMessage(data.response);
+      if (functionUrl && functionUrl.length > 0) {
+        fetch(functionUrl)
+        .then(resp => resp.json())
+        .then(payload => {
+          console.log("Connecting with : ", payload.address);
+          setOfferUrl(payload.address);
+          return payload.address;
+        }).then(
+          async (offerUrl) => {
+            const res = await retryableFetch(offerUrl + '/submit', {
+              method: 'POST',
+              body: formData,
+            }, 5);
+            const data = await res.json();
+            console.log(data);
+            setMessage(data.response);
+            setUploading(false);
+          }
+        )
+        .catch(err => {
+          console.error('Error fetching function URL:', err);
+            setMessage('There was a problem fetching the function URL');
+            setUploading(false);
+          });
+      } else {
+        setMessage('Please enter a valid function URL');
+        setUploading(false);
+        return;
+      }
     } catch (err) {
       setMessage('There was a problem with the server');
+      setUploading(false);
     }
-    setUploading(false);
   };
 
   useEffect(() => {
@@ -103,7 +146,15 @@ const FileUpload = () => {
             onChange={onChange}
           />
         </div> */}
-
+          <div>
+            <h2>Function URL:</h2>
+            <input
+              type="text"
+              value={functionUrl}
+              onChange={(e) => setFunctionUrl(e.target.value)}
+              placeholder="Enter Function URL"
+            />
+          </div>
         {uploading && <div className="spinner"></div>}
 
         {/* <input
