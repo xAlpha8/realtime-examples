@@ -7,6 +7,7 @@ import { useConfig, useRealtime } from "@adaptai/realtime-react";
 import { RtAudio } from "@adaptai/realtime-react";
 import { ChatContext } from "./context";
 import "ldrs/square";
+import { ChatProvider } from "./context";
 
 function RealtimeComponent({ config }) {
   const { isConnected, connection } = useRealtime(config);
