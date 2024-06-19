@@ -121,6 +121,7 @@ const FileUpload = () => {
   return (
     <div className={styles.container}>
       {message && <div className={styles.alert}>{message}</div>}
+      {uploading && <div className={styles.spinner}></div>}
       <div className={styles.preloadedVideos}>
         {preloadedVideos.map((video, index) => (
           <div key={index} className={styles.videoContainer}>
@@ -128,7 +129,7 @@ const FileUpload = () => {
             <video style={{ width: '100%' }} controls src={video.url}>
               Your browser does not support the video tag.
             </video>
-            <button className='btn btn-primary btn-block mt-2' onClick={() => uploadPreloadedVideo(video)}>Analyze</button>
+            <button className={styles.submitButton} onClick={() => uploadPreloadedVideo(video)}>Analyze</button>
           </div>
         ))}
       </div>
@@ -147,7 +148,6 @@ const FileUpload = () => {
             className={styles.inputText}
           />
         </div>
-        {uploading && <div className={styles.spinner}></div>}
       </form>
     </div>
   );
