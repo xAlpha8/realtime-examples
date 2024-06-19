@@ -139,7 +139,7 @@ function App() {
 
 function Avatar() {  
   return (
-    <div className={styles.root}>
+    <div className={styles.body}>
       <ChatProvider>
         <App />
       </ChatProvider>
