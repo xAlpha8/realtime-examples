@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './form.css';
+import styles from './form.module.css';
 
 async function delay (delayInms) {
   return new Promise(resolve => setTimeout(resolve, delayInms));
@@ -119,11 +119,11 @@ const FileUpload = () => {
   }, [file]);
 
   return (
-    <div className="container">
-      {message && <div className="alert alert-info">{message}</div>}
-      <div className="preloaded-videos">
+    <div className={styles.container}>
+      {message && <div className={styles.alert}>{message}</div>}
+      <div className={styles.preloadedVideos}>
         {preloadedVideos.map((video, index) => (
-          <div key={index} className='video-container'>
+          <div key={index} className={styles.videoContainer}>
             <h3 className='text-center'>{video.name}</h3>
             <video style={{ width: '100%' }} controls src={video.url}>
               Your browser does not support the video tag.
@@ -134,45 +134,21 @@ const FileUpload = () => {
       </div>
       <form onSubmit={onSubmit}>
         <div className="mb-5">
-          <label htmlFor="name">Prompt</label>
-          <textarea id="name" name="name" value={prompt} onChange={(e) => setPrompt(e.target.value)}></textarea>
+          <label htmlFor="name" className={styles.label}>Prompt</label>
+          <textarea id="name" name="name" value={prompt} onChange={(e) => setPrompt(e.target.value)} className={styles.textarea}></textarea>
         </div>
-
-        {/* <div className='custom-file mb-4'>
+        <div>
+          <h2>Function URL:</h2>
           <input
-            type='file'
-            className='custom-file-input'
-            id='customFile'
-            onChange={onChange}
+            type="text"
+            value={functionUrl}
+            onChange={(e) => setFunctionUrl(e.target.value)}
+            placeholder="Enter Function URL"
+            className={styles.inputText}
           />
-        </div> */}
-          <div>
-            <h2>Function URL:</h2>
-            <input
-              type="text"
-              value={functionUrl}
-              onChange={(e) => setFunctionUrl(e.target.value)}
-              placeholder="Enter Function URL"
-            />
-          </div>
-        {uploading && <div className="spinner"></div>}
-
-        {/* <input
-          type='submit'
-          value='Upload'
-          className='btn btn-primary btn-block mt-4'
-        /> */}
-      </form>
-      {/* {file ? (
-        <div className='row mt-5'>
-          <div className='col-md-6 m-auto'>
-            <h3 className='text-center'>{filename}</h3>
-            <video style={{ width: '100%' }} controls src={URL.createObjectURL(file)}>
-              Your browser does not support the video tag.
-            </video>
-          </div>
         </div>
-      ) : null} */}
+        {uploading && <div className={styles.spinner}></div>}
+      </form>
     </div>
   );
 };

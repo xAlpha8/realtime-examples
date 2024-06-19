@@ -1,0 +1,89 @@
+/* form.module.css */
+.container {
+  backgroundColor: #1e1e1e;
+  padding: 20px 40px 20px 20px;
+  borderRadius: 10px;
+  boxShadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  width: auto;
+  textAlign: center;
+}
+
+.label {
+  display: block;
+  marginBottom: 5px;
+  fontWeight: bold;
+}
+
+.inputText,
+.inputFile,
+.textarea {
+  width: 100%;
+  padding: 10px;
+  marginBottom: 20px;
+  border: 1px solid #333;
+  borderRadius: 5px;
+  backgroundColor: #2c2c2c;
+  color: #fff;
+}
+
+.textarea {
+  height: 100px;
+  resize: vertical;
+}
+
+.submitButton {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  borderRadius: 5px;
+  backgroundColor: #007bff;
+  color: #fff;
+  fontSize: 16px;
+  cursor: pointer;
+}
+
+.submitButtonHover:hover {
+  backgroundColor: #0056b3;
+}
+
+.alert {
+  marginBottom: 20px;
+  padding: 10px;
+  borderRadius: 5px;
+  backgroundColor: #ff9800;
+  color: #fff;
+  whiteSpace: pre-wrap;
+  textAlign: left;
+  paddingLeft: 20px;
+}
+
+.spinner {
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  borderTop: 4px solid #fff;
+  borderRadius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 1s linear infinite;
+  margin: 20px auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.preloadedVideos {
+  display: flex;
+  overflowX: auto;
+  marginBottom: 20px;
+}
+
+.videoContainer {
+  flex: 0 0 auto;
+  width: 400px;
+  marginRight: 10px;
+}
+
+.videoContainer video {
+  width: 100%;
+}
