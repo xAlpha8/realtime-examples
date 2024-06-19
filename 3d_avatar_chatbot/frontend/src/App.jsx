@@ -8,6 +8,7 @@ import { RtAudio } from "@adaptai/realtime-react";
 import { ChatContext } from "./context";
 import "ldrs/square";
 import { ChatProvider } from "./context";
+import styles from "./index.module.css";
 
 function RealtimeComponent({ config }) {
   const { isConnected, connection } = useRealtime(config);
@@ -136,11 +137,13 @@ function App() {
   );
 }
 
-function Avatar() {
+function Avatar() {  
   return (
-    <ChatProvider>
-      <App />
-    </ChatProvider>
+    <div className={styles.root}>
+      <ChatProvider>
+        <App />
+      </ChatProvider>
+    </div>
   )
 }
 
