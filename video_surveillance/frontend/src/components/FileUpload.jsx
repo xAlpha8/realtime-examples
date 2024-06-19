@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import styles from './form.module.css';
 
 async function delay (delayInms) {
   return new Promise(resolve => setTimeout(resolve, delayInms));
@@ -36,34 +35,6 @@ const FileUpload = () => {
     { name: 'Video_4.mp4', url: 'data/4.mp4' },
   ]);
 
-  const onChange = e => {
-    setFile(e.target.files[0]);
-    setFilename(e.target.files[0].name);
-  };
-  const onSubmit = async e => {
-    e.preventDefault();
-    const formData = new FormData();
-    if (!file) {
-      setMessage('Please select a file to upload');
-      return;
-    }
-    formData.append('file', file);
-    formData.append('prompt', prompt);
-
-
-    try {
-      setUploading(true);
-      const res = await fetch('http://localhost:8080/submit', {
-        method: 'POST',
-        body: formData,
-      });
-      const data = await res.json();
-      setMessage(data.response);
-    } catch (err) {
-      setMessage('There was a problem with the server');
-    }
-    setUploading(false);
-  };
 
   const uploadPreloadedVideo = async (video) => {
     try {
@@ -119,24 +90,23 @@ const FileUpload = () => {
   }, [file]);
 
   return (
-    <div className={styles.container}>
-      {message && <div className={styles.alert}>{message}</div>}
-      {uploading && <div className={styles.spinner}></div>}
-      <div className={styles.preloadedVideos}>
-        {preloadedVideos.map((video, index) => (
-          <div key={index} className={styles.videoContainer}>
-            <h3 className='text-center'>{video.name}</h3>
-            <video style={{ width: '100%' }} controls src={video.url}>
-              Your browser does not support the video tag.
-            </video>
-            <button className={styles.submitButton} onClick={() => uploadPreloadedVideo(video)}>Analyze</button>
-          </div>
-        ))}
-      </div>
-      <form onSubmit={onSubmit}>
+    <div class="bg-gray-900 p-5 rounded-lg shadow-lg text-center mx-5">
+      {message && <div className="mb-5 p-2.5 rounded bg-orange-600 text-white whitespace-pre-wrap text-left pl-5">{message}</div>}
+      {uploading && <div className="border-8 border-white border-opacity-50 border-t-blue-500 rounded-full w-16 h-16 animate-spin mx-auto"></div>}
+      <div class="flex flex-wrap justify-center w-100 mr-2.5">
+  {preloadedVideos.map((video, index) => (
+    <div key={index} className="flex flex-col items-center mb-5 mr-5">
+      <h3 className='text-center mb-2'>{video.name}</h3>
+      <video className="w-4/5" controls src={video.url}>
+        Your browser does not support the video tag.
+      </video>
+      <button class="mt-2 w-2/5 p-2.5 border-none rounded bg-blue-600 text-white text-lg cursor-pointer hover:bg-blue-700" onClick={() => uploadPreloadedVideo(video)}>Analyze</button>
+    </div>
+  ))}
+</div>
         <div className="mb-5">
-          <label htmlFor="name" className={styles.label}>Prompt</label>
-          <textarea id="name" name="name" value={prompt} onChange={(e) => setPrompt(e.target.value)} className={styles.textarea}></textarea>
+        <label class="block mb-1 font-bold">Prompt</label>
+          <textarea id="name" name="name" value={prompt} onChange={(e) => setPrompt(e.target.value)} className="w-full h-25 resize-y p-2.5 mb-5 border border-gray-800 rounded bg-gray-800 text-white"></textarea>
         </div>
         <div>
           <h2>Function URL:</h2>
@@ -145,10 +115,9 @@ const FileUpload = () => {
             value={functionUrl}
             onChange={(e) => setFunctionUrl(e.target.value)}
             placeholder="Enter Function URL"
-            className={styles.inputText}
+            className="w-full p-2.5 mb-5 border border-gray-800 rounded bg-gray-800 text-white"
           />
         </div>
-      </form>
     </div>
   );
 };
