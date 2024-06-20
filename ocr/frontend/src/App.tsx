@@ -10,13 +10,10 @@ function RealtimeContainer({ config }: { config: Config }) {
     connection.connect()
   }, [])
   return (
-    <div className="max-w-screen-xl mx-auto p-8 text-center">
+    <div >
       {isConnected ? (
-        <div className="flex flex-col items-center justify-center space-y-4">
+        <div className="flex items-center justify-center space-y-4">
           <RtVideo rtConnection={connection} />
-          <RtAudio rtConnection={connection} />
-          <RtAudioVisualizer rtConnection={connection} height={100} width={100}/>
-          <RtChat rtConnection={connection} />
         </div>
       ) : (
         <>Connecting!</>
@@ -36,10 +33,10 @@ function App() {
     isVideoEnabled: true,
     videoInput: "",
     videoCodec: "default",
-    videoResolution: "256x256",
+    videoResolution: "2048x2048",
     videoTransform: "none",
     isScreenShareEnabled: false,
-    isAudioEnabled: true,
+    isAudioEnabled: false,
     audioInput: "",
     audioCodec: "PCMU/8000",
     useStun: false,
@@ -60,20 +57,6 @@ function App() {
     <>
       {isRealtimeDisabled ? (
         <div className="max-w-screen-xl mx-auto p-8 text-center bg-gray-100">
-          <div className="mb-4 bg-white p-4 rounded-lg shadow">
-            <h2 className="text-lg font-semibold">Audio Options:</h2>
-            <select
-              value={audioInput}
-              onChange={(e) => setAudioInput(e.target.value)}
-              className="mt-1 block w-full p-2 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-            >
-              {audioOptions.map((option, index) => (
-                <option key={index} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </div>
           <div className="mb-4 bg-white p-4 rounded-lg shadow">
             <h2 className="text-lg font-semibold">Video Options:</h2>
             <select
