@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useConfig, useRealtime } from "@adaptai/realtime-react";
 import { Config } from "@adaptai/realtime-react";
 import { RtVideo, RtAudio, RtChat } from "@adaptai/realtime-react";
-import { RtAudioVisualizer } from "@adaptai/realtime-react";
 
 function RealtimeContainer({ config }: { config: Config }) {
   const { connection, isConnected } = useRealtime(config);
@@ -26,7 +25,7 @@ function App() {
   const [isRealtimeDisabled, setIsRealtimeDisabled] = useState(true);
   const [config, setConfig] = useState<Config | null>(null);
   const configDefault: Config = {
-    functionUrl: "https://infra.getadapt.ai/run/ef5c78106e45cc8e84c40fc3d6a937b7",
+    functionUrl: "https://infra.getadapt.ai/run/9db00fa3dfa522de4c31dd70fad48605",
     offerUrl: "",
     isDataEnabled: true,
     dataParameters: { ordered: true },

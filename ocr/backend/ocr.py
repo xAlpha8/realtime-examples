@@ -171,7 +171,7 @@ async def render_doc_text(pil_image, client, executor):
 class ReplayBot:
     async def setup(self):
         self.client = vision.ImageAnnotatorClient(
-            client_options={"api_key": os.getenv("GOOGLE_CONSOLE_KEY")}
+            client_options={"api_key": os.getenv("GOOGLE_VISION_KEY")}
         )
         self.executor = ThreadPoolExecutor(max_workers=1)
 
