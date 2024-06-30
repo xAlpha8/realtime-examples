@@ -278,7 +278,7 @@ function App() {
                 {config &&
                   (isConnected ? (
                     <div className="flex items-center justify-center space-y-4">
-                      <RtVideo rtConnection={connection} />
+                      <RtAudio rtConnection={connection} />
                       <RtAudioVisualizer
                         rtConnection={connection}
                         height={100}
