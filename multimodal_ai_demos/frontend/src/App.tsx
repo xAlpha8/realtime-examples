@@ -7,20 +7,27 @@ import forwardIcon from "./icons/noun-forward.svg";
 import arrowIcon from "./icons/noun-pixel-arrow.svg";
 import crossIcon from "./icons/noun-pixel-cross.svg";
 import settingsIconDark from "./icons/noun-pixel-cog-dark.svg";
+import { RtAudioVisualizer } from "@adaptai/realtime-react";
 
-function RealtimeContainer({ config }: { config: Config }) {
-  return (
-    <div>
-      {isConnected ? (
-        <div className="flex items-center justify-center space-y-4">
-          <RtVideo rtConnection={connection} />
-        </div>
-      ) : (
-        <>Connecting!</>
-      )}
-    </div>
-  );
-}
+const RealtimeContainer = ({
+  config,
+  setConnection,
+  setIsConnected,
+}: {
+  config: Config;
+  setConnection: (connection: Connection) => void;
+  setIsConnected: (isConnected: boolean) => void;
+}) => {
+  if (!config) {
+    setConnection(null);
+    setIsConnected(false);
+    return;
+  }
+  console.log("config", config);
+  const { connection, isConnected } = useRealtime(config);
+  setConnection(connection);
+  setIsConnected(isConnected);
+};
 
 function App() {
   const [config, setConfig] = useState<Config | null>(null);
@@ -32,10 +39,10 @@ function App() {
     isVideoEnabled: true,
     videoInput: "",
     videoCodec: "default",
-    videoResolution: "2048x2048",
+    videoResolution: "256x256",
     videoTransform: "none",
     isScreenShareEnabled: false,
-    isAudioEnabled: false,
+    isAudioEnabled: true,
     audioInput: "",
     audioCodec: "PCMU/8000",
     useStun: false,
@@ -54,13 +61,10 @@ function App() {
     setConfig(configDump);
   };
   useEffect(() => {
-    if (config) {
-      const { connection, isConnected } = useRealtime(config);
-      setConnection(connection);
-      setIsConnected(isConnected);
+    if (connection && !isConnected) {
       connection.connect();
     }
-  }, [config]);
+  }, [connection]);
 
   if (!isChrome && !isSafari) {
     return (
@@ -84,6 +88,15 @@ function App() {
 
   return (
     <>
+      <div>
+        {config && (
+          <RealtimeContainer
+            config={config}
+            setConnection={setConnection}
+            setIsConnected={setIsConnected}
+          />
+        )}
+      </div>{" "}
       <div id="realtime-container" className="md:h-screen">
         {/* <!-- Modal --> */}
         <dialog className="nes-dialog" id="settings-modal">
