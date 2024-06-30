@@ -10,17 +10,18 @@
   },
   "devDependencies": {
     "autoprefixer": "^10.4.19",
+    "braces": ">=3.0.3",
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.3",
     "typescript": "^5.2.2",
-    "vite": "^5.2.0",
-    "braces": ">=3.0.3"
+    "vite": "^5.2.0"
   },
   "dependencies": {
     "@adaptai/realtime-react": "^0.0.2",
     "audiomotion-analyzer": "^4.5.0",
     "nes.css": "^2.3.0",
     "p-retry": "^6.2.0",
+    "react-device-detect": "^2.2.3",
     "zod": "^3.23.8"
   }
 }
