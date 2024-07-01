@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@adaptai/realtime-react':
-    specifier: ^0.0.6
-    version: 0.0.6(react-dom@18.3.1)(react@18.3.1)
+    specifier: ^0.0.603
+    version: 0.0.603(react-dom@18.3.1)(react@18.3.1)
   audiomotion-analyzer:
     specifier: ^4.5.0
     version: 4.5.0
@@ -55,8 +55,8 @@ devDependencies:
 
 packages:
 
-  /@adaptai/realtime-react@0.0.6(react-dom@18.3.1)(react@18.3.1):
-    resolution: {integrity: sha512-feDz0vpaaIwJfRLScH4Xmr9a5DF9qv3bMmAU1swafTr1Y2/72wHauPKyz7pPYKtewK8bIMSFvwduWuNGWADPsQ==}
+  /@adaptai/realtime-react@0.0.603(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-k4KQl9cbPT907Huft5Jnx5gp/dCoQNRnuNTxJEMxHpRE9ttRoUSul3qlhM6SVBF8WiLyEYAfUQXQ+OBtZNxxNQ==}
     peerDependencies:
       react: ^18.2.0
       react-dom: ^18.2.0

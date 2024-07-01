@@ -49,12 +49,27 @@ function App() {
   };
 
   const { options, setters, values, dump } = useConfig(configDefault);
-  const { audioOptions, videoOptions } = options;
-  const { setAudioInput, setVideoInput, setOfferUrl, setFunctionUrl } = setters;
-  const { audioInput, videoInput, offerUrl, functionUrl } = values;
+  const { audioOptions, videoOptions, videoResolutionOptions } = options;
+  const {
+    setAudioInput,
+    setVideoInput,
+    setOfferUrl,
+    setFunctionUrl,
+    setVideoResolution,
+    setIsScreenShareEnabled,
+    setIsDataEnabled,
+  } = setters;
+  const {
+    audioInput,
+    videoInput,
+    offerUrl,
+    functionUrl,
+    videoResolution,
+    isDataEnabled,
+    isScreenShareEnabled,
+  } = values;
   const [connection, setConnection] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
-  const [videoResolution, setVideoResolution] = useState("256x256");
 
   const dumpConfigAndRun = () => {
     const configDump = dump();
@@ -167,13 +182,14 @@ function App() {
               <div className="nes-select">
                 <select
                   id="resolution-select"
-                  value="256x256"
+                  value={videoResolution}
                   onChange={(e) => setVideoResolution(e.target.value)}
                 >
-                  <option value="256x256">256x256</option>
-                  <option value="512x512">512x512</option>
-                  <option value="1024x1024">1024x1024</option>
-                  <option value="2048x2048">2048x2048</option>
+                  {videoResolutionOptions.map((option, index) => (
+                    <option key={index} value={option}>
+                      {option}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
@@ -183,13 +199,15 @@ function App() {
                   type="checkbox"
                   className="nes-checkbox"
                   id="use-datachannel"
+                  checked={isScreenShareEnabled}
+                  onChange={(e) => setIsScreenShareEnabled(e.target.checked)}
                 />
-                <span>Enable Datachannel</span>
+                <span>Enable Screen Share</span>
               </label>
-              <label>
+              {/* <label>
                 <input type="checkbox" className="nes-checkbox" id="use-stun" />
                 <span>Enable Stun</span>
-              </label>
+              </label> */}
             </div>
             <menu className="dialog-menu flex flex-row gap-4">
               <button className="nes-btn">Close</button>
@@ -252,14 +270,15 @@ function App() {
             className="col-span-4 md:col-span-3 row-span-2 border border-solid  border-black rounded-md flex justify-center items-center overflow-hidden"
             id="video-container"
           >
-            <div className="nes-text is-disabled media-container-label">
+            <div
+              className="nes-text is-disabled media-container-label"
+              hidden={isConnected}
+            >
               Video
             </div>
             {config &&
               (isConnected ? (
-                <div className="flex items-center justify-center space-y-4">
-                  <RtVideo rtConnection={connection} />
-                </div>
+                <RtVideo rtConnection={connection} />
               ) : (
                 <>Connecting!</>
               ))}
@@ -271,20 +290,23 @@ function App() {
               id="audio-container"
               className="h-full flex items-center justify-center"
             >
-              <div className="nes-text is-disabled media-container-label">
+              <div
+                className="nes-text is-disabled media-container-label"
+                hidden={isConnected}
+              >
                 Audio
               </div>
               <div id="audio-visualizer-container" className="h-full">
                 {config &&
                   (isConnected ? (
-                    <div className="flex items-center justify-center space-y-4">
+                    <>
                       <RtAudio rtConnection={connection} />
                       <RtAudioVisualizer
                         rtConnection={connection}
-                        height={100}
-                        width={100}
+                        height={400}
+                        width={200}
                       />
-                    </div>
+                    </>
                   ) : (
                     <>Connecting!</>
                   ))}
@@ -298,16 +320,17 @@ function App() {
               id="chat-container"
               className="nes-container p-0 border-0 overflow-y-scroll h-full flex justify-center items-center"
             >
-              <div className="nes-text is-disabled media-container-label">
+              <div
+                className="nes-text is-disabled media-container-label"
+                hidden={isConnected}
+              >
                 Chat
               </div>
               <section className="message-list text-xs" id="chat-messages">
                 {" "}
                 {config &&
                   (isConnected ? (
-                    <div className="flex items-center justify-center space-y-4">
-                      <RtChat rtConnection={connection} />
-                    </div>
+                    <RtChat rtConnection={connection} />
                   ) : (
                     <>Connecting!</>
                   ))}
