@@ -326,15 +326,12 @@ function App() {
               >
                 Chat
               </div>
-              <section className="message-list text-xs" id="chat-messages">
-                {" "}
-                {config &&
-                  (isConnected ? (
-                    <RtChat rtConnection={connection} />
-                  ) : (
-                    <>Connecting!</>
-                  ))}
-              </section>
+              {config &&
+                (isConnected ? (
+                  <RtChat rtConnection={connection} />
+                ) : (
+                  <>Connecting!</>
+                ))}
             </section>
           </div>
         </div>
