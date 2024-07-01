@@ -39,7 +39,7 @@ function App() {
     isVideoEnabled: true,
     videoInput: "",
     videoCodec: "default",
-    videoResolution: "256x256",
+    videoResolution: "1280x720",
     videoTransform: "none",
     isScreenShareEnabled: false,
     isAudioEnabled: true,

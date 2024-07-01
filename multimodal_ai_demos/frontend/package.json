@@ -18,7 +18,7 @@
     "vite": "^5.2.0"
   },
   "dependencies": {
-    "@adaptai/realtime-react": "^0.0.603",
+    "@adaptai/realtime-react": "^0.0.604",
     "audiomotion-analyzer": "^4.5.0",
     "nes.css": "^2.3.0",
     "p-retry": "^6.2.0",
