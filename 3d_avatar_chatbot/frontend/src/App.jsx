@@ -9,6 +9,7 @@ import { ChatContext } from "./context";
 import "ldrs/square";
 import { ChatProvider } from "./context";
 import styles from "./index.module.css";
+import { isChrome, isSafari } from 'react-device-detect';
 
 function RealtimeComponent({ config }) {
   const { isConnected, connection } = useRealtime(config);
@@ -89,6 +90,14 @@ function App() {
     setConfig(configDump);
   };
 
+  if (!isChrome && !isSafari) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', width: '100vw', backgroundColor: '#000', color: '#fff' }}>
+        <h1 style={{ fontSize: '3rem', textAlign: 'center' }}>This application only supports Chrome and Safari.</h1>
+      </div>
+    );
+  }
+  
   return (
     <>
       <div className="self-start backdrop-blur-md bg-white bg-opacity-50 p-4 rounded-lg">

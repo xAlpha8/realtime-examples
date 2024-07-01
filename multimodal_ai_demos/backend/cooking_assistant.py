@@ -45,7 +45,7 @@ class CookingAssistant:
             audio_input_stream_copy
         )
         openai_stream: TextStream
-        openai_stream, _ = await self.openai_node.run(
+        openai_stream, chat_history = await self.openai_node.run(
             deepgram_stream, video_input_stream
         )
         token_aggregator_stream: TextStream = await self.token_aggregator_node.run(
@@ -60,10 +60,9 @@ class CookingAssistant:
 
         await self.openai_node.set_interrupt(silero_vad_stream)
         await self.elevenlabs_node.set_interrupt(await silero_vad_stream.clone())
-        await self.audio_convertor_node.set_interrupt(await silero_vad_stream.clone())
         await self.token_aggregator_node.set_interrupt(await silero_vad_stream.clone())
 
-        return audio_stream, await video_input_stream.clone()
+        return audio_stream, await video_input_stream.clone(), chat_history
 
     async def teardown(self):
         await self.deepgram_node.close()

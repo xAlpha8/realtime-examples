@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useConfig, useRealtime } from "@adaptai/realtime-react";
 import { Config } from "@adaptai/realtime-react";
 import { RtVideo, RtAudio, RtChat } from "@adaptai/realtime-react";
+import { isChrome, isSafari } from 'react-device-detect';
 
 function RealtimeContainer({ config }: { config: Config }) {
   const { connection, isConnected } = useRealtime(config);
@@ -51,6 +52,14 @@ function App() {
     setConfig(configDump);
     setIsRealtimeDisabled(false);
   };
+
+  if (!isChrome && !isSafari) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', width: '100vw', backgroundColor: '#000', color: '#fff' }}>
+        <h1 style={{ fontSize: '3rem', textAlign: 'center' }}>This application only supports Chrome and Safari.</h1>
+      </div>
+    );
+  }
 
   return (
     <>

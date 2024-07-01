@@ -15,11 +15,12 @@
     "@react-three/xr": "^5.7.1",
     "@types/three": "0.152.1",
     "ldrs": "^1.0.2",
+    "lodash": "^4.17.21",
     "react": "^18.2.0",
+    "react-device-detect": "^2.2.3",
     "react-dom": "^18.2.0",
     "three": "0.153.0",
-    "zod": "^3.23.8",
-    "lodash": "^4.17.21"
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/react": "^18.0.27",
