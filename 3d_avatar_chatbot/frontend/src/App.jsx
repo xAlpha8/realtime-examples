@@ -10,7 +10,7 @@ import "ldrs/square";
 import { ChatProvider } from "./context";
 import { isChrome, isSafari } from "react-device-detect";
 
-function RealtimeComponent({ config }) {
+function RealtimeComponent({ config, setConnection }) {
   const { isConnected, connection } = useRealtime(config);
   const { setMessages } = useContext(ChatContext);
 
@@ -20,6 +20,7 @@ function RealtimeComponent({ config }) {
 
   useEffect(() => {
     connection.connect();
+    setConnection(connection);
     return () => {
       connection.disconnect();
     };
@@ -62,9 +63,10 @@ function RealtimeComponent({ config }) {
 
 function App() {
   const [config, setConfig] = useState(null);
+  const [connection, setConnection] = useState(null);
   const configDefault = {
     functionUrl:
-      "https://infra.getadapt.ai/run/f5a918c27d35c60ac471efccef0d4d08",
+      "https://infra.getadapt.ai/run/207297ad6e1b0247f4fab0f6b18c6126",
     offerUrl: "",
     isDataEnabled: true,
     dataParameters: { ordered: true },
@@ -147,10 +149,14 @@ function App() {
             </button>
           </div>
         </div>
-        <div>{config && <RealtimeComponent config={config} />}</div>
+        <div>
+          {config && (
+            <RealtimeComponent config={config} setConnection={setConnection} />
+          )}
+        </div>
       </div>{" "}
       <Loader />
-      <UI />
+      {connection && <UI connection={connection} />}
       <Canvas shadows camera={{ position: [0, 0, 1], fov: 30 }}>
         <Experience />
       </Canvas>

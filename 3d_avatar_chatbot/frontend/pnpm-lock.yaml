@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@adaptai/realtime-react':
-    specifier: ^0.0.6
-    version: 0.0.6(react-dom@18.3.1)(react@18.3.1)
+    specifier: ^0.0.605
+    version: 0.0.605(react-dom@18.3.1)(react@18.3.1)
   '@react-three/drei':
     specifier: 9.75.0
     version: 9.75.0(@react-three/fiber@8.13.3)(@types/three@0.152.1)(react-dom@18.3.1)(react@18.3.1)(three@0.153.0)
@@ -67,8 +67,8 @@ devDependencies:
 
 packages:
 
-  /@adaptai/realtime-react@0.0.6(react-dom@18.3.1)(react@18.3.1):
-    resolution: {integrity: sha512-feDz0vpaaIwJfRLScH4Xmr9a5DF9qv3bMmAU1swafTr1Y2/72wHauPKyz7pPYKtewK8bIMSFvwduWuNGWADPsQ==}
+  /@adaptai/realtime-react@0.0.605(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-YVHvQEsbNiz2hCofedkrNUrIX9jcUrA0u1aHKbURR+wwwMLa+UF7CuNo+8FdcVY1Nu2DlIHTKtCVN4V+c0SHFQ==}
     peerDependencies:
       react: ^18.2.0
       react-dom: ^18.2.0
