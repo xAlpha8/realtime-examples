@@ -1,10 +1,17 @@
 import { useContext, useRef } from "react";
 import { ChatContext } from "../context";
 
-export const UI = ({ hidden, ...props }) => {
+export const UI = ({ hidden, connection, ...props }) => {
   const input = useRef();
   const { loading, cameraZoomed, setCameraZoomed } = useContext(ChatContext);
-  const sendMessage = () => {};
+  const sendMessage = () => {
+    const text = input.current.value;
+    if (!loading && text) {
+      console.log("sending message", text);
+      connection.send(text);
+      input.current.value = "";
+    }
+  };
 
   if (hidden) {
     return null;

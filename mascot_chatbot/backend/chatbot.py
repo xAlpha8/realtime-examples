@@ -46,8 +46,12 @@ class Chatbot:
         self.audio_convertor_node = AudioConverter()
 
     @realtime.streaming_endpoint()
-    async def run(self, audio_input_stream: AudioStream) -> Tuple[Stream, ...]:
+    async def run(
+        self, audio_input_stream: AudioStream, message_stream: TextStream
+    ) -> Tuple[Stream, ...]:
         deepgram_stream: TextStream = await self.deepgram_node.run(audio_input_stream)
+
+        deepgram_stream = merge([deepgram_stream, message_stream])
 
         llm_token_stream: TextStream
         chat_history_stream: TextStream
