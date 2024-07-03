@@ -215,4 +215,4 @@ class ReplayBot:
 
 
 if __name__ == "__main__":
-    asyncio.run(ReplayBot())
+    asyncio.run(ReplayBot().run())

@@ -79,4 +79,4 @@ class Chatbot:
 
 
 if __name__ == "__main__":
-    asyncio.run(Chatbot())
+    asyncio.run(Chatbot().run())
