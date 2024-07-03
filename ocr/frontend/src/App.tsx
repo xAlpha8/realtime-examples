@@ -2,15 +2,15 @@ import { useState, useEffect } from "react";
 import { useConfig, useRealtime } from "@adaptai/realtime-react";
 import { Config } from "@adaptai/realtime-react";
 import { RtVideo, RtAudio, RtChat } from "@adaptai/realtime-react";
-import { isChrome, isSafari } from 'react-device-detect';
+import { isChrome, isSafari } from "react-device-detect";
 
 function RealtimeContainer({ config }: { config: Config }) {
   const { connection, isConnected } = useRealtime(config);
   useEffect(() => {
-    connection.connect()
-  }, [])
+    connection.connect();
+  }, []);
   return (
-    <div >
+    <div>
       {isConnected ? (
         <div className="flex items-center justify-center space-y-4">
           <RtVideo rtConnection={connection} />
@@ -26,7 +26,8 @@ function App() {
   const [isRealtimeDisabled, setIsRealtimeDisabled] = useState(true);
   const [config, setConfig] = useState<Config | null>(null);
   const configDefault: Config = {
-    functionUrl: "https://infra.getadapt.ai/run/9db00fa3dfa522de4c31dd70fad48605",
+    functionUrl:
+      "https://infra.getadapt.ai/run/45b36c1be5c07bcc51678202d6b960d6",
     offerUrl: "",
     isDataEnabled: true,
     dataParameters: { ordered: true },
@@ -55,8 +56,20 @@ function App() {
 
   if (!isChrome && !isSafari) {
     return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', width: '100vw', backgroundColor: '#000', color: '#fff' }}>
-        <h1 style={{ fontSize: '3rem', textAlign: 'center' }}>This application only supports Chrome and Safari.</h1>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+          width: "100vw",
+          backgroundColor: "#000",
+          color: "#fff",
+        }}
+      >
+        <h1 style={{ fontSize: "3rem", textAlign: "center" }}>
+          This application only supports Chrome and Safari.
+        </h1>
       </div>
     );
   }
@@ -100,7 +113,12 @@ function App() {
             />
           </div>
           <div>
-            <button onClick={dumpConfigAndRun} className="px-4 py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">Run</button>
+            <button
+              onClick={dumpConfigAndRun}
+              className="px-4 py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+            >
+              Run
+            </button>
           </div>
         </div>
       ) : (
