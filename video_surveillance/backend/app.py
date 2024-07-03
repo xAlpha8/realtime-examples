@@ -72,4 +72,4 @@ class VideoSurveillanceApp:
 
 
 if __name__ == "__main__":
-    asyncio.run(VideoSurveillanceApp())
+    asyncio.run(VideoSurveillanceApp().run())

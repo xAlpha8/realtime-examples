@@ -68,4 +68,4 @@ class PokerCommentator:
 
 
 if __name__ == "__main__":
-    asyncio.run(PokerCommentator())
+    asyncio.run(PokerCommentator().run())
