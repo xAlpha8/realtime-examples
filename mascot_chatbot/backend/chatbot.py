@@ -51,11 +51,13 @@ class Chatbot:
     ) -> Tuple[Stream, ...]:
         deepgram_stream: TextStream = await self.deepgram_node.run(audio_input_stream)
 
-        deepgram_stream = merge([deepgram_stream, message_stream])
+        input_text_stream = merge([deepgram_stream, message_stream])
 
         llm_token_stream: TextStream
         chat_history_stream: TextStream
-        llm_token_stream, chat_history_stream = await self.llm_node.run(deepgram_stream)
+        llm_token_stream, chat_history_stream = await self.llm_node.run(
+            input_text_stream
+        )
 
         text_and_animation_stream = map(llm_token_stream, lambda x: json.loads(x))
         json_text_stream = map(
@@ -85,4 +87,4 @@ class Chatbot:
 
 
 if __name__ == "__main__":
-    asyncio.run(Chatbot())
+    asyncio.run(Chatbot().run())
