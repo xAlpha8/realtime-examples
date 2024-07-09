@@ -1080,13 +1080,13 @@ uritemplate = ">=3.0.1,<5"
 
 [[package]]
 name = "google-auth"
-version = "2.31.0"
+version = "2.32.0"
 description = "Google Authentication Library"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "google-auth-2.31.0.tar.gz", hash = "sha256:87805c36970047247c8afe614d4e3af8eceafc1ebba0c679fe75ddd1d575e871"},
-    {file = "google_auth-2.31.0-py2.py3-none-any.whl", hash = "sha256:042c4702efa9f7d3c48d3a69341c209381b125faa6dbf3ebe56bc7e40ae05c23"},
+    {file = "google_auth-2.32.0-py2.py3-none-any.whl", hash = "sha256:53326ea2ebec768070a94bee4e1b9194c9646ea0c2bd72422785bd0f9abfad7b"},
+    {file = "google_auth-2.32.0.tar.gz", hash = "sha256:49315be72c55a6a37d62819e3573f6b416aca00721f7e3e31a008d928bf64022"},
 ]
 
 [package.dependencies]
@@ -1118,37 +1118,37 @@ httplib2 = ">=0.19.0"
 
 [[package]]
 name = "google-cloud-api-keys"
-version = "0.5.9"
+version = "0.5.10"
 description = "Google Cloud Api Keys API client library"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "google-cloud-api-keys-0.5.9.tar.gz", hash = "sha256:b90cc84dcb9fe5fe99c3f8b83bed70c1004ac3acabdffc9a75fb5b6da0f01dcb"},
-    {file = "google_cloud_api_keys-0.5.9-py2.py3-none-any.whl", hash = "sha256:64fe4db86a214557813bef04e2c6a4b74514c09c32fc5bbb8df60e5447608fb0"},
+    {file = "google-cloud-api-keys-0.5.10.tar.gz", hash = "sha256:a9c4a78f88358f363fe92a5f42fb87d5a0b8b06faa134320fa2652dc60066540"},
+    {file = "google_cloud_api_keys-0.5.10-py2.py3-none-any.whl", hash = "sha256:25cbd811c9c02d414d6626af2db76bfe4442eb06c5d035d03aed32f603c6796c"},
 ]
 
 [package.dependencies]
 google-api-core = {version = ">=1.34.1,<2.0.dev0 || >=2.11.dev0,<3.0.0dev", extras = ["grpc"]}
 google-auth = ">=2.14.1,<2.24.0 || >2.24.0,<2.25.0 || >2.25.0,<3.0.0dev"
 proto-plus = ">=1.22.3,<2.0.0dev"
-protobuf = ">=3.19.5,<3.20.0 || >3.20.0,<3.20.1 || >3.20.1,<4.21.0 || >4.21.0,<4.21.1 || >4.21.1,<4.21.2 || >4.21.2,<4.21.3 || >4.21.3,<4.21.4 || >4.21.4,<4.21.5 || >4.21.5,<5.0.0dev"
+protobuf = ">=3.20.2,<4.21.0 || >4.21.0,<4.21.1 || >4.21.1,<4.21.2 || >4.21.2,<4.21.3 || >4.21.3,<4.21.4 || >4.21.4,<4.21.5 || >4.21.5,<6.0.0dev"
 
 [[package]]
 name = "google-cloud-vision"
-version = "3.7.2"
+version = "3.7.3"
 description = "Google Cloud Vision API client library"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "google-cloud-vision-3.7.2.tar.gz", hash = "sha256:044330ad618c810333ff2296cd27ffd145f249638d1b35b270de6b460b00e8d2"},
-    {file = "google_cloud_vision-3.7.2-py2.py3-none-any.whl", hash = "sha256:a313088fcd9c016af0427c2447eea1ad01bc192ca4cc33babaace1be587bbf75"},
+    {file = "google-cloud-vision-3.7.3.tar.gz", hash = "sha256:ee48c48e820c7e09932663986970fef456dc0f45c7af729d46f1f3dd97c1dfb6"},
+    {file = "google_cloud_vision-3.7.3-py2.py3-none-any.whl", hash = "sha256:d989b7e91880f7bd11d65530c3140fc130bbe29513aebb80f3d3e107764265d1"},
 ]
 
 [package.dependencies]
 google-api-core = {version = ">=1.34.1,<2.0.dev0 || >=2.11.dev0,<3.0.0dev", extras = ["grpc"]}
 google-auth = ">=2.14.1,<2.24.0 || >2.24.0,<2.25.0 || >2.25.0,<3.0.0dev"
 proto-plus = ">=1.22.3,<2.0.0dev"
-protobuf = ">=3.19.5,<3.20.0 || >3.20.0,<3.20.1 || >3.20.1,<4.21.0 || >4.21.0,<4.21.1 || >4.21.1,<4.21.2 || >4.21.2,<4.21.3 || >4.21.3,<4.21.4 || >4.21.4,<4.21.5 || >4.21.5,<5.0.0dev"
+protobuf = ">=3.20.2,<4.21.0 || >4.21.0,<4.21.1 || >4.21.1,<4.21.2 || >4.21.2,<4.21.3 || >4.21.3,<4.21.4 || >4.21.4,<4.21.5 || >4.21.5,<6.0.0dev"
 
 [[package]]
 name = "google-crc32c"
@@ -2767,13 +2767,13 @@ dev = ["coverage[toml] (>=7.2.2)"]
 
 [[package]]
 name = "realtime-client"
-version = "0.1.114"
+version = "0.1.116"
 description = ""
 optional = false
 python-versions = "<3.12,>=3.9"
 files = [
-    {file = "realtime_client-0.1.114-py3-none-any.whl", hash = "sha256:5dc0eeee3e8b23bcb7adc3af1285f59b0e4565f4e94f755030980f6bb8b1fa44"},
-    {file = "realtime_client-0.1.114.tar.gz", hash = "sha256:0ecdb6660c2860ca9f91f30be05a4e40d0fe9bb6c0948e9a5e042e139e94f45c"},
+    {file = "realtime_client-0.1.116-py3-none-any.whl", hash = "sha256:c0917ec45abe87c2468702af408a84898228b9a0b862c66808c5bfa47d373856"},
+    {file = "realtime_client-0.1.116.tar.gz", hash = "sha256:ff348da08eacccb03448b1239c93c9038a912234407b253b85e3e87d90b66b47"},
 ]
 
 [package.dependencies]
@@ -2944,17 +2944,20 @@ full = ["httpx (>=0.22.0)", "itsdangerous", "jinja2", "python-multipart (>=0.0.7
 
 [[package]]
 name = "sympy"
-version = "1.12.1"
+version = "1.13.0"
 description = "Computer algebra system (CAS) in Python"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "sympy-1.12.1-py3-none-any.whl", hash = "sha256:9b2cbc7f1a640289430e13d2a56f02f867a1da0190f2f99d8968c2f74da0e515"},
-    {file = "sympy-1.12.1.tar.gz", hash = "sha256:2877b03f998cd8c08f07cd0de5b767119cd3ef40d09f41c30d722f6686b0fb88"},
+    {file = "sympy-1.13.0-py3-none-any.whl", hash = "sha256:6b0b32a4673fb91bd3cac3b55406c8e01d53ae22780be467301cc452f6680c92"},
+    {file = "sympy-1.13.0.tar.gz", hash = "sha256:3b6af8f4d008b9a1a6a4268b335b984b23835f26d1d60b0526ebc71d48a25f57"},
 ]
 
 [package.dependencies]
-mpmath = ">=1.1.0,<1.4.0"
+mpmath = ">=1.1.0,<1.4"
+
+[package.extras]
+dev = ["hypothesis (>=6.70.0)", "pytest (>=7.1.0)"]
 
 [[package]]
 name = "tbb"
@@ -3358,4 +3361,4 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9 <3.12"
-content-hash = "945b079aed3db024231a3dadf772fcf1a6a0cc500a2b81001bd1217e7c2d9d14"
+content-hash = "d7d5a0d3d001e1e195b3b3433b4012b80c052a8405eefcc745596e03f16dc4da"
