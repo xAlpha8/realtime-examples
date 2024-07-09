@@ -115,8 +115,8 @@ export function Avatar(props) {
 
   useEffect(() => {
     if (!speaking) {
-      setMessages((prevMessages) => prevMessages.slice(1))
-      setSpeaking(true)
+      setMessages((prevMessages) => prevMessages.slice(1));
+      setSpeaking(true);
     }
   }, [speaking]);
 
@@ -127,8 +127,9 @@ export function Avatar(props) {
       setFacialExpression(messages[0].facialExpression);
       setLipsync(messages[0].lipsync);
     } else {
-      console.log("Empty")
+      console.log("Empty");
       setAnimation("Idle");
+      setFacialExpression("default");
     }
   }, [messages]);
 
@@ -206,16 +207,17 @@ export function Avatar(props) {
     const appliedMorphTargets = [];
     if (messages.length && lipsync) {
       if (!audioStartTime.current) {
-        audioStartTime.current = new Date().getTime() / 1000
+        audioStartTime.current = new Date().getTime() / 1000;
       }
       setSpeaking(true);
-      const currentAudioTime = (new Date().getTime() / 1000) - audioStartTime.current;
+      const currentAudioTime =
+        new Date().getTime() / 1000 - audioStartTime.current;
       let i = 0;
       for (i = 0; i < lipsync.mouthCues.length; i++) {
         const mouthCue = lipsync.mouthCues[i];
         if (
           currentAudioTime >= mouthCue.start &&
-          currentAudioTime <= mouthCue.end
+          currentAudioTime < mouthCue.end
         ) {
           appliedMorphTargets.push(corresponding[mouthCue.value]);
           lerpMorphTarget(corresponding[mouthCue.value], 1, 0.2);
