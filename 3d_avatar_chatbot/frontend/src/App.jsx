@@ -166,7 +166,7 @@ function App() {
 
 function Avatar() {
   return (
-    <div className="h-screen w-screen m-0 bg-[#faaca8] bg-gradient-to-r from-[#faaca8] to-[#ddd6f3]">
+    <div className="h-screen w-screen m-0 bg-[#faaca8] bg-gradient-to-r from-[#faaca8] to-[#ddd6f3] overflow-hidden">
       <ChatProvider>
         <App />
       </ChatProvider>
