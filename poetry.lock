@@ -710,13 +710,13 @@ wmi = ["wmi (>=1.5.1)"]
 
 [[package]]
 name = "elevenlabs"
-version = "1.3.1"
+version = "1.4.1"
 description = ""
 optional = false
 python-versions = "<4.0,>=3.8"
 files = [
-    {file = "elevenlabs-1.3.1-py3-none-any.whl", hash = "sha256:96cb48d3527393b0f56fb9c6a26ad6520e2999a4c1ac9ca2b525ab7a26ea7342"},
-    {file = "elevenlabs-1.3.1.tar.gz", hash = "sha256:23df9b48960bc1d48b9fe13a5dad74144a83ce5ed83708dd7dcf6180f44ce697"},
+    {file = "elevenlabs-1.4.1-py3-none-any.whl", hash = "sha256:844fa386822746f2b37e4a4d29d72f42877bcbcaee71a99a140349419160940e"},
+    {file = "elevenlabs-1.4.1.tar.gz", hash = "sha256:8df9e252f2bb11b2d0175071661c716238e9074e66eaf5d0c52aeab6b6fd39ad"},
 ]
 
 [package.dependencies]
@@ -1062,13 +1062,13 @@ grpcio-gcp = ["grpcio-gcp (>=0.2.2,<1.0.dev0)"]
 
 [[package]]
 name = "google-api-python-client"
-version = "2.136.0"
+version = "2.137.0"
 description = "Google API Client Library for Python"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "google-api-python-client-2.136.0.tar.gz", hash = "sha256:161c722c8864e7ed39393e2b7eea76ef4e1c933a6a59f9d7c70409b6635f225d"},
-    {file = "google_api_python_client-2.136.0-py2.py3-none-any.whl", hash = "sha256:5a554c8b5edf0a609b905d89d7ced82e8f6ac31da1e4d8d5684ef63dbc0e49f5"},
+    {file = "google_api_python_client-2.137.0-py2.py3-none-any.whl", hash = "sha256:a8b5c5724885e5be9f5368739aa0ccf416627da4ebd914b410a090c18f84d692"},
+    {file = "google_api_python_client-2.137.0.tar.gz", hash = "sha256:e739cb74aac8258b1886cb853b0722d47c81fe07ad649d7f2206f06530513c04"},
 ]
 
 [package.dependencies]
@@ -2242,13 +2242,13 @@ files = [
 
 [[package]]
 name = "openai"
-version = "1.35.10"
+version = "1.35.13"
 description = "The official Python library for the openai API"
 optional = false
 python-versions = ">=3.7.1"
 files = [
-    {file = "openai-1.35.10-py3-none-any.whl", hash = "sha256:962cb5c23224b5cbd16078308dabab97a08b0a5ad736a4fdb3dc2ffc44ac974f"},
-    {file = "openai-1.35.10.tar.gz", hash = "sha256:85966949f4f960f3e4b239a659f9fd64d3a97ecc43c44dc0a044b5c7f11cccc6"},
+    {file = "openai-1.35.13-py3-none-any.whl", hash = "sha256:36ec3e93e0d1f243f69be85c89b9221a471c3e450dfd9df16c9829e3cdf63e60"},
+    {file = "openai-1.35.13.tar.gz", hash = "sha256:c684f3945608baf7d2dcc0ef3ee6f3e27e4c66f21076df0b47be45d57e6ae6e4"},
 ]
 
 [package.dependencies]
@@ -3361,4 +3361,4 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9 <3.12"
-content-hash = "d7d5a0d3d001e1e195b3b3433b4012b80c052a8405eefcc745596e03f16dc4da"
+content-hash = "e3a5f89dc3ad5b941d6591b435a7337a11aca1e602fa4b7ef13e2dd4c522ae94"
