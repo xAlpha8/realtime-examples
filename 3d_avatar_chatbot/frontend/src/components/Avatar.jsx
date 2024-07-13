@@ -105,9 +105,7 @@ const corresponding = {
 let setupMode = false;
 
 export function Avatar(props) {
-  const { nodes, materials, scene } = useGLTF(
-    "/models/64f1a714fe61576b46f27ca2.glb"
-  );
+  const { nodes, materials, scene } = useGLTF("/models/untitled.glb");
 
   const { messages, setMessages } = useContext(ChatContext);
   const [lipsync, setLipsync] = useState();
@@ -183,22 +181,6 @@ export function Avatar(props) {
   const audioStartTime = useRef(null);
 
   useFrame(() => {
-    !setupMode &&
-      Object.keys(nodes.EyeLeft.morphTargetDictionary).forEach((key) => {
-        const mapping = facialExpressions[facialExpression];
-        if (key === "eyeBlinkLeft" || key === "eyeBlinkRight") {
-          return; // eyes wink/blink are handled separately
-        }
-        if (mapping && mapping[key]) {
-          lerpMorphTarget(key, mapping[key], 0.1);
-        } else {
-          lerpMorphTarget(key, 0, 0.1);
-        }
-      });
-
-    lerpMorphTarget("eyeBlinkLeft", blink || winkLeft ? 1 : 0, 0.5);
-    lerpMorphTarget("eyeBlinkRight", blink || winkRight ? 1 : 0, 0.5);
-
     // LIPSYNC
     if (setupMode) {
       return;
@@ -238,89 +220,19 @@ export function Avatar(props) {
     });
   });
 
-  useEffect(() => {
-    let blinkTimeout;
-    const nextBlink = () => {
-      blinkTimeout = setTimeout(() => {
-        setBlink(true);
-        setTimeout(() => {
-          setBlink(false);
-          nextBlink();
-        }, 200);
-      }, THREE.MathUtils.randInt(1000, 5000));
-    };
-    nextBlink();
-    return () => clearTimeout(blinkTimeout);
-  }, []);
-
   return (
     <group {...props} dispose={null} ref={group}>
-      <primitive object={nodes.Hips} />
-      <skinnedMesh
-        name="Wolf3D_Body"
-        geometry={nodes.Wolf3D_Body.geometry}
-        material={materials.Wolf3D_Body}
-        skeleton={nodes.Wolf3D_Body.skeleton}
-      />
-      <skinnedMesh
-        name="Wolf3D_Outfit_Bottom"
-        geometry={nodes.Wolf3D_Outfit_Bottom.geometry}
-        material={materials.Wolf3D_Outfit_Bottom}
-        skeleton={nodes.Wolf3D_Outfit_Bottom.skeleton}
-      />
-      <skinnedMesh
-        name="Wolf3D_Outfit_Footwear"
-        geometry={nodes.Wolf3D_Outfit_Footwear.geometry}
-        material={materials.Wolf3D_Outfit_Footwear}
-        skeleton={nodes.Wolf3D_Outfit_Footwear.skeleton}
-      />
-      <skinnedMesh
-        name="Wolf3D_Outfit_Top"
-        geometry={nodes.Wolf3D_Outfit_Top.geometry}
-        material={materials.Wolf3D_Outfit_Top}
-        skeleton={nodes.Wolf3D_Outfit_Top.skeleton}
-      />
-      <skinnedMesh
-        name="Wolf3D_Hair"
-        geometry={nodes.Wolf3D_Hair.geometry}
-        material={materials.Wolf3D_Hair}
-        skeleton={nodes.Wolf3D_Hair.skeleton}
-      />
-      <skinnedMesh
-        name="EyeLeft"
-        geometry={nodes.EyeLeft.geometry}
-        material={materials.Wolf3D_Eye}
-        skeleton={nodes.EyeLeft.skeleton}
-        morphTargetDictionary={nodes.EyeLeft.morphTargetDictionary}
-        morphTargetInfluences={nodes.EyeLeft.morphTargetInfluences}
-      />
-      <skinnedMesh
-        name="EyeRight"
-        geometry={nodes.EyeRight.geometry}
-        material={materials.Wolf3D_Eye}
-        skeleton={nodes.EyeRight.skeleton}
-        morphTargetDictionary={nodes.EyeRight.morphTargetDictionary}
-        morphTargetInfluences={nodes.EyeRight.morphTargetInfluences}
-      />
-      <skinnedMesh
-        name="Wolf3D_Head"
-        geometry={nodes.Wolf3D_Head.geometry}
-        material={materials.Wolf3D_Skin}
-        skeleton={nodes.Wolf3D_Head.skeleton}
-        morphTargetDictionary={nodes.Wolf3D_Head.morphTargetDictionary}
-        morphTargetInfluences={nodes.Wolf3D_Head.morphTargetInfluences}
-      />
-      <skinnedMesh
-        name="Wolf3D_Teeth"
-        geometry={nodes.Wolf3D_Teeth.geometry}
-        material={materials.Wolf3D_Teeth}
-        skeleton={nodes.Wolf3D_Teeth.skeleton}
-        morphTargetDictionary={nodes.Wolf3D_Teeth.morphTargetDictionary}
-        morphTargetInfluences={nodes.Wolf3D_Teeth.morphTargetInfluences}
-      />
+      <group scale={[0.015, 0.015, 0.015]} position={[0, -1, 0]}>
+        <skinnedMesh
+          geometry={nodes.rp_eric_rigged_001_geo.geometry}
+          material={materials.rp_eric_rigged_001_mat}
+          skeleton={nodes.rp_eric_rigged_001_geo.skeleton}
+        />
+        <primitive object={nodes.root} />
+      </group>
     </group>
   );
 }
 
-useGLTF.preload("/models/64f1a714fe61576b46f27ca2.glb");
+useGLTF.preload("/models/untitled.glb");
 useGLTF.preload("/models/animations.glb");
