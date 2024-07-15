@@ -6,29 +6,24 @@ from typing import Tuple
 logging.basicConfig(level=logging.INFO)
 
 import realtime
-from realtime.plugins.eleven_labs_tts import ElevenLabsTTS
-from realtime.plugins.token_aggregator import TokenAggregator
 from realtime.plugins.deepgram_stt import DeepgramSTT
 from realtime.plugins.fireworks_llm import FireworksLLM
 from realtime.plugins.audio_convertor import AudioConverter
-from realtime.streams import AudioStream, VideoStream, Stream, TextStream, ByteStream
+from realtime.streams import AudioStream, Stream, TextStream, ByteStream
 from realtime.ops.combine_latest import combine_latest
 from realtime.ops.map import map
-from realtime.ops.unzip_array import unzip_array
 from realtime.ops.join import join
-from realtime.ops.merge import merge
 from realtime.plugins.azure_tts import AzureTTS
 
 
 @realtime.App()
 class Chatbot:
+    ### SETUP
     async def setup(self):
         self.deepgram_node = DeepgramSTT(sample_rate=8000)
         self.llm_node = FireworksLLM(
-            system_prompt="You are a spanish language coach. You teach at level A1 & A2.\
-            The student is reading the text: ## ¡Madrid, Madrid, Madrid!\n Betty: Hola, me llamo Betty Borbollón. Este es mi hotel, el famoso Borbollón, en la hermosa ciudad de Madrid.\n La vida es buena aquí: fiestas espectaculares, amantes, cosas increíbles…\n Lamentablemente, pronto voy a morir. \nNecesito un sucesor, pero... ¿quién?\n Ana: ¿Abuelita? ## \
-            '##' is just used as a delimeter here\
-            The student might ask about what's written in the text or beginner spanish questions. \
+            system_prompt="You are a medical expert.\
+            Answer questions about head lice, it's treatment and answer questions based on what the user asks. \
             Reply without being verbose. \
             You will always reply with a JSON object.\
             Each message has a text, facialExpression, and animation property.\
@@ -43,17 +38,15 @@ class Chatbot:
         self.tts_node = AzureTTS(stream=False)
         self.audio_convertor_node = AudioConverter()
 
+
+    ### MAIN FUNCTION
     @realtime.streaming_endpoint()
     async def run(
-        self, audio_input_stream: AudioStream, message_stream: TextStream
-    ) -> Tuple[Stream, ...]:
+        self, audio_input_stream: AudioStream) -> Tuple[Stream, ...]:
         deepgram_stream: TextStream = await self.deepgram_node.run(audio_input_stream)
 
-        deepgram_stream = merge([deepgram_stream, message_stream])
-
         llm_token_stream: TextStream
-        chat_history_stream: TextStream
-        llm_token_stream, chat_history_stream = await self.llm_node.run(deepgram_stream)
+        llm_token_stream, _ = await self.llm_node.run(deepgram_stream)
 
         text_and_animation_stream = map(llm_token_stream, lambda x: json.loads(x))
         json_text_stream = map(
