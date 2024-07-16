@@ -66,7 +66,7 @@ function App() {
   const [connection, setConnection] = useState(null);
   const configDefault = {
     functionUrl:
-      "https://infra.getadapt.ai/run/6ce7fb34a42359c5a4fc791f29b61c54",
+      "https://infra.getadapt.ai/run/0e1b72bb5663a63dcbc929c69a660446",
     offerUrl: "",
     isDataEnabled: true,
     dataParameters: { ordered: true },
