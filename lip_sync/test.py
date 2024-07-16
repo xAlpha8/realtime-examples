@@ -18,7 +18,7 @@ def read_and_chunk_wav(file_path, chunk_duration_ms=1000):
 
 
 async def send_bytes_to_websocket(file_path):
-    uri = "wss://lipsync.getadapt.ai:27434/ws?audio_channels=2&audio_sample_rate=44100&audio_sample_width=2"
+    uri = "wss://lipsync.getadapt.ai/ws?audio_channels=2&audio_sample_rate=44100&audio_sample_width=2"
     # Open a connection to the WebSocket server
     async with websockets.connect(uri) as websocket:
         # Open the file in binary read mode
