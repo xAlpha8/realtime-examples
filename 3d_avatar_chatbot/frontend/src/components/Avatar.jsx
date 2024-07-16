@@ -105,7 +105,7 @@ const corresponding = {
 let setupMode = false;
 
 export function Avatar(props) {
-  const { nodes, materials, scene } = useGLTF("/models/untitled.glb");
+  const { nodes, materials, scene } = useGLTF("/models/eric_viseme.glb");
 
   const { messages, setMessages } = useContext(ChatContext);
   const [lipsync, setLipsync] = useState();
@@ -224,9 +224,16 @@ export function Avatar(props) {
     <group {...props} dispose={null} ref={group}>
       <group scale={[0.015, 0.015, 0.015]} position={[0, -1, 0]}>
         <skinnedMesh
+          name="rp_eric_rigged_001_geo"
           geometry={nodes.rp_eric_rigged_001_geo.geometry}
           material={materials.rp_eric_rigged_001_mat}
           skeleton={nodes.rp_eric_rigged_001_geo.skeleton}
+          morphTargetDictionary={
+            nodes.rp_eric_rigged_001_geo.morphTargetDictionary
+          }
+          morphTargetInfluences={
+            nodes.rp_eric_rigged_001_geo.morphTargetInfluences
+          }
         />
         <primitive object={nodes.root} />
       </group>
@@ -234,5 +241,5 @@ export function Avatar(props) {
   );
 }
 
-useGLTF.preload("/models/untitled.glb");
+useGLTF.preload("/models/eric_viseme.glb");
 useGLTF.preload("/models/animations.glb");
