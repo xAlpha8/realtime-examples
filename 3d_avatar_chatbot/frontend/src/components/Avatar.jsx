@@ -181,6 +181,9 @@ export function Avatar(props) {
   const audioStartTime = useRef(null);
 
   useFrame(() => {
+    lerpMorphTarget("eyeBlinkLeft", blink || winkLeft ? 1 : 0, 0.5);
+    lerpMorphTarget("eyeBlinkRight", blink || winkRight ? 1 : 0, 0.5);
+
     // LIPSYNC
     if (setupMode) {
       return;
@@ -220,9 +223,24 @@ export function Avatar(props) {
     });
   });
 
+  useEffect(() => {
+    let blinkTimeout;
+    const nextBlink = () => {
+      blinkTimeout = setTimeout(() => {
+        setBlink(true);
+        setTimeout(() => {
+          setBlink(false);
+          nextBlink();
+        }, 200);
+      }, THREE.MathUtils.randInt(1000, 5000));
+    };
+    nextBlink();
+    return () => clearTimeout(blinkTimeout);
+  }, []);
+
   return (
     <group {...props} dispose={null} ref={group}>
-      <group scale={[0.015, 0.015, 0.015]} position={[0, -1, 0]}>
+      <group scale={[0.01, 0.01, 0.01]} position={[0, 0, 0]}>
         <skinnedMesh
           name="rp_eric_rigged_001_geo"
           geometry={nodes.rp_eric_rigged_001_geo.geometry}
