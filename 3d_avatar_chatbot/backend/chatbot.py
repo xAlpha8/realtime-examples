@@ -25,12 +25,12 @@ class Chatbot:
     async def setup(self):
         self.deepgram_node = DeepgramSTT(sample_rate=8000)
         self.llm_node = FireworksLLM(
-            system_prompt="You are a virtual girlfriend.\
+            system_prompt="You are a virtual assistant.\
             You will always reply with a JSON object.\
             Each message has a text, facialExpression, and animation property.\
             The text property is a short response to the user (no emoji).\
             The different facial expressions are: smile, sad, angry, surprised, funnyFace, and default.\
-            The different animations are: Talking_0, Talking_1, Talking_2, Crying, Laughing, Rumba, Idle, Terrified, and Angry.",
+            The different animations are: Idle, Talking_0 and Talking_1.",
             temperature=0.9,
             response_format={"type": "json_object"},
             stream=False,
