@@ -166,7 +166,15 @@ function App() {
 
 function Avatar() {
   return (
-    <div className="h-screen w-screen m-0 bg-[#faaca8] bg-gradient-to-r from-[#faaca8] to-[#ddd6f3] overflow-hidden">
+    <div
+      className="h-screen w-screen m-0 overflow-hidden"
+      style={{
+        backgroundImage: 'url("ZI.svg")',
+        backgroundSize: "50% 50%", // Ensures the background covers the entire element
+        backgroundPosition: "center", // Centers the background
+        backgroundRepeat: "no-repeat", // Prevents repeating the background
+      }}
+    >
       <ChatProvider>
         <App />
       </ChatProvider>
