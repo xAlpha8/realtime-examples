@@ -1,6 +1,7 @@
 import asyncio
 import logging
 import os
+import time
 from typing import Tuple
 
 import realtime
@@ -33,9 +34,12 @@ class VoiceBot:
         self.llm_node = FireworksLLM(
             # api_key=os.environ.get("OPENAI_API_KEY"),
             system_prompt="You are a helpful assistant. Keep your answers very short.",
+            model="accounts/fireworks/models/llama-v3-8b-instruct",
         )
         self.token_aggregator_node = TokenAggregator()
-        self.tts_node = ElevenLabsTTS(api_key=os.environ.get("ELEVEN_LABS_API_KEY"))
+        self.tts_node = ElevenLabsTTS(
+            api_key=os.environ.get("ELEVEN_LABS_API_KEY"), model="eleven_turbo_v2_5"
+        )
         self.audio_convertor_node = AudioConverter()
 
         # Silero for voice activity detection to handle interrupts while bot is talking
@@ -87,4 +91,9 @@ class VoiceBot:
 
 
 if __name__ == "__main__":
-    asyncio.run(VoiceBot().run())
+    while True:
+        try:
+            asyncio.run(VoiceBot().run())
+        except Exception as e:
+            print(e)
+            time.sleep(1)
