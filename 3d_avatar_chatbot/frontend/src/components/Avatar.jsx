@@ -121,9 +121,15 @@ export function Avatar(props) {
   useEffect(() => {
     if (messages.length > 0) {
       console.log(messages[0]);
-      setAnimation(messages[0].animation);
-      setFacialExpression(messages[0].facialExpression);
-      setLipsync(messages[0].lipsync);
+      if (messages[0].animation) {
+        setAnimation(messages[0].animation);
+      }
+      if (messages[0].facialExpression) {
+        setFacialExpression(messages[0].facialExpression);
+      }
+      if (messages[0].lipsync) {
+        setLipsync(messages[0].lipsync);
+      }
     } else {
       console.log("Empty");
       setAnimation("Idle");
