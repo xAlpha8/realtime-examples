@@ -34,7 +34,7 @@ class Chatbot:
             temperature=0.9,
             response_format={"type": "json_object"},
             stream=False,
-            model="accounts/fireworks/models/llama-v3-70b-instruct",
+            model="accounts/fireworks/models/llama-v3-8b-instruct",
         )
         self.tts_node = AzureTTS(stream=False)
         self.audio_convertor_node = AudioConverter()
