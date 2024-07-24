@@ -156,8 +156,8 @@ export function Avatar(props) {
 
   const lerpMorphTarget = (target, value, speed = 0.1) => {
     scene.traverse((child) => {
-      if (child.isSkinnedMesh && child.morphTargetDictionary) {
-        const index = child.morphTargetDictionary[target];
+      if (child.isSkinnedMesh && child?.morphTargetDictionary) {
+        const index = child?.morphTargetDictionary[target];
         if (
           index === undefined ||
           child.morphTargetInfluences[index] === undefined
@@ -190,6 +190,7 @@ export function Avatar(props) {
 
   useFrame(() => {
     !setupMode &&
+      nodes?.EyeLeft?.morphTargetDictionary &&
       Object.keys(nodes.EyeLeft.morphTargetDictionary).forEach((key) => {
         const mapping = facialExpressions[facialExpression];
         if (key === "eyeBlinkLeft" || key === "eyeBlinkRight") {
