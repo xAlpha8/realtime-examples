@@ -111,12 +111,11 @@ export function Avatar(props) {
 
   const { messages, setMessages, newAudioStartTime } = useContext(ChatContext);
   const [lipsync, setLipsync] = useState();
-  const [speaking, setSpeaking] = useState(true);
+  const [speaking, setSpeaking] = useState(false);
 
   useEffect(() => {
     if (!speaking) {
       setMessages((prevMessages) => prevMessages.slice(1));
-      setSpeaking(true);
     }
   }, [speaking]);
 
@@ -215,6 +214,9 @@ export function Avatar(props) {
       setSpeaking(true);
       const currentAudioTime =
         new Date().getTime() / 1000 - newAudioStartTime.current;
+      if (currentAudioTime < 0.0) {
+        return;
+      }
       let i = 0;
       for (i = 0; i < lipsync.mouthCues.length; i++) {
         const mouthCue = lipsync.mouthCues[i];
@@ -230,7 +232,8 @@ export function Avatar(props) {
       if (i === lipsync.mouthCues.length) {
         setSpeaking(false);
       }
-    } else {
+    } else if (speaking) {
+      console.log("no lipsync; setting speaking to false");
       setSpeaking(false);
     }
     Object.values(corresponding).forEach((value) => {

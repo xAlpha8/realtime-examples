@@ -13,6 +13,7 @@ import { isChrome, isSafari } from "react-device-detect";
 function RealtimeComponent({ config, setConnection }) {
   const { isConnected, connection } = useRealtime(config);
   const { setMessages, newAudioStartTime } = useContext(ChatContext);
+  const deltaCount = useRef(0);
 
   const chat = async (message) => {
     setMessages((prevMessages) => [...prevMessages, message]);
@@ -52,8 +53,12 @@ function RealtimeComponent({ config, setConnection }) {
             console.log("new audio started", timestamp, prevTimestamp);
             newAudioStartTime.current = timestamp / 1000;
           } else if (newAudioStartTime.current && delta == 0) {
-            console.log("new audio ended", timestamp, prevTimestamp);
-            newAudioStartTime.current = null;
+            deltaCount.current += 1;
+            if (deltaCount.current > 10) {
+              console.log("new audio ended", timestamp, prevTimestamp);
+              newAudioStartTime.current = null;
+              deltaCount.current = 0;
+            }
           }
         } else {
           console.log("new audio initiated", timestamp, prevTimestamp);
