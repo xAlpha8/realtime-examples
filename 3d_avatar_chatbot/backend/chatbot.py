@@ -1,53 +1,3 @@
-
-# INFO:root:Received exit, stopping bot
-# Traceback (most recent call last):
-#   File "/tmp/script.xeVdwp.py", line 119, in <module>
-#     asyncio.run(Chatbot().run())
-#   File "/usr/lib/python3.10/asyncio/runners.py", line 44, in run
-#     return loop.run_until_complete(main)
-#   File "/usr/lib/python3.10/asyncio/base_events.py", line 649, in run_until_complete
-#     return future.result()
-#   File "/usr/local/realtime/.venv/lib/python3.10/site-packages/realtime/streaming_endpoint/__init__.py", line 95, in wrapper
-#     await instance.teardown()
-#   File "/tmp/script.xeVdwp.py", line 115, in teardown
-#     await self.tts_node.close()
-#   File "/usr/local/realtime/.venv/lib/python3.10/site-packages/realtime/plugins/azure_tts.py", line 160, in close
-#     self._task.cancel()
-# AttributeError: 'AzureTTS' object has no attribute '_task'
-# Sentry is attempting to send 2 pending events
-# Waiting up to 2 seconds
-# Press Ctrl-C to quit
-# rm: cannot remove '': No such file or directory
-# --2024-07-23 22:43:46--  https://storage.googleapis.com/realtime-sdk-dev.appspot.com/sahil_adpat_demo/44e61c85543663e04e1a60cac4ed1d5e.py?Expires=2036270572&GoogleAccessId=firebase-adminsdk-d4xho%40realtime-sdk-dev.iam.gserviceaccount.com&Signature=ccN%2FcEywl86haYdxRhrvqs7%2FGpNLh06a%2F3HTuoYj2MLgtGiOT5E2SSL1fcJT0sUYNiWj8aX%2FVrm0lT8lEmVTIokB%2FHK7SE0M86VO9k1WH%2BwVE6vjd5peAisFDbU3wxzyDw6avHdxinyZIfiKPbAI6QnAA1Dtlwyk1NwTtltt2cPfZbu8f6%2BDI51COMmNA1vpMfeKQVqJL0rzY4RxaefocX740n9nuJ0rxdaKAMuxDMKLHB4c7CQrcPeTxvz7PCqz6X71WL5i7gaQ8mMs%2BVEnsaIPseKcPEwmX9r8UOn0yn1BGfWadqaEMrcsONb6s9FdEHDdxhKFf1Ti9pmCV0vJNA%3D%3D
-# Resolving storage.googleapis.com (storage.googleapis.com)... 142.250.191.59, 142.250.188.27, 142.250.72.219, ...
-# Connecting to storage.googleapis.com (storage.googleapis.com)|142.250.191.59|:443... connected.
-# HTTP request sent, awaiting response... 200 OK
-# Length: 4622 (4.5K) [text/plain]
-# Saving to: ‘/tmp/script.TpnTsC.py’
-
-#      0K ....                                                  100% 65.7M=0s
-
-# 2024-07-23 22:43:46 (65.7 MB/s) - ‘/tmp/script.TpnTsC.py’ saved [4622/4622]
-
-# INFO:root:Received exit, stopping bot
-# Traceback (most recent call last):
-#   File "/tmp/script.TpnTsC.py", line 119, in <module>
-#     asyncio.run(Chatbot().run())
-#   File "/usr/lib/python3.10/asyncio/runners.py", line 44, in run
-#     return loop.run_until_complete(main)
-#   File "/usr/lib/python3.10/asyncio/base_events.py", line 649, in run_until_complete
-#     return future.result()
-#   File "/usr/local/realtime/.venv/lib/python3.10/site-packages/realtime/streaming_endpoint/__init__.py", line 95, in wrapper
-#     await instance.teardown()
-#   File "/tmp/script.TpnTsC.py", line 115, in teardown
-#     await self.tts_node.close()
-#   File "/usr/local/realtime/.venv/lib/python3.10/site-packages/realtime/plugins/azure_tts.py", line 160, in close
-#     self._task.cancel()
-# AttributeError: 'AzureTTS' object has no attribute '_task'
-# Sentry is attempting to send 2 pending events
-# Waiting up to 2 seconds
-# Press Ctrl-C to quit
-# rm: cannot remove '': No such file or directory
 import asyncio
 import json
 import logging
@@ -144,7 +94,7 @@ Provide accurate, easy-to-understand info about the current page topic. Use medi
             temperature=0.9,
             response_format={"type": "json_object"},
             stream=False,
-            model="accounts/fireworks/models/llama-v3-70b-instruct",
+            model="accounts/fireworks/models/llama-v3-8b-instruct",
         )
         self.tts_node = AzureTTS(stream=False, voice_id="en-US-AndrewMultilingualNeural")
         self.audio_convertor_node = AudioConverter()
