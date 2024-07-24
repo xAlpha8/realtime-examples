@@ -3,7 +3,7 @@ import { useConfig } from "@adaptai/realtime-react";
 const ConnectionConfigPanel = ({ handleRun }) => {
   const configDefault = {
     functionUrl:
-      "https://infra.getadapt.ai/run/dd0b40c2acb71ad19e0b62e865eaa1e9",
+      "https://infra.getadapt.ai/run/e998d975f99abf1e605e2c4e919925c9",
     offerUrl: "",
     isDataEnabled: true,
     dataParameters: { ordered: true },
@@ -40,7 +40,7 @@ const ConnectionConfigPanel = ({ handleRun }) => {
               ))}
             </select>
           </div>
-          <div>
+          <div style={{display: 'none'}}>
             <h2 className="text-lg font-bold">Function URL:</h2>
             <input
               type="text"

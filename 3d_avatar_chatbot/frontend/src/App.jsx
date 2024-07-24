@@ -11,6 +11,7 @@ import { ChatProvider } from "./context";
 import { isChrome, isSafari } from "react-device-detect";
 import { ConnectionConfigPanel } from "./components/ConnectionConfigPanel";
 import { Toaster } from "react-hot-toast"
+import { ToastManager } from "./components/ToastManager";
 
 function RealtimeComponent({ config, setConnection }) {
   const { isConnected, connection } = useRealtime(config);
@@ -95,6 +96,7 @@ function App() {
 
   return (
     <>
+      <ToastManager />
       <div className="self-start backdrop-blur-md bg-white bg-opacity-50 p-4 rounded-lg">
         <div className="space-y-{!connection && 4">
           {!connection && <ConnectionConfigPanel handleRun={handleRun} />}
@@ -106,7 +108,7 @@ function App() {
         </div>
       </div>{" "}
       <Loader />
-      {connection && <UI connection={connection} />}
+      {/* {connection && <UI connection={connection} />} */}
       <Canvas shadows camera={{ position: [0, 0, 1], fov: 30 }}>
         <Experience />
       </Canvas>
