@@ -116,24 +116,24 @@ export function Avatar(props) {
   useEffect(() => {
     if (!speaking) {
       setMessages((prevMessages) => prevMessages.slice(1));
+      setAnimation("Idle");
+      setFacialExpression("default");
     }
   }, [speaking]);
 
   useEffect(() => {
     if (messages.length > 0) {
       console.log("message", messages[0]);
-      if (messages[0].animation) {
+      if (messages[0]?.animation) {
         setAnimation(messages[0].animation);
       }
-      if (messages[0].facialExpression) {
+      if (messages[0]?.facialExpression) {
         setFacialExpression(messages[0].facialExpression);
       }
-      if (messages[0].lipsync) {
-        setLipsync(messages[0].lipsync);
+      if (messages[0]?.mouthCues) {
+        setLipsync(messages[0].mouthCues);
       }
-    } else {
-      setAnimation("Idle");
-      setFacialExpression("default");
+      setMessages((prevMessages) => prevMessages.slice(1));
     }
   }, [messages]);
 
@@ -210,7 +210,7 @@ export function Avatar(props) {
     }
 
     const appliedMorphTargets = [];
-    if (messages.length && lipsync && newAudioStartTime.current) {
+    if (lipsync && newAudioStartTime.current) {
       setSpeaking(true);
       const currentAudioTime =
         new Date().getTime() / 1000 - newAudioStartTime.current;
@@ -218,8 +218,8 @@ export function Avatar(props) {
         return;
       }
       let i = 0;
-      for (i = 0; i < lipsync.mouthCues.length; i++) {
-        const mouthCue = lipsync.mouthCues[i];
+      for (i = 0; i < lipsync.length; i++) {
+        const mouthCue = lipsync[i];
         if (
           currentAudioTime >= mouthCue.start &&
           currentAudioTime < mouthCue.end
@@ -229,7 +229,7 @@ export function Avatar(props) {
           break;
         }
       }
-      if (i === lipsync.mouthCues.length) {
+      if (i === lipsync.length) {
         setSpeaking(false);
       }
     } else if (speaking) {
