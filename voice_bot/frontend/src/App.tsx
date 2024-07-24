@@ -174,7 +174,10 @@ export default function App() {
 
   if (state !== "idle") {
     return (
-      <Card shadow className="animate-appear max-w-lg">
+      <Card
+        shadow="md"
+        className="animate-fade-in-up max-w-2xl mx-auto my-4 bg-gray-200"
+      >
         <CardHeader>
           <CardTitle>Configure your devices</CardTitle>
           <CardDescription>
@@ -182,9 +185,9 @@ export default function App() {
           </CardDescription>
         </CardHeader>
         <CardContent stack>
-          <div className="flex flex-row gap-2 bg-primary-50 px-4 py-2 md:p-2 text-sm items-center justify-center rounded-md font-medium text-pretty">
-            <Ear className="size-7 md:size-5 text-primary-400" />
-            Works best in a quiet environment with a good internet.
+          <div className="flex flex-row gap-3 bg-gray-300 px-5 py-3 md:py-3 text-base items-center justify-center rounded-lg font-semibold text-navy-900">
+            <Ear className="size-8 md:size-6 text-navy-600" />
+            Works best in a quiet environment.
           </div>
           <Configure
             startAudioOff={startAudioOff}
@@ -197,13 +200,16 @@ export default function App() {
             fullWidthMobile
             onClick={() => start()}
             disabled={state !== "configuring"}
+            className="bg-navy-700 hover:bg-navy-800 text-white font-bold py-2 px-4 rounded"
           >
             {state !== "configuring" && <Loader2 className="animate-spin" />}
             {status_text[state as keyof typeof status_text]}
           </Button>
         </CardFooter>
         {capacityError && (
-          <div className="text-red-500 mt-2 p-4">{capacityError}</div>
+          <div className="text-red-700 mt-3 p-4 rounded bg-red-200">
+            {capacityError}
+          </div>
         )}
       </Card>
     );

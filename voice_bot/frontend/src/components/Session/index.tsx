@@ -173,7 +173,7 @@ export const Session = React.memo(
         <div className="flex-1 flex flex-col items-center justify-center w-full">
           <Card
             fullWidthMobile={false}
-            className="w-full max-w-[320px] sm:max-w-[420px] mt-auto shadow-long"
+            className="w-full max-w-[320px] sm:max-w-[420px] mt-auto shadow-long bg-dark-blue border-neon-blue"
           >
             <Agent hasStarted={hasStarted} statsAggregator={stats_aggregator} />
           </Card>
@@ -196,6 +196,7 @@ export const Session = React.memo(
                   variant={showStats ? "light" : "ghost"}
                   size="icon"
                   onClick={() => setShowStats(!showStats)}
+                  className="text-dark-blue hover:bg-neon-blue"
                 >
                   <LineChart />
                 </Button>
@@ -208,12 +209,16 @@ export const Session = React.memo(
                   variant="ghost"
                   size="icon"
                   onClick={() => setShowDevices(true)}
+                  className="text-gray hover:bg-neon-blue"
                 >
                   <Settings />
                 </Button>
               </TooltipTrigger>
             </Tooltip>
-            <Button onClick={() => onLeave()} className="ml-auto">
+            <Button
+              onClick={() => onLeave()}
+              className="ml-auto bg-gray hover:bg-dark-blue"
+            >
               <LogOut size={16} />
               End
             </Button>
