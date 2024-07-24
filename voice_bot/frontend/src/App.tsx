@@ -175,7 +175,7 @@ export default function App() {
   if (state !== "idle") {
     return (
       <Card
-        shadow="md"
+        shadow={true}
         className="animate-fade-in-up max-w-2xl mx-auto my-4 bg-gray-200"
       >
         <CardHeader>
