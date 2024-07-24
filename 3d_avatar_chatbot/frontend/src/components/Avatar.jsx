@@ -109,7 +109,7 @@ export function Avatar(props) {
     "/models/64f1a714fe61576b46f27ca2.glb"
   );
 
-  const { messages, setMessages } = useContext(ChatContext);
+  const { messages, setMessages, newAudioStartTime } = useContext(ChatContext);
   const [lipsync, setLipsync] = useState();
   const [speaking, setSpeaking] = useState(true);
 
@@ -122,7 +122,7 @@ export function Avatar(props) {
 
   useEffect(() => {
     if (messages.length > 0) {
-      console.log(messages[0]);
+      console.log("message", messages[0]);
       if (messages[0].animation) {
         setAnimation(messages[0].animation);
       }
@@ -133,7 +133,6 @@ export function Avatar(props) {
         setLipsync(messages[0].lipsync);
       }
     } else {
-      console.log("Empty");
       setAnimation("Idle");
       setFacialExpression("default");
     }
@@ -212,13 +211,10 @@ export function Avatar(props) {
     }
 
     const appliedMorphTargets = [];
-    if (messages.length && lipsync) {
-      if (!audioStartTime.current) {
-        audioStartTime.current = new Date().getTime() / 1000;
-      }
+    if (messages.length && lipsync && newAudioStartTime.current) {
       setSpeaking(true);
       const currentAudioTime =
-        new Date().getTime() / 1000 - audioStartTime.current;
+        new Date().getTime() / 1000 - newAudioStartTime.current;
       let i = 0;
       for (i = 0; i < lipsync.mouthCues.length; i++) {
         const mouthCue = lipsync.mouthCues[i];
@@ -233,10 +229,10 @@ export function Avatar(props) {
       }
       if (i === lipsync.mouthCues.length) {
         setSpeaking(false);
-        audioStartTime.current = null;
       }
+    } else {
+      setSpeaking(false);
     }
-
     Object.values(corresponding).forEach((value) => {
       if (appliedMorphTargets.includes(value)) {
         return;

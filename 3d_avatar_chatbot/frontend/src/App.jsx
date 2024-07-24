@@ -12,7 +12,7 @@ import { isChrome, isSafari } from "react-device-detect";
 
 function RealtimeComponent({ config, setConnection }) {
   const { isConnected, connection } = useRealtime(config);
-  const { setMessages } = useContext(ChatContext);
+  const { setMessages, newAudioStartTime } = useContext(ChatContext);
 
   const chat = async (message) => {
     setMessages((prevMessages) => [...prevMessages, message]);
@@ -29,11 +29,37 @@ function RealtimeComponent({ config, setConnection }) {
   useEffect(() => {
     const onMessage = (evt) => {
       const msg = JSON.parse(evt.data);
-      console.log("onMessage", msg);
+      console.log(
+        new Date().toLocaleTimeString("en-US", {
+          hour12: false,
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          fractionalSecondDigits: 3,
+        }),
+        "   onMessage",
+        msg
+      );
       chat(msg);
     };
     if (isConnected) {
       connection.on("message", onMessage);
+      connection.onAudioPacketReceived((timestamp, prevTimestamp, source) => {
+        if (prevTimestamp) {
+          const delta = timestamp - prevTimestamp;
+          // console.log("delta", delta, newAudioStartTime.current, prevTimestamp);
+          if (!newAudioStartTime.current && delta > 200) {
+            console.log("new audio started", timestamp, prevTimestamp);
+            newAudioStartTime.current = timestamp / 1000;
+          } else if (newAudioStartTime.current && delta == 0) {
+            console.log("new audio ended", timestamp, prevTimestamp);
+            newAudioStartTime.current = null;
+          }
+        } else {
+          console.log("new audio initiated", timestamp, prevTimestamp);
+          newAudioStartTime.current = timestamp / 1000;
+        }
+      });
     }
   }, [isConnected]);
 
