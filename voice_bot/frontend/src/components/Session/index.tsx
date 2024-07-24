@@ -7,7 +7,7 @@ import {
   useDailyEvent,
   useMeetingState,
 } from "@daily-co/daily-react";
-import { LineChart, LogOut, Settings, Github } from "lucide-react";
+import { LineChart, LogOut, Settings } from "lucide-react";
 
 import StatsAggregator from "../../utils/stats_aggregator";
 import { DeviceSelect } from "../Setup";
