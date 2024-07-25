@@ -59,10 +59,10 @@ class Chatbot:
         viseme_stream: TextStream
         tts_stream, viseme_stream = await self.tts_node.run(json_text_stream)
 
-        json_with_mouth_stream = merge([llm_token_stream, viseme_stream])
+        llm_with_viseme_stream = merge([llm_token_stream, viseme_stream])
 
         audio_stream: AudioStream = await self.audio_convertor_node.run(tts_stream)
-        return audio_stream, json_with_mouth_stream
+        return audio_stream, llm_with_viseme_stream
 
     async def teardown(self):
         await self.deepgram_node.close()

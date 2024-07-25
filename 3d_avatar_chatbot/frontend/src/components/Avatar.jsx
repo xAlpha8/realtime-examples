@@ -115,7 +115,6 @@ export function Avatar(props) {
 
   useEffect(() => {
     if (!speaking) {
-      setMessages((prevMessages) => prevMessages.slice(1));
       setAnimation("Idle");
       setFacialExpression("default");
     }
