@@ -109,33 +109,30 @@ export function Avatar(props) {
     "/models/64f1a714fe61576b46f27ca2.glb"
   );
 
-  const { messages, setMessages } = useContext(ChatContext);
+  const { messages, setMessages, newAudioStartTime } = useContext(ChatContext);
   const [lipsync, setLipsync] = useState();
-  const [speaking, setSpeaking] = useState(true);
+  const [speaking, setSpeaking] = useState(false);
 
   useEffect(() => {
     if (!speaking) {
-      setMessages((prevMessages) => prevMessages.slice(1));
-      setSpeaking(true);
+      setAnimation("Idle");
+      setFacialExpression("default");
     }
   }, [speaking]);
 
   useEffect(() => {
     if (messages.length > 0) {
-      console.log(messages[0]);
-      if (messages[0].animation) {
+      console.log("message", messages[0]);
+      if (messages[0]?.animation) {
         setAnimation(messages[0].animation);
       }
-      if (messages[0].facialExpression) {
+      if (messages[0]?.facialExpression) {
         setFacialExpression(messages[0].facialExpression);
       }
-      if (messages[0].lipsync) {
-        setLipsync(messages[0].lipsync);
+      if (messages[0]?.mouthCues) {
+        setLipsync(messages[0].mouthCues);
       }
-    } else {
-      console.log("Empty");
-      setAnimation("Idle");
-      setFacialExpression("default");
+      setMessages((prevMessages) => prevMessages.slice(1));
     }
   }, [messages]);
 
@@ -156,8 +153,8 @@ export function Avatar(props) {
 
   const lerpMorphTarget = (target, value, speed = 0.1) => {
     scene.traverse((child) => {
-      if (child.isSkinnedMesh && child.morphTargetDictionary) {
-        const index = child.morphTargetDictionary[target];
+      if (child.isSkinnedMesh && child?.morphTargetDictionary) {
+        const index = child?.morphTargetDictionary[target];
         if (
           index === undefined ||
           child.morphTargetInfluences[index] === undefined
@@ -190,6 +187,7 @@ export function Avatar(props) {
 
   useFrame(() => {
     !setupMode &&
+      nodes?.EyeLeft?.morphTargetDictionary &&
       Object.keys(nodes.EyeLeft.morphTargetDictionary).forEach((key) => {
         const mapping = facialExpressions[facialExpression];
         if (key === "eyeBlinkLeft" || key === "eyeBlinkRight") {
@@ -211,16 +209,16 @@ export function Avatar(props) {
     }
 
     const appliedMorphTargets = [];
-    if (messages.length && lipsync) {
-      if (!audioStartTime.current) {
-        audioStartTime.current = new Date().getTime() / 1000;
-      }
+    if (lipsync && newAudioStartTime.current) {
       setSpeaking(true);
       const currentAudioTime =
-        new Date().getTime() / 1000 - audioStartTime.current;
+        new Date().getTime() / 1000 - newAudioStartTime.current;
+      if (currentAudioTime < 0.0) {
+        return;
+      }
       let i = 0;
-      for (i = 0; i < lipsync.mouthCues.length; i++) {
-        const mouthCue = lipsync.mouthCues[i];
+      for (i = 0; i < lipsync.length; i++) {
+        const mouthCue = lipsync[i];
         if (
           currentAudioTime >= mouthCue.start &&
           currentAudioTime < mouthCue.end
@@ -230,12 +228,13 @@ export function Avatar(props) {
           break;
         }
       }
-      if (i === lipsync.mouthCues.length) {
+      if (i === lipsync.length) {
         setSpeaking(false);
-        audioStartTime.current = null;
       }
+    } else if (speaking) {
+      console.log("no lipsync; setting speaking to false");
+      setSpeaking(false);
     }
-
     Object.values(corresponding).forEach((value) => {
       if (appliedMorphTargets.includes(value)) {
         return;

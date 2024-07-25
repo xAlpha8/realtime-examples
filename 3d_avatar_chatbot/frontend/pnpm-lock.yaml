@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@adaptai/realtime-react':
-    specifier: ^0.0.605
-    version: 0.0.605(react-dom@18.3.1)(react@18.3.1)
+    specifier: ^0.0.610
+    version: 0.0.610(react-dom@18.3.1)(react@18.3.1)
   '@react-three/drei':
     specifier: 9.75.0
     version: 9.75.0(@react-three/fiber@8.13.3)(@types/three@0.152.1)(react-dom@18.3.1)(react@18.3.1)(three@0.153.0)
@@ -67,12 +67,13 @@ devDependencies:
 
 packages:
 
-  /@adaptai/realtime-react@0.0.605(react-dom@18.3.1)(react@18.3.1):
-    resolution: {integrity: sha512-YVHvQEsbNiz2hCofedkrNUrIX9jcUrA0u1aHKbURR+wwwMLa+UF7CuNo+8FdcVY1Nu2DlIHTKtCVN4V+c0SHFQ==}
+  /@adaptai/realtime-react@0.0.610(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-5kuIjT/7U5SLvN2Gvyfda1sr+p3VKrwkl+8jSpqD/kjNXfpUAkeM94LYXrAri77OKETWAXnQxb/tItZ0UArmHg==}
     peerDependencies:
       react: ^18.2.0
       react-dom: ^18.2.0
     dependencies:
+      '@sentry/react': 8.19.0(react@18.3.1)
       audiomotion-analyzer: 4.5.0
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
@@ -731,6 +732,91 @@ packages:
       zustand: 3.7.2(react@18.3.1)
     dev: false
 
+  /@sentry-internal/browser-utils@8.19.0:
+    resolution: {integrity: sha512-kM/2KlikKuBR63nFi2q7MGS3V9K9hakjvUknhr/jHZqDVfEuBKmp1ZlHFAdJtglKHHJy07gPj/XqDH7BbYh5yg==}
+    engines: {node: '>=14.18'}
+    dependencies:
+      '@sentry/core': 8.19.0
+      '@sentry/types': 8.19.0
+      '@sentry/utils': 8.19.0
+    dev: false
+
+  /@sentry-internal/feedback@8.19.0:
+    resolution: {integrity: sha512-Jc77H8fEaGcBhERc2U/o7Q8CZHvlZLT9vAlzq0ZZR20v/1vwYcJW1ysKfTuvmw22hCR6ukhFNl6pqJocXFVhvA==}
+    engines: {node: '>=14.18'}
+    dependencies:
+      '@sentry/core': 8.19.0
+      '@sentry/types': 8.19.0
+      '@sentry/utils': 8.19.0
+    dev: false
+
+  /@sentry-internal/replay-canvas@8.19.0:
+    resolution: {integrity: sha512-l4pKJDHrXEctxrK7Xme/+fKToXpGwr/G2t77BzeE1WEw9LwSwADz/hi8HoMdZzuKWriM2BNbz20tpVS84sODxA==}
+    engines: {node: '>=14.18'}
+    dependencies:
+      '@sentry-internal/replay': 8.19.0
+      '@sentry/core': 8.19.0
+      '@sentry/types': 8.19.0
+      '@sentry/utils': 8.19.0
+    dev: false
+
+  /@sentry-internal/replay@8.19.0:
+    resolution: {integrity: sha512-EW9e1J6XbqXUXQST1AfSIzT9O8OwPyeFOkhkn9/gqOQv08TJvQEIBtWJEoJS+XFMEUuB8IqIzVWNVko/DnGt9A==}
+    engines: {node: '>=14.18'}
+    dependencies:
+      '@sentry-internal/browser-utils': 8.19.0
+      '@sentry/core': 8.19.0
+      '@sentry/types': 8.19.0
+      '@sentry/utils': 8.19.0
+    dev: false
+
+  /@sentry/browser@8.19.0:
+    resolution: {integrity: sha512-ZC1HxIFm4TIGONyy9MkPG6Dw8IAhzq43t5mq9PqrB1ehuWj8GX6Vk3E26kuc2sydAm4AXbj0562OmvZHsAJpUA==}
+    engines: {node: '>=14.18'}
+    dependencies:
+      '@sentry-internal/browser-utils': 8.19.0
+      '@sentry-internal/feedback': 8.19.0
+      '@sentry-internal/replay': 8.19.0
+      '@sentry-internal/replay-canvas': 8.19.0
+      '@sentry/core': 8.19.0
+      '@sentry/types': 8.19.0
+      '@sentry/utils': 8.19.0
+    dev: false
+
+  /@sentry/core@8.19.0:
+    resolution: {integrity: sha512-MrgjsZCEjOJgQjIznnDSrLEy7qL+4LVpNieAvr49cV1rzBNSwGmWRnt/puVaPsLyCUgupVx/43BPUHB/HtKNUw==}
+    engines: {node: '>=14.18'}
+    dependencies:
+      '@sentry/types': 8.19.0
+      '@sentry/utils': 8.19.0
+    dev: false
+
+  /@sentry/react@8.19.0(react@18.3.1):
+    resolution: {integrity: sha512-MzuMy4AEdSuIrBEyp3W7c4+v215+2MiU9ba7Y0KBKcC/Nrf1cGfRFRbjl9OYm/JIuxkaop7kgYs6sPMrVJVlrQ==}
+    engines: {node: '>=14.18'}
+    peerDependencies:
+      react: ^16.14.0 || 17.x || 18.x || 19.x
+    dependencies:
+      '@sentry/browser': 8.19.0
+      '@sentry/core': 8.19.0
+      '@sentry/types': 8.19.0
+      '@sentry/utils': 8.19.0
+      hoist-non-react-statics: 3.3.2
+      react: 18.3.1
+    dev: false
+
+  /@sentry/types@8.19.0:
+    resolution: {integrity: sha512-52C8X5V7mK2KIxMJt8MV5TxXAFHqrQR1RKm1oPTwKVWm8hKr1ZYJXINymNrWvpAc3oVIKLC/sa9WFYgXQh+YlA==}
+    engines: {node: '>=14.18'}
+    dev: false
+
+  /@sentry/utils@8.19.0:
+    resolution: {integrity: sha512-8dWJJKaUN6Hf92Oxw2TBmHchGua2W3ZmonrZTTwLvl06jcAigbiQD0MGuF5ytZP8PHx860orV+SbTGKFzfU3Pg==}
+    engines: {node: '>=14.18'}
+    dependencies:
+      '@sentry/types': 8.19.0
+    dev: false
+
   /@tweenjs/tween.js@18.6.4:
     resolution: {integrity: sha512-lB9lMjuqjtuJrx7/kOkqQBtllspPIN+96OvTCeJ2j5FEzinoAXTdAMFnDAQT1KVPRlnYfBrqxtqP66vDM40xxQ==}
     dev: false
@@ -1203,6 +1289,12 @@ packages:
     dependencies:
       function-bind: 1.1.2
     dev: true
+
+  /hoist-non-react-statics@3.3.2:
+    resolution: {integrity: sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==}
+    dependencies:
+      react-is: 16.13.1
+    dev: false
 
   /is-binary-path@2.1.0:
     resolution: {integrity: sha512-ZMERYes6pDydyuGidse7OsHxtbI7WVeUEozgR/g7rd0xUimYNlvZRE/K2MgZTjWy725IfelLeVcEM97mmtRGXw==}
