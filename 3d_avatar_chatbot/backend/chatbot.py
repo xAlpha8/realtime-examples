@@ -25,7 +25,7 @@ class Chatbot:
     async def setup(self):
         self.deepgram_node = DeepgramSTT(sample_rate=8000)
         self.llm_node = FireworksLLM(
-            system_prompt="You are a virtual girlfriend.\
+            system_prompt="You are a virtual assistant.\
             You will always reply with a JSON object.\
             Each message has a text, facialExpression, and animation property.\
             The text property is a short response to the user (no emoji).\
@@ -36,7 +36,7 @@ class Chatbot:
             stream=False,
             model="accounts/fireworks/models/llama-v3-8b-instruct",
         )
-        self.tts_node = AzureTTS(stream=False)
+        self.tts_node = AzureTTS(stream=True)
         self.audio_convertor_node = AudioConverter()
 
     @realtime.streaming_endpoint()
