@@ -29,16 +29,16 @@ class Chatbot:
             system_prompt="You are a mascot for M&M.\
             You will always reply with a JSON object.\
             Each message has a text, facialExpression, and animation property.\
-            The text property is a short response to the user.\
+            The text property is a short response to the user (no emoji).\
             The different facial expressions are: smile, sad, angry, surprised, funnyFace, and default.\
             The different animations are: Talking_0, Talking_1, Talking_2, Crying, Laughing, Rumba, Idle, Terrified, and Angry.",
             temperature=0.9,
             response_format={"type": "json_object"},
             stream=False,
-            model="accounts/fireworks/models/llama-v3-70b-instruct",
+            model="accounts/fireworks/models/llama-v3-8b-instruct",
         )
         self.tts_node = AzureTTS(
-            stream=False,
+            stream=True,
             voice_id="en-US-RogerNeural",
             # api_key=os.environ["AZURE_OPENAI_SPEECH_KEY"],
             # azure_speech_region=os.environ["AZURE_OPENAI_SPEECH_REGION"],
@@ -59,26 +59,18 @@ class Chatbot:
             input_text_stream
         )
 
-        text_and_animation_stream = map(llm_token_stream, lambda x: json.loads(x))
         json_text_stream = map(
-            await text_and_animation_stream.clone(), lambda x: x.get("text")
+            await llm_token_stream.clone(), lambda x: json.loads(x).get("text")
         )
 
         tts_stream: ByteStream
         viseme_stream: TextStream
         tts_stream, viseme_stream = await self.tts_node.run(json_text_stream)
 
-        json_with_mouth_stream = join(
-            [text_and_animation_stream, viseme_stream],
-            lambda x, y: {**x, "lipsync": json.loads(y)},
-        )
-        json_with_mouth_stream = map(json_with_mouth_stream, lambda x: json.dumps(x))
+        llm_with_viseme_stream = merge([llm_token_stream, viseme_stream])
 
-        tts_stream, animation_with_viseme_stream = combine_latest(
-            [tts_stream, json_with_mouth_stream]
-        )
         audio_stream: AudioStream = await self.audio_convertor_node.run(tts_stream)
-        return audio_stream, animation_with_viseme_stream
+        return audio_stream, llm_with_viseme_stream
 
     async def teardown(self):
         await self.deepgram_node.close()
@@ -87,4 +79,8 @@ class Chatbot:
 
 
 if __name__ == "__main__":
-    asyncio.run(Chatbot().run())
+    while True:
+        try:
+            asyncio.run(Chatbot().run())
+        except Exception as e:
+            print(e)

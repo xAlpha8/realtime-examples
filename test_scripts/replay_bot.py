@@ -20,9 +20,20 @@ class ReplayBot:
 
     @realtime.streaming_endpoint()
     async def run(
-        self, audio_input_queue: AudioStream, video_input_queue: VideoStream
+        self,
+        text_input_queue: TextStream,
+        video_input_queue: VideoStream,
+        audio_input_queue: AudioStream,
     ) -> Tuple[Stream, ...]:
-        return (audio_input_queue, video_input_queue, None)
+        return text_input_queue, video_input_queue, audio_input_queue
 
     async def teardown(self):
         pass
+
+
+if __name__ == "__main__":
+    while True:
+        try:
+            asyncio.run(ReplayBot().run(), debug=True)
+        except Exception as e:
+            print(e)
