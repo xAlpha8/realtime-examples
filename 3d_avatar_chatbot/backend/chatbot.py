@@ -1,6 +1,7 @@
 import asyncio
 import json
 import logging
+import os
 from typing import Tuple
 
 logging.basicConfig(level=logging.INFO)
@@ -25,10 +26,10 @@ class Chatbot:
     async def setup(self):
         self.deepgram_node = DeepgramSTT(sample_rate=8000)
         self.llm_node = FireworksLLM(
-            system_prompt="You are a virtual girlfriend.\
+            system_prompt="You are a mascot for M&M.\
             You will always reply with a JSON object.\
             Each message has a text, facialExpression, and animation property.\
-            The text property is a short response to the user (no emoji).\
+            The text property is a short response to the user.\
             The different facial expressions are: smile, sad, angry, surprised, funnyFace, and default.\
             The different animations are: Talking_0, Talking_1, Talking_2, Crying, Laughing, Rumba, Idle, Terrified, and Angry.",
             temperature=0.9,
@@ -36,7 +37,12 @@ class Chatbot:
             stream=False,
             model="accounts/fireworks/models/llama-v3-70b-instruct",
         )
-        self.tts_node = AzureTTS(stream=False)
+        self.tts_node = AzureTTS(
+            stream=False,
+            voice_id="en-US-RogerNeural",
+            # api_key=os.environ["AZURE_OPENAI_SPEECH_KEY"],
+            # azure_speech_region=os.environ["AZURE_OPENAI_SPEECH_REGION"],
+        )
         self.audio_convertor_node = AudioConverter()
 
     @realtime.streaming_endpoint()
@@ -45,11 +51,13 @@ class Chatbot:
     ) -> Tuple[Stream, ...]:
         deepgram_stream: TextStream = await self.deepgram_node.run(audio_input_stream)
 
-        deepgram_stream = merge([deepgram_stream, message_stream])
+        input_text_stream = merge([deepgram_stream, message_stream])
 
         llm_token_stream: TextStream
         chat_history_stream: TextStream
-        llm_token_stream, chat_history_stream = await self.llm_node.run(deepgram_stream)
+        llm_token_stream, chat_history_stream = await self.llm_node.run(
+            input_text_stream
+        )
 
         text_and_animation_stream = map(llm_token_stream, lambda x: json.loads(x))
         json_text_stream = map(
