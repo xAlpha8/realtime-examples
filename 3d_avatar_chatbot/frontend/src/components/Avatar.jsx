@@ -141,13 +141,13 @@ export function Avatar(props) {
   const [animation, setAnimation] = useState(
     animations.find((a) => a.name === "Idle") ? "Idle" : animations[0].name // Check if Idle animation exists otherwise use first animation
   );
-  useEffect(() => {
-    actions[animation]
-      .reset()
-      .fadeIn(mixer.stats.actions.inUse === 0 ? 0 : 0.5)
-      .play();
-    return () => actions[animation].fadeOut(0.5);
-  }, [animation]);
+  // useEffect(() => {
+  //   actions[animation]
+  //     .reset()
+  //     .fadeIn(mixer.stats.actions.inUse === 0 ? 0 : 0.5)
+  //     .play();
+  //   return () => actions[animation].fadeOut(0.5);
+  // }, [animation]);
 
   const lerpMorphTarget = (target, value, speed = 0.1) => {
     scene.traverse((child) => {
