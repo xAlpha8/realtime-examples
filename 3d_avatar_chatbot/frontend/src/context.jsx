@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useRef } from "react";
 
 const ChatContext = createContext(null);
 
@@ -6,6 +6,7 @@ const ChatProvider = ({ children, connection }) => {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [cameraZoomed, setCameraZoomed] = useState(true);
+  const newAudioStartTime = useRef(null);
 
   return (
     <ChatContext.Provider
@@ -15,6 +16,7 @@ const ChatProvider = ({ children, connection }) => {
         setCameraZoomed,
         messages,
         setMessages,
+        newAudioStartTime,
       }}
     >
       {children}

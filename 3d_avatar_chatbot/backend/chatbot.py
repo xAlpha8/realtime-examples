@@ -34,9 +34,9 @@ class Chatbot:
             temperature=0.9,
             response_format={"type": "json_object"},
             stream=False,
-            model="accounts/fireworks/models/llama-v3-70b-instruct",
+            model="accounts/fireworks/models/llama-v3-8b-instruct",
         )
-        self.tts_node = AzureTTS(stream=False)
+        self.tts_node = AzureTTS(stream=True)
         self.audio_convertor_node = AudioConverter()
 
     @realtime.streaming_endpoint()
@@ -51,26 +51,18 @@ class Chatbot:
         chat_history_stream: TextStream
         llm_token_stream, chat_history_stream = await self.llm_node.run(deepgram_stream)
 
-        text_and_animation_stream = map(llm_token_stream, lambda x: json.loads(x))
         json_text_stream = map(
-            await text_and_animation_stream.clone(), lambda x: x.get("text")
+            await llm_token_stream.clone(), lambda x: json.loads(x).get("text")
         )
 
         tts_stream: ByteStream
         viseme_stream: TextStream
         tts_stream, viseme_stream = await self.tts_node.run(json_text_stream)
 
-        json_with_mouth_stream = join(
-            [text_and_animation_stream, viseme_stream],
-            lambda x, y: {**x, "lipsync": json.loads(y)},
-        )
-        json_with_mouth_stream = map(json_with_mouth_stream, lambda x: json.dumps(x))
+        llm_with_viseme_stream = merge([llm_token_stream, viseme_stream])
 
-        tts_stream, animation_with_viseme_stream = combine_latest(
-            [tts_stream, json_with_mouth_stream]
-        )
         audio_stream: AudioStream = await self.audio_convertor_node.run(tts_stream)
-        return audio_stream, animation_with_viseme_stream
+        return audio_stream, llm_with_viseme_stream
 
     async def teardown(self):
         await self.deepgram_node.close()
@@ -79,4 +71,8 @@ class Chatbot:
 
 
 if __name__ == "__main__":
-    asyncio.run(Chatbot().run())
+    while True:
+        try:
+            asyncio.run(Chatbot().run())
+        except Exception as e:
+            print(e)
