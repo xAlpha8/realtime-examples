@@ -44,12 +44,12 @@ def frame_to_data_url(frame):
 
 
 async def fetch_data(image, classes):
-    url = "https://infer.roboflow.com/yolo_world/infer?api_key=7RMjEFRGeoDQdYfT3Dfe"
+    url = "http://64.181.234.250:9001/yolo_world/infer?api_key=UdE7KhC1MuHuHOIKxjtO"
     payload = {
         "id": "text",
         "image": {"type": "base64", "value": frame_to_data_url(image)},
         "text": classes,
-        "api_key": "7RMjEFRGeoDQdYfT3Dfe",
+        "api_key": "UdE7KhC1MuHuHOIKxjtO",
         "yolo_world_version_id": "l",
         "confidence": 0.06,
     }

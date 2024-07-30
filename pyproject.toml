@@ -8,7 +8,9 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = ">=3.9 <3.12"
 #realtime-client = {extras = ["plugins"], version = "^0.1.116"}
-realtime-client = {path= "/Users/janakagrawal/Documents/GitHub/realtime-client"}
+realtime-client = {path= "/Users/sahilmanocha/Sahil/Projects/realtime/sdk/realtime-client"}
+supervision = "^0.22.0"
+inference = "^0.15.1"
 
 [tool.poetry.group.plugins]
 optional = true
