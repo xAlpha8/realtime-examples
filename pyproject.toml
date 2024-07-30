@@ -7,7 +7,8 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = ">=3.9 <3.12"
-realtime-client = {extras = ["plugins"], version = "^0.1.116"}
+#realtime-client = {extras = ["plugins"], version = "^0.1.116"}
+realtime-client = {path= "/Users/janakagrawal/Documents/GitHub/realtime-client"}
 
 [tool.poetry.group.plugins]
 optional = true
@@ -29,6 +30,7 @@ google-cloud-vision = "^3.7.2"
 
 [tool.poetry.group.dev.dependencies]
 google-cloud-api-keys = "^0.5.9"
+supervision = "^0.22.0"
 
 [build-system]
 requires = ["poetry-core"]
