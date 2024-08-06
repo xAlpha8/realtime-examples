@@ -38,23 +38,25 @@ class Chatbot:
         )
         self.tts_node = AzureTTS(stream=False)
         self.audio_convertor_node = AudioConverter()
+        self.id = None
 
     @realtime.streaming_endpoint()
     async def run(
         self, audio_input_stream: AudioStream, message_stream: TextStream
     ) -> Tuple[Stream, ...]:
         deepgram_stream: TextStream = await self.deepgram_node.run(audio_input_stream)
-
-        deepgram_stream = merge([deepgram_stream, message_stream])
+        if (self.id is None):
+            self.id = message_stream_processor.get_nowait()
 
         llm_token_stream: TextStream
         chat_history_stream: TextStream
         llm_token_stream, chat_history_stream = await self.llm_node.run(deepgram_stream)
-
+        message_stream_processor = map(await message_stream.clone(), lambda x: x.get("id"))
         text_and_animation_stream = map(llm_token_stream, lambda x: json.loads(x))
         json_text_stream = map(
             await text_and_animation_stream.clone(), lambda x: x.get("text")
         )
+
 
         tts_stream: ByteStream
         viseme_stream: TextStream

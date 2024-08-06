@@ -27,8 +27,37 @@ const FileUpload = () => {
   const [functionUrl, setFunctionUrl] = useState(
     "https://infra.getadapt.ai/run/b84113e776b6ff63b351534e202275a5"
   );
+  const [extractSegments, setExtractSegments] = useState(false)
+  const [segmentsExtracted, setSegmentsExtracted] = useState({
+    state: 'none',
+  })
   const [offerUrl, setOfferUrl] = useState("http://0.0.0.0:8080");
   const [uploading, setUploading] = useState(false);
+  const [selectedSegment, setSelectedSegment] = useState(null);
+  const handleSelectSegment = (segment) => {
+    console.log(segment)
+    setSelectedSegment(segment)
+  }
+  const extractedSegmentsList = [
+    {
+      "id": "segment_1",
+      'timestamp_start': "0:08",
+      'timestamp_end': "0:15",
+      'video_url': "data/ship_segment1.mp4"
+    },
+    {
+      "id": "segment_2",
+      'timestamp_start': "0:16",
+      'timestamp_end': "0:22",
+      'video_url': "data/ship_segment2.mp4"
+    },
+    {
+      "id": "segment_3",
+      'timestamp_start': "0:23",
+      'timestamp_end': "0:31",
+      'video_url': "data/ship_segment3.mp4"
+    }
+  ]
   const [preloadedVideos, setPreloadedVideos] = useState([
     {
       name: "Video_1.mp4",
@@ -57,6 +86,13 @@ const FileUpload = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (extractSegments) {
+      setSegmentsExtracted({ state: 'pending' });
+
+      setTimeout(() => {
+        setSegmentsExtracted({ state: 'done' });
+      }, 5000);
+    }
     setUploading(true);
     const formData = new FormData();
     console.log("File: ", file);
@@ -148,7 +184,7 @@ const FileUpload = () => {
           className="w-full p-2.5 mb-5 border border-gray-800 rounded bg-gray-800 text-white"
         />
       </div>{" "}
-      <div className="bg-gray-900 text-white min-h-screen p-6">
+      <div className="bg-gray-900 text-white p-6">
         <h1 className="text-2xl font-bold mb-6">
           Prompt-based Object Detection Demo
         </h1>
@@ -191,6 +227,18 @@ const FileUpload = () => {
                 placeholder="Enter text and press ENTER"
                 className="w-full bg-gray-800 border border-gray-700 rounded-lg p-2 mb-4"
               />
+              <div className="flex items-center mb-4">
+                <input
+                  type="checkbox"
+                  id="extractSegments"
+                  className="mr-2"
+                  checked={extractSegments}
+                  onChange={(e) => setExtractSegments(e.target.checked)}
+                />
+                <label htmlFor="extractSegments" className="text-white">
+                  Extract segments
+                </label>
+              </div>
               <div className="flex justify-between">
                 <button
                   type="submit"
@@ -206,41 +254,62 @@ const FileUpload = () => {
                 </button>
               </div>
             </form>
-
-            {/* Examples */}
-            <div className="mt-6">
-              <h2 className="text-lg font-semibold mb-2">Examples</h2>
-              <div className="bg-gray-800 border border-gray-700 rounded-lg p-4">
-                <div className="grid grid-cols-1 gap-4">
-                  {preloadedVideos.map((video, index) => (
-                    <div
-                      key={index}
-                      className="flex flex-col items-center mb-5 mr-5"
-                    >
-                      <h3 className="text-center mb-2">{video.name}</h3>
-                      <video className="w-4/5" controls src={video.url}>
-                        Your browser does not support the video tag.
-                      </video>
-                      <button
-                        className="mt-2 w-2/5 p-2.5 border-none rounded bg-blue-600 text-white text-lg cursor-pointer hover:bg-blue-700"
-                        onClick={() => uploadPreloadedVideo(video)}
-                      >
-                        {video.prompt}
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
           </div>
 
           {/* Output Video */}
           <div className="border border-gray-700 rounded-lg p-4">
-            <h2 className="text-lg font-semibold mb-2">Output Video</h2>
-            <div className="bg-gray-800 h-64 flex items-center justify-center">
-              <img id="outputVideo" className="w-full h-full" />
+            <div>
+              <h2 className="text-lg font-semibold mb-2">Output Video</h2>
+              <div className="bg-gray-800 h-64 flex items-center justify-center">
+                <img id="outputVideo" className="w-full h-full" />
+              </div>
             </div>
+
           </div>
+          {/* Segments */}
+          {segmentsExtracted.state === 'done' && (
+            <div className="border border-gray-700 rounded-lg p-4">
+              <h2 className="text-lg font-semibold mb-2">Extracted Segments</h2>
+              <div className="bg-gray-800 h-64 overflow-y-auto">
+                {extractedSegmentsList.map((segment) => (
+                  <div key={segment.id} className="mb-4 p-2 border border-gray-700 rounded">
+                    <p className="text-white mb-2">
+                      {segment.timestamp_start} - {segment.timestamp_end}
+                    </p>
+                    <button
+                      onClick={() => handleSelectSegment(segment)}
+                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    >
+                      Play
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          {segmentsExtracted.state === 'pending' && (
+            <div className="border border-gray-700 rounded-lg p-4 flex items-center justify-center">
+              <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
+            </div>
+          )}
+          {selectedSegment && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+              <div className="bg-gray-800 p-4 rounded-lg">
+                <h2 className="text-lg font-semibold mb-2 text-white">Selected Segment</h2>
+                <video className="w-full max-h-[80vh]" controls autoPlay>
+                  <source src={selectedSegment.video_url} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+                <button
+                  onClick={() => setSelectedSegment(null)}
+                  className="mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          )}
+          
         </div>
       </div>
     </div>
