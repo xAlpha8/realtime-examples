@@ -97,7 +97,7 @@ function App() {
   const [connection, setConnection] = useState(null);
   const configDefault = {
     functionUrl:
-      "https://infra.getadapt.ai/run/68deae870da28f99a8562dcb962b9383",
+      "https://infra.getadapt.ai/run/c41ab645e46335d79c2961f7cc20e2c6",
     offerUrl: "http://0.0.0.0:8080/offer",
     isDataEnabled: true,
     dataParameters: { ordered: true },
@@ -123,6 +123,10 @@ function App() {
     setConfig(configDump);
   };
 
+  useEffect(() => {
+    dumpConfigAndRun();
+  }, []);
+
   if (!isChrome && !isSafari) {
     return (
       <div
@@ -145,8 +149,8 @@ function App() {
 
   return (
     <>
-      <div className="self-start backdrop-blur-md bg-white bg-opacity-50 p-4 rounded-lg">
-        <div className="space-y-4">
+      {/* <div className="self-start backdrop-blur-md bg-white bg-opacity-50 p-4 rounded-lg"> */}
+        {/* <div className="space-y-4">
           <div>
             <h2 className="text-lg font-bold">Audio Options:</h2>
             <select
@@ -179,16 +183,16 @@ function App() {
               Run
             </button>
           </div>
-        </div>
+        </div> */}
         <div>
           {config && (
             <RealtimeComponent config={config} setConnection={setConnection} />
           )}
         </div>
-      </div>{" "}
+      {/* </div>{" "} */}
       <Loader />
       {connection && <UI connection={connection} />}
-      <Canvas shadows camera={{ position: [0, 0, 1], fov: 30 }}>
+      <Canvas shadows camera={{ position: [0, 0, 1], fov: 60 }}>
         <Experience />
       </Canvas>
     </>
@@ -197,7 +201,7 @@ function App() {
 
 function Avatar() {
   return (
-    <div className="h-screen w-screen m-0 bg-[#faaca8] bg-gradient-to-r from-[#faaca8] to-[#ddd6f3] overflow-hidden">
+    <div className="h-screen w-screen m-0 bg-[#000000] overflow-hidden">
       <ChatProvider>
         <App />
       </ChatProvider>

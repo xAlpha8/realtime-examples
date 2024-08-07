@@ -26,7 +26,7 @@ export const UI = ({ hidden, connection, ...props }) => {
   if (hidden) {
     return null;
   }
-
+  return null;
   return (
     <>
       <div className="fixed top-0 left-0 right-0 bottom-0 z-10 flex justify-between p-4 flex-col pointer-events-none">
