@@ -36,7 +36,7 @@ class Chatbot:
             stream=False,
             model="accounts/fireworks/models/llama-v3-8b-instruct",
         )
-        self.tts_node = AzureTTS(stream=True)
+        self.tts_node = AzureTTS(voice_id="en-US-EricNeural", stream=True)
         self.audio_convertor_node = AudioConverter()
 
     @realtime.streaming_endpoint()
