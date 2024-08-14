@@ -1,7 +1,6 @@
 import { Loader } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import { Experience } from "./components/Experience";
-import { UI } from "./components/UI";
+import { Avatar } from "./components/Avatar";
 import { useState, useRef, useEffect, useContext } from "react";
 import { useConfig, useRealtime } from "@adaptai/realtime-react";
 import { RtAudio } from "@adaptai/realtime-react";
@@ -14,10 +13,6 @@ function RealtimeComponent({ config, setConnection }) {
   const { isConnected, connection } = useRealtime(config);
   const { setMessages, newAudioStartTime } = useContext(ChatContext);
   const deltaCount = useRef(0);
-
-  const chat = async (message) => {
-    setMessages((prevMessages) => [...prevMessages, message]);
-  };
 
   useEffect(() => {
     connection.connect();
@@ -41,7 +36,7 @@ function RealtimeComponent({ config, setConnection }) {
         "   onMessage",
         msg
       );
-      chat(msg);
+      setMessages((prevMessages) => [...prevMessages, message]);
     };
     if (isConnected) {
       connection.on("message", onMessage);
@@ -117,6 +112,25 @@ function App() {
   const { audioOptions } = options;
   const { setAudioInput, setFunctionUrl } = setters;
   const { audioInput, functionUrl } = values;
+  const input = useRef();
+  const sendMessage = () => {
+    const text = input.current.value;
+    if (text) {
+      console.log(
+        new Date().toLocaleTimeString("en-US", {
+          hour12: false,
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          fractionalSecondDigits: 3,
+        }),
+        "  sending message",
+        text
+      );
+      connection.send(text);
+      input.current.value = "";
+    }
+  };
 
   const dumpConfigAndRun = () => {
     const configDump = dump();
@@ -145,64 +159,82 @@ function App() {
 
   return (
     <>
-      <div className="self-start backdrop-blur-md bg-white bg-opacity-50 p-4 rounded-lg">
-        <div className="space-y-4">
-          <div>
-            <h2 className="text-lg font-bold">Audio Options:</h2>
-            <select
-              className="w-full p-2 border border-gray-300 rounded-md"
-              value={audioInput}
-              onChange={(e) => setAudioInput(e.target.value)}
-            >
-              {audioOptions.map((option, index) => (
-                <option key={index} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <h2 className="text-lg font-bold">Function URL:</h2>
-            <input
-              type="text"
-              className="w-full p-2 border border-gray-300 rounded-md"
-              value={functionUrl}
-              onChange={(e) => setFunctionUrl(e.target.value)}
-              placeholder="Enter Function URL"
-            />
-          </div>
-          <div>
-            <button
-              className="bg-pink-500 hover:bg-pink-600 text-white p-4 px-10 font-semibold uppercase rounded-md"
-              onClick={dumpConfigAndRun}
-            >
-              Run
-            </button>
-          </div>
-        </div>
-        <div>
-          {config && (
-            <RealtimeComponent config={config} setConnection={setConnection} />
+      <div className="h-screen w-screen m-0 bg-[#faaca8] bg-gradient-to-r from-[#faaca8] to-[#ddd6f3] overflow-hidden">
+        <ChatProvider>
+          <div className="self-start backdrop-blur-md bg-white bg-opacity-50 p-4 rounded-lg">
+            <div className="space-y-4">
+              <div>
+                <h2 className="text-lg font-bold">Audio Options:</h2>
+                <select
+                  className="w-full p-2 border border-gray-300 rounded-md"
+                  value={audioInput}
+                  onChange={(e) => setAudioInput(e.target.value)}
+                >
+                  {audioOptions.map((option, index) => (
+                    <option key={index} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <h2 className="text-lg font-bold">Function URL:</h2>
+                <input
+                  type="text"
+                  className="w-full p-2 border border-gray-300 rounded-md"
+                  value={functionUrl}
+                  onChange={(e) => setFunctionUrl(e.target.value)}
+                  placeholder="Enter Function URL"
+                />
+              </div>
+              <div>
+                <button
+                  className="bg-pink-500 hover:bg-pink-600 text-white p-4 px-10 font-semibold uppercase rounded-md"
+                  onClick={dumpConfigAndRun}
+                >
+                  Run
+                </button>
+              </div>
+            </div>
+            <div>
+              {config && (
+                <RealtimeComponent
+                  config={config}
+                  setConnection={setConnection}
+                />
+              )}
+            </div>
+          </div>{" "}
+          <Loader />
+          {connection && (
+            <div className="fixed left-0 right-0 bottom-0 z-10 flex justify-between p-4 flex-col pointer-events-none">
+              <div className="flex items-center gap-2 pointer-events-auto max-w-screen-sm w-full mx-auto">
+                <input
+                  className="w-full placeholder:text-gray-800 placeholder:italic p-4 rounded-md bg-opacity-50 bg-white backdrop-blur-md"
+                  placeholder="Type a message..."
+                  ref={input}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      sendMessage();
+                    }
+                  }}
+                />
+                <button
+                  onClick={sendMessage}
+                  className={`bg-pink-500 hover:bg-pink-600 text-white p-4 px-10 font-semibold uppercase rounded-md`}
+                >
+                  Send
+                </button>
+              </div>
+            </div>
           )}
-        </div>
-      </div>{" "}
-      <Loader />
-      {connection && <UI connection={connection} />}
-      <Canvas shadows camera={{ position: [0, 0, 1], fov: 30 }}>
-        <Experience />
-      </Canvas>
+          <Canvas shadows camera={{ position: [0, 0, 1], fov: 30 }}>
+            <Avatar />
+          </Canvas>
+        </ChatProvider>
+      </div>
     </>
   );
 }
 
-function Avatar() {
-  return (
-    <div className="h-screen w-screen m-0 bg-[#faaca8] bg-gradient-to-r from-[#faaca8] to-[#ddd6f3] overflow-hidden">
-      <ChatProvider>
-        <App />
-      </ChatProvider>
-    </div>
-  );
-}
-
-export default Avatar;
+export default App;
