@@ -1,0 +1,16 @@
+export const DEFAULT_CONFIG = {
+  functionUrl: "https://infra.getadapt.ai/run/68deae870da28f99a8562dcb962b9383",
+  offerUrl: "http://0.0.0.0:8080/offer",
+  isDataEnabled: true,
+  dataParameters: { ordered: true },
+  isVideoEnabled: false,
+  videoInput: "",
+  videoCodec: "default",
+  videoResolution: "256x256",
+  videoTransform: "none",
+  isScreenShareEnabled: false,
+  isAudioEnabled: true,
+  audioInput: "",
+  audioCodec: "PCMU/8000",
+  useStun: false,
+};
