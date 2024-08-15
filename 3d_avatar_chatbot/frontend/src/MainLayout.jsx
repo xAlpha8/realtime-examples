@@ -23,7 +23,11 @@ export function MainLayout({ config }) {
     <div className="flex-1">
       <RealtimeComponent config={config} setConnection={setConnection} />
       {connection && <MessageInput inputRef={ref} sendMessage={sendMessage} />}
-      <Canvas shadows camera={{ position: [0, 0, 1], fov: 30 }}>
+      <Canvas
+        style={{ pointerEvents: "none" }}
+        shadows
+        camera={{ position: [0, 0, 1], fov: 30 }}
+      >
         <Avatar messages={messages} removeFirstMessage={removeFirstMessage} />
       </Canvas>
     </div>
