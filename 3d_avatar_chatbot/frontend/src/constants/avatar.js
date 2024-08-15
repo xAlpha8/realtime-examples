@@ -1,5 +1,12 @@
+/**
+ * A collection of predefined facial expressions with their corresponding morph target influences.
+ *
+ * Each key represents an expression, and the associated value is an object where keys represent
+ * facial morph targets (e.g., 'browInnerUp', 'mouthSmileLeft') and the values are the intensities
+ * (ranging from 0 to 1) for those morph targets.
+ */
 export const FACIAL_EXPRESSIONS = {
-  default: {},
+  default: {}, // Default expression with no morph target changes
   smile: {
     browInnerUp: 0.17,
     eyeSquintLeft: 0.4,
@@ -79,6 +86,12 @@ export const FACIAL_EXPRESSIONS = {
   },
 };
 
+/**
+ * A mapping of message cues to corresponding avatar mesh morph targets.
+ *
+ * Each key represents a message cue, and the associated value is the name of the morph target
+ * that should be activated on the avatar mesh in response to that cue.
+ */
 export const MAP_MESSAGE_CUES_TO_AVATAR_MESH = {
   A: "viseme_PP",
   B: "viseme_kk",
