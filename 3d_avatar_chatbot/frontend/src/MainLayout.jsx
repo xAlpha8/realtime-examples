@@ -21,7 +21,9 @@ export function MainLayout({ config }) {
 
   return (
     <div className="flex-1">
-      <RealtimeComponent config={config} setConnection={setConnection} />
+      {config && (
+        <RealtimeComponent config={config} setConnection={setConnection} />
+      )}
       {connection && <MessageInput inputRef={ref} sendMessage={sendMessage} />}
       <Canvas
         style={{ pointerEvents: "none" }}

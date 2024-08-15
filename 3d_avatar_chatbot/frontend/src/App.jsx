@@ -1,3 +1,4 @@
+import { Loader } from "@react-three/drei";
 import React, { useState } from "react";
 import { useConfig } from "@adaptai/realtime-react";
 import { DEFAULT_CONFIG } from "./constants/config";
@@ -27,7 +28,8 @@ function App() {
         setFunctionUrl={setFunctionUrl}
         onClickRun={() => setConfig(dump())}
       />
-      {config && <MainLayout config={config} />}
+      <Loader />
+      <MainLayout config={config} />
     </div>
   );
 }
