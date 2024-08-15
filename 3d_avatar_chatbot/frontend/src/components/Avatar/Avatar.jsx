@@ -11,8 +11,9 @@ import { Dots } from "./Dots";
 import {
   FACIAL_EXPRESSIONS,
   MAP_MESSAGE_CUES_TO_AVATAR_MESH,
-} from "../constants/avatar";
-import { lerpMorphTarget } from "../utils/morph";
+} from "../../constants/avatar";
+import { lerpMorphTarget } from "../../utils/morph";
+import { useFacialExpression } from "./useFacialExpression";
 
 let setupMode = false;
 
@@ -25,11 +26,9 @@ export function Avatar(props) {
   const newAudioStartTime = useRef(0);
   const [lipsync, setLipsync] = useState();
   const [speaking, setSpeaking] = useState(false);
-  const [blink, setBlink] = useState(false);
-  const [winkLeft, setWinkLeft] = useState(false);
-  const [winkRight, setWinkRight] = useState(false);
-  const [facialExpression, setFacialExpression] = useState("");
   const { animations } = useGLTF("/models/animations.glb");
+
+  const { setFacialExpression } = useFacialExpression({ scene, nodes });
 
   const group = useRef();
   const { actions, mixer } = useAnimations(animations, group);
@@ -75,23 +74,6 @@ export function Avatar(props) {
   }, [animation]);
 
   useFrame(() => {
-    !setupMode &&
-      nodes?.EyeLeft?.morphTargetDictionary &&
-      Object.keys(nodes.EyeLeft.morphTargetDictionary).forEach((key) => {
-        const mapping = FACIAL_EXPRESSIONS[facialExpression];
-        if (key === "eyeBlinkLeft" || key === "eyeBlinkRight") {
-          return; // eyes wink/blink are handled separately
-        }
-        if (mapping && mapping[key]) {
-          lerpMorphTarget(scene, key, mapping[key], 0.1);
-        } else {
-          lerpMorphTarget(scene, key, 0, 0.1);
-        }
-      });
-
-    lerpMorphTarget(scene, "eyeBlinkLeft", blink || winkLeft ? 1 : 0, 0.5);
-    lerpMorphTarget(scene, "eyeBlinkRight", blink || winkRight ? 1 : 0, 0.5);
-
     // LIPSYNC
     if (setupMode) {
       return;
@@ -140,21 +122,6 @@ export function Avatar(props) {
       lerpMorphTarget(scene, value, 0, 0.1);
     });
   });
-
-  useEffect(() => {
-    let blinkTimeout;
-    const nextBlink = () => {
-      blinkTimeout = setTimeout(() => {
-        setBlink(true);
-        setTimeout(() => {
-          setBlink(false);
-          nextBlink();
-        }, 200);
-      }, THREE.MathUtils.randInt(1000, 5000));
-    };
-    nextBlink();
-    return () => clearTimeout(blinkTimeout);
-  }, []);
 
   return (
     <>

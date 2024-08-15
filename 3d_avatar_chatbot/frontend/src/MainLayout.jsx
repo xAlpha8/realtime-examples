@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { RealtimeComponent } from "./RealtimeComponent";
 import { Canvas } from "@react-three/fiber";
-import { Avatar } from "./components/Avatar";
+import { Avatar } from "./components/Avatar/Avatar";
 import { MessageInput } from "./MessageInput";
 import { useMessage } from "./hooks/useMessage";
 
