@@ -11,7 +11,6 @@ import { lerpMorphTarget } from "../../utils/morph";
  * @param {THREE.Scene} params.scene - The 3D scene containing the avatar.
  * @param {Object} params.nodes - The 3D model nodes, including morph targets.
  * @param {boolean} params.setupMode - A flag indicating whether the avatar is in setup mode.
- * @returns {Object} - An object containing setter functions for facial expressions and eye animations.
  */
 export function useFacialExpression({ scene, nodes, setupMode }) {
   const [facialExpression, setFacialExpression] = useState("");
