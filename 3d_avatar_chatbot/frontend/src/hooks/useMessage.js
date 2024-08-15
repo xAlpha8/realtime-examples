@@ -6,7 +6,7 @@ import { logger } from "../utils/logger";
  *
  * @param {Object} props - The properties for the hook.
  * @param {Object} props.connection - An instance of RealtimeConnection.
- * @returns {Object} - An object containing message management functions and state.
+ * @returns An object containing message management functions and state.
  */
 export function useMessage(props) {
   const { connection } = props;

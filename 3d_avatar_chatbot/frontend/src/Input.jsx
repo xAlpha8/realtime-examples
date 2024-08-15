@@ -23,43 +23,52 @@ export function InputForm(props) {
   } = props;
 
   return (
-    <div className="space-y-4">
-      {/* Audio Options Section */}
-      <div>
-        <h2 className="text-lg font-bold">Audio Options:</h2>
-        <select
-          className="w-full p-2 border border-gray-300 rounded-md"
-          value={audioInput}
-          onChange={(e) => setAudioInput(e.target.value)}
-        >
-          {audioOptions.map((option, index) => (
-            <option key={index} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-      </div>
+    <div className="p-6">
+      <div className="space-y-6 p-6 bg-gradient-to-r from-[#faaca8] to-[#ddd6f3] rounded-lg shadow-lg">
+        {/* Form Section */}
+        <div className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4">
+          {/* Audio Options */}
+          <div className="flex-1">
+            <h2 className="text-xl font-semibold text-gray-800 mb-2">
+              Audio Options
+            </h2>
+            <select
+              className="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 transition"
+              value={audioInput}
+              onChange={(e) => setAudioInput(e.target.value)}
+            >
+              {audioOptions.map((option, index) => (
+                <option key={index} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </div>
 
-      {/* Function URL Input Section */}
-      <div>
-        <h2 className="text-lg font-bold">Function URL:</h2>
-        <input
-          type="text"
-          className="w-full p-2 border border-gray-300 rounded-md"
-          value={functionUrl}
-          onChange={(e) => setFunctionUrl(e.target.value)}
-          placeholder="Enter Function URL"
-        />
-      </div>
+          {/* Function URL */}
+          <div className="flex-1">
+            <h2 className="text-xl font-semibold text-gray-800 mb-2">
+              Function URL
+            </h2>
+            <input
+              type="text"
+              className="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 transition"
+              value={functionUrl}
+              onChange={(e) => setFunctionUrl(e.target.value)}
+              placeholder="Enter Function URL"
+            />
+          </div>
+        </div>
 
-      {/* Run Button Section */}
-      <div>
-        <button
-          className="bg-pink-500 hover:bg-pink-600 text-white p-4 px-10 font-semibold uppercase rounded-md"
-          onClick={onClickRun}
-        >
-          Run
-        </button>
+        {/* Run Button */}
+        <div>
+          <button
+            className="w-full bg-pink-500 hover:bg-pink-600 text-white p-3 font-semibold uppercase rounded-md shadow-md transition"
+            onClick={onClickRun}
+          >
+            Run
+          </button>
+        </div>
       </div>
     </div>
   );
