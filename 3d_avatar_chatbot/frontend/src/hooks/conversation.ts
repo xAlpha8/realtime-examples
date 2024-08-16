@@ -9,31 +9,24 @@ import { blobToBase64, stringify } from "../utils/utils";
 import { isSafari, isChrome } from "react-device-detect";
 import { Buffer } from "buffer";
 
-const DEFAULT_CHUNK_SIZE = 2048;
-
 export const useConversation = (): {
   status: string;
   start: () => void;
   stop: () => void;
-  toggleActive: () => void;
   active: boolean;
   setActive: React.Dispatch<React.SetStateAction<boolean>>;
   error: Error | undefined;
-  currentSpeaker: CurrentSpeaker;
 } => {
   const [audioContext, setAudioContext] = React.useState<AudioContext>();
   const [audioQueue, setAudioQueue] = React.useState<Buffer[]>([]);
-  const [currentSpeaker, setCurrentSpeaker] =
-    React.useState<CurrentSpeaker>("none");
   // const [payload, setPayload] =
   //   React.useState<Payload>({name: "a",text:"b"});
   const [processing, setProcessing] = React.useState(false);
   const [recorder, setRecorder] = React.useState<IMediaRecorder>();
   const [socket, setSocket] = React.useState<WebSocket>();
-  const [status, setStatus] = React.useState<ConversationStatus>("idle");
+  const [status, setStatus] = React.useState<string>("idle");
   const [error, setError] = React.useState<Error>();
   const [active, setActive] = React.useState(true);
-  const toggleActive = () => setActive(!active);
 
   // get audio context and metadata about user audio
   React.useEffect(() => {
@@ -44,8 +37,8 @@ export const useConversation = (): {
   const recordingDataListener = ({ data }: { data: Blob }) => {
     blobToBase64(data).then((base64Encoded: string | null) => {
       if (!base64Encoded) return;
-      const audioMessage: AudioMessage = {
-        type: "websocket_audio",
+      const audioMessage = {
+        type: "audio",
         data: base64Encoded,
       };
       socket!.readyState === WebSocket.OPEN &&
@@ -101,7 +94,6 @@ export const useConversation = (): {
 
   const stopConversation = (error?: Error) => {
     setAudioQueue([]);
-    setCurrentSpeaker("none");
     if (error) {
       setError(error);
       setStatus("error");
@@ -110,76 +102,12 @@ export const useConversation = (): {
     }
     if (!recorder || !socket) return;
     recorder.stop();
-    const stopMessage: StopMessage = {
+    const stopMessage = {
       type: "websocket_stop",
     };
     socket.send(stringify(stopMessage));
     socket.close();
   };
-
-  const getBackendUrl = async () => {
-    if ("backendUrl" in config) {
-      return config.backendUrl;
-    } else if ("vocodeConfig" in config) {
-      const baseUrl = config.vocodeConfig.baseUrl || VOCODE_API_URL;
-      return `wss://${baseUrl}/conversation?key=${config.vocodeConfig.apiKey}`;
-    } else {
-      throw new Error("Invalid config");
-    }
-  };
-
-  const getStartMessage = (
-    config: ConversationConfig,
-    inputAudioMetadata: { samplingRate: number; audioEncoding: AudioEncoding },
-    outputAudioMetadata: { samplingRate: number; audioEncoding: AudioEncoding }
-  ): StartMessage => {
-    let transcriberConfig: TranscriberConfig = Object.assign(
-      config.transcriberConfig,
-      inputAudioMetadata
-    );
-    if (isSafari && transcriberConfig.type === "transcriber_deepgram") {
-      (transcriberConfig as DeepgramTranscriberConfig).downsampling = 2;
-    }
-
-    return {
-      type: "websocket_start",
-      transcriberConfig: Object.assign(
-        config.transcriberConfig,
-        inputAudioMetadata
-      ),
-      agentConfig: config.agentConfig,
-      synthesizerConfig: Object.assign(
-        config.synthesizerConfig,
-        outputAudioMetadata
-      ),
-      conversationId: config.vocodeConfig.conversationId,
-    };
-  };
-
-  const getAudioConfigStartMessage = (
-    inputAudioMetadata: { samplingRate: number; audioEncoding: AudioEncoding },
-    outputAudioMetadata: { samplingRate: number; audioEncoding: AudioEncoding },
-    chunkSize: number | undefined,
-    downsampling: number | undefined,
-    conversationId: string | undefined,
-    subscribeTranscript: boolean | undefined,
-    payload: any | undefined
-  ): AudioConfigStartMessage => ({
-    type: "websocket_audio_config_start",
-    inputAudioConfig: {
-      samplingRate: inputAudioMetadata.samplingRate,
-      audioEncoding: inputAudioMetadata.audioEncoding,
-      chunkSize: chunkSize || DEFAULT_CHUNK_SIZE,
-      downsampling,
-    },
-    outputAudioConfig: {
-      samplingRate: outputAudioMetadata.samplingRate,
-      audioEncoding: outputAudioMetadata.audioEncoding,
-    },
-    conversationId,
-    subscribeTranscript,
-    payload,
-  });
 
   const startConversation = async () => {
     if (!audioContext) return;
@@ -203,9 +131,10 @@ export const useConversation = (): {
     };
     socket.onmessage = (event) => {
       const message = JSON.parse(event.data);
-      if (message.type === "websocket_audio") {
+      if (message.type === "audio") {
+        setStatus("connected");
         setAudioQueue((prev) => [...prev, Buffer.from(message.data, "base64")]);
-      } else if (message.type === "websocket_ready") {
+      } else if (message.type === "message") {
         setStatus("connected");
       }
     };
@@ -229,13 +158,6 @@ export const useConversation = (): {
       const trackConstraints: MediaTrackConstraints = {
         echoCancellation: true,
       };
-      if (config.audioDeviceConfig.inputDeviceId) {
-        console.log(
-          "Using input device",
-          config.audioDeviceConfig.inputDeviceId
-        );
-        trackConstraints.deviceId = config.audioDeviceConfig.inputDeviceId;
-      }
       audioStream = await navigator.mediaDevices.getUserMedia({
         video: false,
         audio: trackConstraints,
@@ -255,48 +177,10 @@ export const useConversation = (): {
     console.log(micSettings);
     const inputAudioMetadata = {
       samplingRate: micSettings.sampleRate || audioContext.sampleRate,
-      audioEncoding: "linear16" as AudioEncoding,
+      audioEncoding: "linear16",
     };
     console.log("Input audio metadata", inputAudioMetadata);
-
-    const outputAudioMetadata = {
-      samplingRate:
-        config.audioDeviceConfig.outputSamplingRate || audioContext.sampleRate,
-      audioEncoding: "linear16" as AudioEncoding,
-    };
-    console.log("Output audio metadata", inputAudioMetadata);
-
-    let startMessage;
-    if (
-      [
-        "transcriberConfig",
-        "agentConfig",
-        "synthesizerConfig",
-        "vocodeConfig",
-      ].every((key) => key in config)
-    ) {
-      startMessage = getStartMessage(
-        config as ConversationConfig,
-        inputAudioMetadata,
-        outputAudioMetadata
-      );
-    } else {
-      const selfHostedConversationConfig =
-        config as SelfHostedConversationConfig;
-      startMessage = getAudioConfigStartMessage(
-        inputAudioMetadata,
-        outputAudioMetadata,
-        selfHostedConversationConfig.chunkSize,
-        selfHostedConversationConfig.downsampling,
-        selfHostedConversationConfig.conversationId,
-        selfHostedConversationConfig.subscribeTranscript,
-        selfHostedConversationConfig.payload
-      );
-    }
-
-    socket.send(stringify(startMessage));
-    console.log("Access to microphone granted");
-    console.log(startMessage);
+    console.log("Output audio metadata", audioContext.sampleRate);
 
     let recorderToUse = recorder;
     if (recorderToUse && recorderToUse.state === "paused") {
@@ -309,16 +193,7 @@ export const useConversation = (): {
     }
 
     let timeSlice;
-    if ("transcriberConfig" in startMessage) {
-      timeSlice = Math.round(
-        (1000 * startMessage.transcriberConfig.chunkSize) /
-          startMessage.transcriberConfig.samplingRate
-      );
-    } else if ("timeSlice" in config) {
-      timeSlice = config.timeSlice;
-    } else {
-      timeSlice = 10;
-    }
+    timeSlice = 10;
 
     if (recorderToUse.state === "recording") {
       // When the recorder is in the recording state, see:
@@ -335,9 +210,7 @@ export const useConversation = (): {
     start: startConversation,
     stop: stopConversation,
     error,
-    toggleActive,
     active,
     setActive,
-    currentSpeaker,
   };
 };
