@@ -32,7 +32,6 @@ export const useConversation = (): {
   const [socket, setSocket] = React.useState<WebSocket>();
   const [status, setStatus] = React.useState<ConversationStatus>("idle");
   const [error, setError] = React.useState<Error>();
-  const [transcripts, setTranscripts] = React.useState<Transcript[]>([]);
   const [active, setActive] = React.useState(true);
   const toggleActive = () => setActive(!active);
 
@@ -208,25 +207,6 @@ export const useConversation = (): {
         setAudioQueue((prev) => [...prev, Buffer.from(message.data, "base64")]);
       } else if (message.type === "websocket_ready") {
         setStatus("connected");
-      } else if (message.type == "websocket_transcript") {
-        setTranscripts((prev) => {
-          let last = prev.pop();
-          if (last && last.sender === message.sender) {
-            prev.push({
-              sender: message.sender,
-              text: last.text + " " + message.text,
-            });
-          } else {
-            if (last) {
-              prev.push(last);
-            }
-            prev.push({
-              sender: message.sender,
-              text: message.text,
-            });
-          }
-          return prev;
-        });
       }
     };
     socket.onclose = () => {
