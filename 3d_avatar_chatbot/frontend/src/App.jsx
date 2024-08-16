@@ -3,10 +3,13 @@ import React, { useState } from "react";
 import { useConfig } from "@adaptai/realtime-react";
 import { isSafari, isChrome } from "react-device-detect";
 import { DEFAULT_CONFIG } from "./constants/config";
-import { MainLayout } from "./MainLayout";
-import { InputForm } from "./Input";
-import { BrowserNotSupported } from "./BrowserNotSupported";
-
+import { InputForm } from "./components/Input";
+import { BrowserNotSupported } from "./components/BrowserNotSupported";
+import { RealtimeComponent } from "./components/RealtimeComponent";
+import { Canvas } from "@react-three/fiber";
+import { Avatar } from "./components/Avatar/Avatar";
+import { MessageInput } from "./components/MessageInput";
+import { useMessage } from "./hooks/useMessage";
 /**
  * Main application component.
  *
@@ -19,6 +22,11 @@ function App() {
   const { audioOptions } = options;
   const { setAudioInput, setFunctionUrl } = setters;
   const { audioInput, functionUrl } = values;
+  const [connection, setConnection] = useState(null);
+
+  const { messages, ref, removeFirstMessage, sendMessage } = useMessage({
+    connection,
+  });
 
   if (!isChrome && !isSafari) {
     return <BrowserNotSupported />;
@@ -35,7 +43,21 @@ function App() {
         onClickRun={() => setConfig(dump())}
       />
       <Loader />
-      <MainLayout config={config} />
+      <div className="flex-1">
+        {config && (
+          <RealtimeComponent config={config} setConnection={setConnection} />
+        )}
+        {connection && (
+          <MessageInput inputRef={ref} sendMessage={sendMessage} />
+        )}
+        <Canvas
+          style={{ pointerEvents: "none" }}
+          shadows
+          camera={{ position: [0, 0, 1], fov: 30 }}
+        >
+          <Avatar messages={messages} removeFirstMessage={removeFirstMessage} />
+        </Canvas>
+      </div>
     </div>
   );
 }
