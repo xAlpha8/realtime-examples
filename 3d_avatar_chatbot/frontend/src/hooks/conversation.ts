@@ -4,19 +4,12 @@ import {
   register,
 } from "extendable-media-recorder";
 import { connect } from "extendable-media-recorder-wav-encoder";
-import React from "react";
+import React, { useRef, useState } from "react";
 import { blobToBase64, stringify } from "../utils/utils";
 import { isSafari, isChrome } from "react-device-detect";
 import { Buffer } from "buffer";
 
-export const useConversation = (): {
-  status: string;
-  start: () => void;
-  stop: () => void;
-  active: boolean;
-  setActive: React.Dispatch<React.SetStateAction<boolean>>;
-  error: Error | undefined;
-} => {
+export const useConversation = () => {
   const [audioContext, setAudioContext] = React.useState<AudioContext>();
   const [audioQueue, setAudioQueue] = React.useState<Buffer[]>([]);
   // const [payload, setPayload] =
@@ -27,6 +20,8 @@ export const useConversation = (): {
   const [status, setStatus] = React.useState<string>("idle");
   const [error, setError] = React.useState<Error>();
   const [active, setActive] = React.useState(true);
+  const [messages, setMessages] = useState([]); // State to store the list of messages
+  const ref = useRef(null); // Reference to the input element for sending messages
 
   // get audio context and metadata about user audio
   React.useEffect(() => {
@@ -44,6 +39,29 @@ export const useConversation = (): {
       socket!.readyState === WebSocket.OPEN &&
         socket!.send(stringify(audioMessage));
     });
+  };
+
+  const sendMessage = () => {
+    if (!ref.current) {
+      console.error(
+        "[useMessage - sendMessage]",
+        "Send message is called without setting ref to an input element."
+      );
+      return;
+    }
+
+    const text = ref.current.value;
+
+    if (text) {
+      console.log("Sending message", text);
+      const payload = {
+        type: "message",
+        data: text,
+      };
+
+      socket!.send(stringify(payload));
+      ref.current.value = ""; // Clear the input field
+    }
   };
 
   // once the conversation is connected, stream the microphone audio into the socket
@@ -132,10 +150,15 @@ export const useConversation = (): {
     socket.onmessage = (event) => {
       const message = JSON.parse(event.data);
       if (message.type === "audio") {
-        setStatus("connected");
+        if (status === "idle") {
+          setStatus("connected");
+        }
         setAudioQueue((prev) => [...prev, Buffer.from(message.data, "base64")]);
       } else if (message.type === "message") {
-        setStatus("connected");
+        if (status === "idle") {
+          setStatus("connected");
+        }
+        setMessages((prev) => [...prev, message.data]);
       }
     };
     socket.onclose = () => {
@@ -205,6 +228,10 @@ export const useConversation = (): {
     recorderToUse.start(timeSlice);
   };
 
+  function removeFirstMessage() {
+    setMessages((prev) => prev.slice(1));
+  }
+
   return {
     status,
     start: startConversation,
@@ -212,5 +239,9 @@ export const useConversation = (): {
     error,
     active,
     setActive,
+    messages, // Array of messages
+    removeFirstMessage, // Function to remove the first message
+    sendMessage, // Function to send a new message
+    ref, // Reference to the input element
   };
 };

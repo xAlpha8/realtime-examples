@@ -10,6 +10,7 @@ import { Canvas } from "@react-three/fiber";
 import { Avatar } from "./components/Avatar/Avatar";
 import { MessageInput } from "./components/MessageInput";
 import { useMessage } from "./hooks/useMessage";
+import { useConversation } from "./hooks/conversation";
 /**
  * Main application component.
  *
@@ -22,11 +23,8 @@ function App() {
   const { audioOptions } = options;
   const { setAudioInput, setFunctionUrl } = setters;
   const { audioInput, functionUrl } = values;
-  const [connection, setConnection] = useState(null);
-
-  const { messages, ref, removeFirstMessage, sendMessage } = useMessage({
-    connection,
-  });
+  const { messages, ref, removeFirstMessage, sendMessage, start, status } =
+    useConversation();
 
   if (!isChrome && !isSafari) {
     return <BrowserNotSupported />;
@@ -40,14 +38,11 @@ function App() {
         setAudioInput={setAudioInput}
         functionUrl={functionUrl}
         setFunctionUrl={setFunctionUrl}
-        onClickRun={() => setConfig(dump())}
+        onClickRun={() => start()}
       />
       <Loader />
       <div className="flex-1">
-        {config && (
-          <RealtimeComponent config={config} setConnection={setConnection} />
-        )}
-        {connection && (
+        {status === "connected" && (
           <MessageInput inputRef={ref} sendMessage={sendMessage} />
         )}
         <Canvas
