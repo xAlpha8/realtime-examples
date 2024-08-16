@@ -19,11 +19,9 @@ export const useConversation = (): {
   active: boolean;
   setActive: React.Dispatch<React.SetStateAction<boolean>>;
   error: Error | undefined;
-  analyserNode: AnalyserNode | undefined;
   currentSpeaker: CurrentSpeaker;
 } => {
   const [audioContext, setAudioContext] = React.useState<AudioContext>();
-  const [audioAnalyser, setAudioAnalyser] = React.useState<AnalyserNode>();
   const [audioQueue, setAudioQueue] = React.useState<Buffer[]>([]);
   const [currentSpeaker, setCurrentSpeaker] =
     React.useState<CurrentSpeaker>("none");
@@ -42,8 +40,6 @@ export const useConversation = (): {
   React.useEffect(() => {
     const audioContext = new AudioContext();
     setAudioContext(audioContext);
-    const audioAnalyser = audioContext.createAnalyser();
-    setAudioAnalyser(audioAnalyser);
   }, []);
 
   const recordingDataListener = ({ data }: { data: Blob }) => {
@@ -80,12 +76,10 @@ export const useConversation = (): {
   React.useEffect(() => {
     const playArrayBuffer = (arrayBuffer: ArrayBuffer) => {
       audioContext &&
-        audioAnalyser &&
         audioContext.decodeAudioData(arrayBuffer, (buffer) => {
           const source = audioContext.createBufferSource();
           source.buffer = buffer;
           source.connect(audioContext.destination);
-          source.connect(audioAnalyser);
           setCurrentSpeaker("agent");
           source.start(0);
           source.onended = () => {
@@ -189,7 +183,7 @@ export const useConversation = (): {
   });
 
   const startConversation = async () => {
-    if (!audioContext || !audioAnalyser) return;
+    if (!audioContext) return;
     setStatus("connecting");
     // setPayload()
     if (!isSafari && !isChrome) {
@@ -364,8 +358,6 @@ export const useConversation = (): {
     toggleActive,
     active,
     setActive,
-    analyserNode: audioAnalyser,
-    transcripts,
     currentSpeaker,
   };
 };
