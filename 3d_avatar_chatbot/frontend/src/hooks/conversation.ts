@@ -36,8 +36,8 @@ export const useConversation = () => {
         type: "audio",
         data: base64Encoded,
       };
-      // socket!.readyState === WebSocket.OPEN &&
-      //   socket!.send(stringify(audioMessage));
+      socket!.readyState === WebSocket.OPEN &&
+        socket!.send(stringify(audioMessage));
     });
   };
 
@@ -201,6 +201,25 @@ export const useConversation = () => {
       samplingRate: micSettings.sampleRate || audioContext.sampleRate,
       audioEncoding: "linear16",
     };
+
+    // wait for socket to be ready
+    await new Promise((resolve) => {
+      const interval = setInterval(() => {
+        console.log("socket.readyState", socket.readyState);
+        if (socket.readyState === WebSocket.OPEN) {
+          clearInterval(interval);
+          resolve(null);
+        }
+      }, 100);
+    });
+
+    socket!.send(
+      stringify({
+        type: "audio_metadata",
+        sampleRate: inputAudioMetadata.samplingRate,
+      })
+    );
+
     console.log("Input audio metadata", inputAudioMetadata);
     console.log("Output audio metadata", audioContext.sampleRate);
 
