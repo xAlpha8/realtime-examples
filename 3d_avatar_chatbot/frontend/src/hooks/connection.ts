@@ -153,9 +153,7 @@ export const useConversation = () => {
     if (functionUrl) {
       const resp = await fetch(functionUrl);
       const payload = await resp.json();
-      const offerURL = payload.address.replace("https://", "wss://");
-      console.log("Connecting with : ", offerURL);
-      socket = await retryableConnect(offerURL, {}, 7);
+      socket = await retryableConnect(payload.address, {}, 7);
     } else {
       socket = new WebSocket("ws://0.0.0.0:8080");
     }

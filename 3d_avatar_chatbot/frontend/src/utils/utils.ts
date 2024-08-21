@@ -29,16 +29,21 @@ async function delay(delayInms: number) {
 }
 
 export async function retryableConnect(
-  url: string | URL,
+  url: string,
   params: RequestInit,
   attempts: number
 ) {
   let mult = 1;
+  console.log("Connecting to ", url);
+  const offerURL = url.replace("https://", "wss://");
   for (let i = 0; i < attempts; ++i) {
     try {
-      let res = new WebSocket(url);
-      return res;
+      let res = await fetch(url + "/connections", params);
+      console.log("res", res);
+      const socket = new WebSocket(offerURL);
+      return socket;
     } catch (err) {
+      console.log("Error connecting to ", url, ". Retrying...");
       await delay(mult * 1000);
       mult *= 2;
       if (i == attempts - 1) {
