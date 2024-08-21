@@ -36,8 +36,8 @@ export const useConversation = () => {
         type: "audio",
         data: base64Encoded,
       };
-      socket!.readyState === WebSocket.OPEN &&
-        socket!.send(stringify(audioMessage));
+      // socket!.readyState === WebSocket.OPEN &&
+      //   socket!.send(stringify(audioMessage));
     });
   };
 
@@ -90,12 +90,12 @@ export const useConversation = () => {
           const source = audioContext.createBufferSource();
           source.buffer = buffer;
           source.connect(audioContext.destination);
-          setCurrentSpeaker("agent");
+          // setCurrentSpeaker("agent");
           source.start(0);
           source.onended = () => {
-            if (audioQueue.length <= 0) {
-              setCurrentSpeaker("user");
-            }
+            // if (audioQueue.length <= 0) {
+            //   setCurrentSpeaker("user");
+            // }
             setProcessing(false);
           };
         });
@@ -150,19 +150,18 @@ export const useConversation = () => {
     socket.onmessage = (event) => {
       const message = JSON.parse(event.data);
       if (message.type === "audio") {
-        if (status === "idle") {
-          setStatus("connected");
-        }
         setAudioQueue((prev) => [...prev, Buffer.from(message.data, "base64")]);
       } else if (message.type === "message") {
-        if (status === "idle") {
-          setStatus("connected");
-        }
-        setMessages((prev) => [...prev, message.data]);
+        const messageData = JSON.parse(message.data);
+        console.log("Received message", messageData);
+        setMessages((prev) => [...prev, messageData]);
       }
     };
     socket.onclose = () => {
       stopConversation(error);
+    };
+    socket.onopen = () => {
+      setStatus("connected");
     };
     setSocket(socket);
 
