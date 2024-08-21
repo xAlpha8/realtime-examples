@@ -10,7 +10,7 @@ import { Canvas } from "@react-three/fiber";
 import { Avatar } from "./components/Avatar/Avatar";
 import { MessageInput } from "./components/MessageInput";
 import { useMessage } from "./hooks/useMessage";
-import { useConversation } from "./hooks/conversation";
+import { useConversation } from "./hooks/connection";
 /**
  * Main application component.
  *
