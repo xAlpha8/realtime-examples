@@ -45,7 +45,7 @@ function App() {
         setAudioInput={setAudioInput}
         functionUrl={functionUrl}
         setFunctionUrl={setFunctionUrl}
-        onClickRun={() => start()}
+        onClickRun={() => start(functionUrl)}
       />
       <Loader />
       <div className="flex-1">

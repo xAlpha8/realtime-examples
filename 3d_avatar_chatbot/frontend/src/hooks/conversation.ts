@@ -5,7 +5,7 @@ import {
 } from "extendable-media-recorder";
 import { connect } from "extendable-media-recorder-wav-encoder";
 import React, { useRef, useState } from "react";
-import { blobToBase64, stringify } from "../utils/utils";
+import { blobToBase64, stringify, retryableConnect } from "../utils/utils";
 import { isSafari, isChrome } from "react-device-detect";
 import { Buffer } from "buffer";
 
@@ -135,7 +135,7 @@ export const useConversation = () => {
     socket.close();
   };
 
-  const startConversation = async () => {
+  const startConversation = async (functionUrl: string) => {
     if (!audioContext) return;
     setStatus("connecting");
     // setPayload()
@@ -149,7 +149,16 @@ export const useConversation = () => {
     }
 
     setError(undefined);
-    const socket = new WebSocket("ws://0.0.0.0:8080");
+    let socket = null;
+    if (functionUrl) {
+      const resp = await fetch(functionUrl);
+      const payload = await resp.json();
+      const offerURL = payload.address.replace("https://", "wss://");
+      console.log("Connecting with : ", offerURL);
+      socket = await retryableConnect(offerURL, {}, 7);
+    } else {
+      socket = new WebSocket("ws://0.0.0.0:8080");
+    }
     let error: Error | undefined;
     socket.onerror = (event) => {
       console.error(event);
