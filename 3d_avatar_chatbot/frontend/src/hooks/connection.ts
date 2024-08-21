@@ -9,27 +9,41 @@ import { blobToBase64, stringify, retryableConnect } from "../utils/utils";
 import { isSafari, isChrome } from "react-device-detect";
 import { Buffer } from "buffer";
 
+/**
+ * Custom hook to manage conversation state and interactions in a chat application.
+ * It handles audio and text messaging through WebSockets and manages the audio recording.
+ */
 export const useConversation = () => {
+  // State to manage the audio context for processing audio data
   const [audioContext, setAudioContext] = React.useState<AudioContext>();
+  // Queue to store audio data and control messages
   const [audioQueue, setAudioQueue] = React.useState<(Buffer | string)[]>([]);
-  // const [payload, setPayload] =
-  //   React.useState<Payload>({name: "a",text:"b"});
+  // Flag to indicate if audio is currently being processed
   const [processing, setProcessing] = React.useState(false);
+  // MediaRecorder instance for recording audio
   const [recorder, setRecorder] = React.useState<IMediaRecorder>();
+  // WebSocket instance for communication with the server
   const [socket, setSocket] = React.useState<WebSocket>();
+  // Current status of the conversation (idle, connecting, connected, error)
   const [status, setStatus] = React.useState<string>("idle");
+  // Error state to capture and display errors
   const [error, setError] = React.useState<Error>();
+  // Flag to control the recording state
   const [active, setActive] = React.useState(true);
-  const [messages, setMessages] = useState([]); // State to store the list of messages
-  const ref = useRef(null); // Reference to the input element for sending messages
+  // Array to store messages received from the server
+  const [messages, setMessages] = useState([]);
+  // Ref to the input element for typing messages
+  const ref = useRef(null);
+  // Timestamp for when new audio starts
   const newAudioStartTime = useRef(0);
 
-  // get audio context and metadata about user audio
+  // Initialize the audio context when the component mounts
   React.useEffect(() => {
     const audioContext = new AudioContext();
     setAudioContext(audioContext);
   }, []);
 
+  // Listener for recording data available events
   const recordingDataListener = ({ data }: { data: Blob }) => {
     blobToBase64(data).then((base64Encoded: string | null) => {
       if (!base64Encoded) return;
@@ -37,11 +51,13 @@ export const useConversation = () => {
         type: "audio",
         data: base64Encoded,
       };
+      // Send audio data to the server if the WebSocket is open
       socket!.readyState === WebSocket.OPEN &&
         socket!.send(stringify(audioMessage));
     });
   };
 
+  // Function to send a text message
   const sendMessage = () => {
     if (!ref.current) {
       console.error(
@@ -60,12 +76,13 @@ export const useConversation = () => {
         data: text,
       };
 
+      // Send the message payload to the server
       socket!.send(stringify(payload));
-      ref.current.value = ""; // Clear the input field
+      ref.current.value = ""; // Clear the input field after sending
     }
   };
 
-  // once the conversation is connected, stream the microphone audio into the socket
+  // Effect to handle the recorder and socket connection status
   React.useEffect(() => {
     if (!recorder || !socket) return;
     if (status === "connected") {
@@ -75,7 +92,7 @@ export const useConversation = () => {
     }
   }, [recorder, socket, status, active]);
 
-  // accept wav audio from webpage
+  // Register WAV encoder for the media recorder
   React.useEffect(() => {
     const registerWav = async () => {
       await register(await connect());
@@ -83,7 +100,7 @@ export const useConversation = () => {
     registerWav().catch(console.error);
   }, []);
 
-  // play audio that is queued
+  // Effect to play queued audio
   React.useEffect(() => {
     const playArrayBuffer = (arrayBuffer: ArrayBuffer) => {
       audioContext &&
@@ -91,12 +108,8 @@ export const useConversation = () => {
           const source = audioContext.createBufferSource();
           source.buffer = buffer;
           source.connect(audioContext.destination);
-          // setCurrentSpeaker("agent");
           source.start(0);
           source.onended = () => {
-            // if (audioQueue.length <= 0) {
-            //   setCurrentSpeaker("user");
-            // }
             setProcessing(false);
           };
         });
@@ -118,6 +131,7 @@ export const useConversation = () => {
     }
   }, [audioQueue, processing]);
 
+  // Function to stop the conversation
   const stopConversation = (error?: Error) => {
     setAudioQueue([]);
     if (error) {
@@ -135,10 +149,10 @@ export const useConversation = () => {
     socket.close();
   };
 
+  // Function to start the conversation
   const startConversation = async (functionUrl: string) => {
     if (!audioContext) return;
     setStatus("connecting");
-    // setPayload()
     if (!isSafari && !isChrome) {
       stopConversation(new Error("Unsupported browser"));
       return;
@@ -263,6 +277,7 @@ export const useConversation = () => {
     recorderToUse.start(timeSlice);
   };
 
+  // Function to remove the first message from the queue
   function removeFirstMessage() {
     setMessages((prev) => prev.slice(1));
   }
