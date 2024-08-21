@@ -152,7 +152,7 @@ class ReplayBot:
 
         deepgram_node = DeepgramSTT(sample_rate=audio_metadata.get("sampleRate", 48000))
         llm_node = FireworksLLM(
-            system_prompt="You are a virtual girlfriend.\
+            system_prompt="You are a virtual assistant.\
             You will always reply with a JSON object.\
             Each message has a text, facialExpression, and animation property.\
             The text property is a short response to the user (no emoji).\
@@ -161,9 +161,9 @@ class ReplayBot:
             temperature=0.9,
             response_format={"type": "json_object"},
             stream=False,
-            model="accounts/fireworks/models/llama-v3-70b-instruct",
+            model="accounts/fireworks/models/llama-v3-8b-instruct",
         )
-        tts_node = AzureTTS(stream=False)
+        tts_node = AzureTTS(stream=False, voice_id="en-US-EricNeural")
 
         deepgram_stream = await deepgram_node.run(audio_input_stream)
         deepgram_stream = merge([deepgram_stream, message_stream])

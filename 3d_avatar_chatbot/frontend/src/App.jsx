@@ -1,5 +1,5 @@
 import { Loader } from "@react-three/drei";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useConfig } from "@adaptai/realtime-react";
 import { isSafari, isChrome } from "react-device-detect";
 import { DEFAULT_CONFIG } from "./constants/config";
@@ -33,16 +33,17 @@ function App() {
     newAudioStartTime,
   } = useConversation();
 
-  useEffect(() => {
-    dumpConfigAndRun();
-  }, []);
+  // useEffect(() => {
+  //   console.log("Starting connection");
+  //   start(functionUrl);
+  // }, []);
 
   if (!isChrome && !isSafari) {
     return <BrowserNotSupported />;
   }
 
   return (
-    <div className="h-screen w-screen m-0 bg-[#faaca8] bg-gradient-to-r from-[#faaca8] to-[#ddd6f3] overflow-hidden flex flex-col">
+    <div className="h-screen w-screen m-0 bg-[#000000] overflow-hidden flex flex-col">
       {status === "connecting" && <ConnectionStatusOverlay />}
       <InputForm
         audioOptions={audioOptions}
@@ -60,7 +61,7 @@ function App() {
         <Canvas
           style={{ pointerEvents: "none" }}
           shadows
-          camera={{ position: [0, 0, 1], fov: 30 }}
+          camera={{ position: [0, 0, 1], fov: 60 }}
         >
           <Avatar
             messages={messages}
