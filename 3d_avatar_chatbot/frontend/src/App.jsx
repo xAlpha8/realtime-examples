@@ -23,8 +23,15 @@ function App() {
   const { audioOptions } = options;
   const { setAudioInput, setFunctionUrl } = setters;
   const { audioInput, functionUrl } = values;
-  const { messages, ref, removeFirstMessage, sendMessage, start, status } =
-    useConversation();
+  const {
+    messages,
+    ref,
+    removeFirstMessage,
+    sendMessage,
+    start,
+    status,
+    newAudioStartTime,
+  } = useConversation();
 
   if (!isChrome && !isSafari) {
     return <BrowserNotSupported />;
@@ -50,7 +57,11 @@ function App() {
           shadows
           camera={{ position: [0, 0, 1], fov: 30 }}
         >
-          <Avatar messages={messages} removeFirstMessage={removeFirstMessage} />
+          <Avatar
+            messages={messages}
+            removeFirstMessage={removeFirstMessage}
+            newAudioStartTime={newAudioStartTime}
+          />
         </Canvas>
       </div>
     </div>

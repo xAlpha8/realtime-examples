@@ -25,9 +25,13 @@ export function Avatar(props) {
   const { nodes, materials, scene } = useGLTF(
     "/models/64f1a714fe61576b46f27ca2.glb"
   );
-  const { messages, removeFirstMessage, isLoading, ...rest } = props;
-
-  const newAudioStartTime = useRef(0);
+  const {
+    messages,
+    removeFirstMessage,
+    isLoading,
+    newAudioStartTime,
+    ...rest
+  } = props;
 
   const { speaking, setLipSync } = useLipSync({ scene, newAudioStartTime });
   const { group, cameraControls, setAnimation } = useAvatarAnimation();

@@ -28,6 +28,7 @@ export function useProcessMessages({
     if (typeof message !== "object" || message === null) return;
 
     if (message.animation && setAnimation) {
+      console.log("Processing message", message);
       setAnimation(message.animation);
     }
 

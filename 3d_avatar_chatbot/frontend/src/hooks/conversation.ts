@@ -11,7 +11,7 @@ import { Buffer } from "buffer";
 
 export const useConversation = () => {
   const [audioContext, setAudioContext] = React.useState<AudioContext>();
-  const [audioQueue, setAudioQueue] = React.useState<Buffer[]>([]);
+  const [audioQueue, setAudioQueue] = React.useState<(Buffer | string)[]>([]);
   // const [payload, setPayload] =
   //   React.useState<Payload>({name: "a",text:"b"});
   const [processing, setProcessing] = React.useState(false);
@@ -22,6 +22,7 @@ export const useConversation = () => {
   const [active, setActive] = React.useState(true);
   const [messages, setMessages] = useState([]); // State to store the list of messages
   const ref = useRef(null); // Reference to the input element for sending messages
+  const newAudioStartTime = useRef(0);
 
   // get audio context and metadata about user audio
   React.useEffect(() => {
@@ -103,6 +104,13 @@ export const useConversation = () => {
     if (!processing && audioQueue.length > 0) {
       setProcessing(true);
       const audio = audioQueue.shift();
+      if (typeof audio === "string" && audio === "audio_end") {
+        newAudioStartTime.current = 0;
+        setProcessing(false);
+        return;
+      } else if (audio instanceof Buffer && newAudioStartTime.current === 0) {
+        newAudioStartTime.current = new Date().getTime() / 1000;
+      }
       audio &&
         fetch(URL.createObjectURL(new Blob([audio])))
           .then((response) => response.arrayBuffer())
@@ -155,6 +163,8 @@ export const useConversation = () => {
         const messageData = JSON.parse(message.data);
         console.log("Received message", messageData);
         setMessages((prev) => [...prev, messageData]);
+      } else if (message.type === "audio_end") {
+        setAudioQueue((prev) => [...prev, "audio_end"]);
       }
     };
     socket.onclose = () => {
@@ -261,5 +271,6 @@ export const useConversation = () => {
     removeFirstMessage, // Function to remove the first message
     sendMessage, // Function to send a new message
     ref, // Reference to the input element
+    newAudioStartTime,
   };
 };

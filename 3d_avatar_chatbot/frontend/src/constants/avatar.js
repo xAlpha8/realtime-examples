@@ -41,13 +41,6 @@ export const FACIAL_EXPRESSIONS = {
     eyeLookDownRight: 0.5,
     jawForward: 1,
   },
-  surprised: {
-    eyeWideLeft: 0.5,
-    eyeWideRight: 0.5,
-    jawOpen: 0.351,
-    mouthFunnel: 1,
-    browInnerUp: 1,
-  },
   angry: {
     browDownLeft: 1,
     browDownRight: 1,
