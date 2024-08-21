@@ -5,12 +5,12 @@ import { isSafari, isChrome } from "react-device-detect";
 import { DEFAULT_CONFIG } from "./constants/config";
 import { InputForm } from "./components/Input";
 import { BrowserNotSupported } from "./components/BrowserNotSupported";
-import { RealtimeComponent } from "./components/RealtimeComponent";
 import { Canvas } from "@react-three/fiber";
 import { Avatar } from "./components/Avatar/Avatar";
 import { MessageInput } from "./components/MessageInput";
-import { useMessage } from "./hooks/useMessage";
 import { useConversation } from "./hooks/connection";
+import { ConnectionStatusOverlay } from "./components/ConnectionStatusOverlay";
+
 /**
  * Main application component.
  *
@@ -39,6 +39,7 @@ function App() {
 
   return (
     <div className="h-screen w-screen m-0 bg-[#faaca8] bg-gradient-to-r from-[#faaca8] to-[#ddd6f3] overflow-hidden flex flex-col">
+      {status === "connecting" && <ConnectionStatusOverlay />}
       <InputForm
         audioOptions={audioOptions}
         audioInput={audioInput}
