@@ -7,7 +7,7 @@ from realtime.ops.map import map
 from realtime.ops.merge import merge
 from realtime.plugins.azure_tts import AzureTTS
 from realtime.plugins.deepgram_stt import DeepgramSTT
-from realtime.plugins.fireworks_llm import FireworksLLM
+from realtime.plugins.groq_llm import GroqLLM
 from realtime.server import RealtimeServer
 from realtime.streams import AudioStream, TextStream
 
@@ -31,17 +31,17 @@ class Chatbot:
     @realtime.websocket()
     async def run(audio_input_stream: AudioStream, message_stream: TextStream):
         deepgram_node = DeepgramSTT(sample_rate=audio_input_stream.sample_rate)
-        llm_node = FireworksLLM(
-            system_prompt="You are a virtual girlfriend.\
+        llm_node = GroqLLM(
+            system_prompt="You are a virtual assistant.\
             You will always reply with a JSON object.\
             Each message has a text, facialExpression, and animation property.\
             The text property is a short response to the user (no emoji).\
-            The different facial expressions are: smile, sad, angry, surprised, funnyFace, and default.\
+            The different facial expressions are: smile, sad, angry, and default.\
             The different animations are: Talking_0, Talking_1, Talking_2, Crying, Laughing, Rumba, Idle, Terrified, and Angry.",
             temperature=0.9,
             response_format={"type": "json_object"},
             stream=False,
-            model="accounts/fireworks/models/llama-v3-70b-instruct",
+            model="llama-3.1-8b-instant",
         )
         tts_node = AzureTTS(stream=False)
 
