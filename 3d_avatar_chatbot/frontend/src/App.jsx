@@ -45,19 +45,21 @@ function App() {
   return (
     <div className="h-screen w-screen m-0 bg-[#000000] overflow-hidden flex flex-col">
       {status === "connecting" && <ConnectionStatusOverlay />}
-      <InputForm
-        audioOptions={audioOptions}
-        audioInput={audioInput}
-        setAudioInput={setAudioInput}
-        functionUrl={functionUrl}
-        setFunctionUrl={setFunctionUrl}
-        onClickRun={() => start(functionUrl)}
-      />
+      {status !== "connected" && (
+        <InputForm
+          audioOptions={audioOptions}
+          audioInput={audioInput}
+          setAudioInput={setAudioInput}
+          functionUrl={functionUrl}
+          setFunctionUrl={setFunctionUrl}
+          onClickRun={() => start(functionUrl)}
+        />
+      )}
       <Loader />
       <div className="flex-1">
-        {status === "connected" && (
+        {/* {status === "connected" && (
           <MessageInput inputRef={ref} sendMessage={sendMessage} />
-        )}
+        )} */}
         <Canvas
           style={{ pointerEvents: "none" }}
           shadows
