@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDaily } from "@daily-co/daily-react";
-import { ArrowRight, Ear, Loader2 } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
 
 import Session from "./components/Session";
 import { Configure, RoomSetup } from "./components/Setup";
@@ -59,7 +59,6 @@ export default function App() {
     showConfigOptions ? "idle" : "configuring"
   );
   const [error, setError] = useState<string | null>(null);
-  const [startAudioOff, setStartAudioOff] = useState<boolean>(false);
   const [roomUrl, setRoomUrl] = useState<string | null>(roomQs || null);
   const [roomError, setRoomError] = useState<boolean>(
     (roomQs && checkRoomUrl(roomQs)) || false
@@ -137,7 +136,6 @@ export default function App() {
         url: data.result.url || roomUrl,
         token: data.result.token || "",
         videoSource: false,
-        startAudioOff: startAudioOff,
       });
     } catch (e) {
       setError(`Unable to join room: '${data?.room_url || roomUrl}'`);
@@ -170,10 +168,7 @@ export default function App() {
           className="animate-fade-in-up max-w-2xl mx-auto my-4 bg-gray-200"
         >
           <CardContent stack>
-            <Configure
-              startAudioOff={startAudioOff}
-              handleStartAudioOff={() => setStartAudioOff(!startAudioOff)}
-            />
+            <Configure />
           </CardContent>
           <CardFooter>
             <Button
@@ -193,11 +188,7 @@ export default function App() {
             </div>
           )}
         </Card>
-        <Session
-          onLeave={() => leave()}
-          openMic={isOpenMic}
-          startAudioOff={startAudioOff}
-        />
+        <Session onLeave={() => leave()} openMic={isOpenMic} />
       </>
     );
   }

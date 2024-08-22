@@ -1,12 +1,7 @@
 import React, { memo, useEffect, useState } from "react";
 import { useActiveSpeakerId, useParticipantIds } from "@daily-co/daily-react";
-import clsx from "clsx";
-import { Loader2 } from "lucide-react";
 
 import Latency from "@/components/Latency";
-import Transcript from "@/components/Transcript";
-
-import Avatar from "./avatar";
 
 import styles from "./styles.module.css";
 
@@ -31,11 +26,6 @@ export const Agent: React.FC<{
 
     // Cleanup
     useEffect(() => () => setAgentState("connecting"), []);
-
-    const cx = clsx(
-      styles.agentWindow,
-      agentState === "connected" && styles.connected
-    );
 
     return (
       <div className={styles.agent}>

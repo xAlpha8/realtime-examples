@@ -7,19 +7,13 @@ import {
   useDailyEvent,
   useMeetingState,
 } from "@daily-co/daily-react";
-import { LineChart, LogOut, Settings } from "lucide-react";
+import { LineChart, Settings } from "lucide-react";
 
 import StatsAggregator from "../../utils/stats_aggregator";
 import { DeviceSelect } from "../Setup";
 import Stats from "../Stats";
 import { Button } from "../ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "../ui/card";
+import { Card, CardContent, CardFooter } from "../ui/card";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import UserMicBubble from "../UserMicBubble";
 
