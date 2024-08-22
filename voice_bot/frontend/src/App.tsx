@@ -27,7 +27,7 @@ type State =
   | "error";
 
 const status_text = {
-  configuring: "Let's go!",
+  configuring: "Run",
   requesting_agent: "Requesting agent...",
   requesting_token: "Requesting token...",
   connecting: "Connecting to room...",
@@ -162,56 +162,43 @@ export default function App() {
     );
   }
 
-  if (state === "connected") {
-    return (
-      <Session
-        onLeave={() => leave()}
-        openMic={isOpenMic}
-        startAudioOff={startAudioOff}
-      />
-    );
-  }
-
   if (state !== "idle") {
     return (
-      <Card
-        shadow={true}
-        className="animate-fade-in-up max-w-2xl mx-auto my-4 bg-gray-200"
-      >
-        <CardHeader>
-          <CardTitle>Configure your devices</CardTitle>
-          <CardDescription>
-            Please configure your microphone and speakers below
-          </CardDescription>
-        </CardHeader>
-        <CardContent stack>
-          <div className="flex flex-row gap-3 bg-gray-300 px-5 py-3 md:py-3 text-base items-center justify-center rounded-lg font-semibold text-navy-900">
-            <Ear className="size-8 md:size-6 text-navy-600" />
-            Works best in a quiet environment.
-          </div>
-          <Configure
-            startAudioOff={startAudioOff}
-            handleStartAudioOff={() => setStartAudioOff(!startAudioOff)}
-          />
-        </CardContent>
-        <CardFooter>
-          <Button
-            key="start"
-            fullWidthMobile
-            onClick={() => start()}
-            disabled={state !== "configuring"}
-            className="bg-navy-700 hover:bg-navy-800 text-white font-bold py-2 px-4 rounded"
-          >
-            {state !== "configuring" && <Loader2 className="animate-spin" />}
-            {status_text[state as keyof typeof status_text]}
-          </Button>
-        </CardFooter>
-        {capacityError && (
-          <div className="text-red-700 mt-3 p-4 rounded bg-red-200">
-            {capacityError}
-          </div>
-        )}
-      </Card>
+      <>
+        <Card
+          shadow={true}
+          className="animate-fade-in-up max-w-2xl mx-auto my-4 bg-gray-200"
+        >
+          <CardContent stack>
+            <Configure
+              startAudioOff={startAudioOff}
+              handleStartAudioOff={() => setStartAudioOff(!startAudioOff)}
+            />
+          </CardContent>
+          <CardFooter>
+            <Button
+              key="start"
+              fullWidthMobile
+              onClick={() => start()}
+              disabled={state !== "configuring"}
+              className="bg-navy-700 hover:bg-navy-800 text-white font-bold py-2 px-4 rounded"
+            >
+              {state !== "configuring" && <Loader2 className="animate-spin" />}
+              {status_text[state as keyof typeof status_text]}
+            </Button>
+          </CardFooter>
+          {capacityError && (
+            <div className="text-red-700 mt-3 p-4 rounded bg-red-200">
+              {capacityError}
+            </div>
+          )}
+        </Card>
+        <Session
+          onLeave={() => leave()}
+          openMic={isOpenMic}
+          startAudioOff={startAudioOff}
+        />
+      </>
     );
   }
 

@@ -58,7 +58,8 @@ const Latency: React.FC<{
       }
 
       const now = new Date();
-      const diff = now.getTime() - startTimeRef.current.getTime();
+      var diff = now.getTime() - startTimeRef.current.getTime();
+      diff = Math.max(diff - 400, 0);
 
       // Ignore any values that are obviously wrong
       // These may be triggered by small noises such as coughs etc

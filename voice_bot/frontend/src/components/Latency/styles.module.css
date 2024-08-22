@@ -9,7 +9,7 @@
 .latencyColumn {
   display: flex;
   flex-flow: column nowrap;
-  background-color: white;
+  background-color: theme(colors.gray.400);
   padding: theme(spacing.2);
   border-radius: theme(borderRadius.2xl);
   transition: border-color 200ms ease, background-color 200ms ease;
@@ -24,8 +24,7 @@
   flex: 1;
   border: 1px solid theme(colors.primary.200);
   justify-content: space-between;
-  background-color: theme(colors.primary.50);
-
+  background-color: theme(colors.gray.400);
   &:first-child {
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
@@ -60,19 +59,19 @@
 }
 
 .statusConnecting {
-  background-color: theme(colors.orange.100);
-  color: theme(colors.orange.700);
+  background-color: theme(colors.lime.100);
+  color: theme(colors.lime.700);
 }
 
 .statusLoading {
-  background-color: theme(colors.blue.100);
-  color: theme(colors.blue.700);
+  background-color: theme(colors.teal.100);
+  color: theme(colors.teal.700);
 }
 
 .speaking {
-  border-color: theme(colors.emerald.300);
-  background-color: theme(colors.emerald.50);
-  box-shadow: 0 0 0 2px theme(colors.emerald.50);
+  border-color: theme(colors.green.300);
+  background-color: theme(colors.green.50);
+  box-shadow: 0 0 0 2px theme(colors.green.50);
 }
 
 .latencyColumn {

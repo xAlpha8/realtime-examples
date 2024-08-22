@@ -149,9 +149,6 @@ export const Session = React.memo(
       <>
         <dialog ref={modalRef}>
           <Card className="w-svw max-w-full md:max-w-md">
-            <CardHeader>
-              <CardTitle>Change devices</CardTitle>
-            </CardHeader>
             <CardContent>
               <DeviceSelect hideMeter={true} />
             </CardContent>
@@ -215,13 +212,6 @@ export const Session = React.memo(
                 </Button>
               </TooltipTrigger>
             </Tooltip>
-            <Button
-              onClick={() => onLeave()}
-              className="ml-auto bg-gray hover:bg-dark-blue"
-            >
-              <LogOut size={16} />
-              End
-            </Button>
           </div>
         </footer>
       </>

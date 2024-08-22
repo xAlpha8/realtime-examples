@@ -39,16 +39,6 @@ export const Agent: React.FC<{
 
     return (
       <div className={styles.agent}>
-        <div className={cx}>
-          {agentState === "connecting" ? (
-            <span className={styles.loader}>
-              <Loader2 size={32} className="animate-spin" />
-            </span>
-          ) : (
-            <Avatar />
-          )}
-          <Transcript />
-        </div>
         <footer className={styles.agentFooter}>
           <Latency
             started={agentState === "connected" && hasStarted}
