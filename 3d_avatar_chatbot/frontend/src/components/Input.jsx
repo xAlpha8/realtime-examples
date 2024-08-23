@@ -66,7 +66,7 @@ export function InputForm(props) {
             className="w-full bg-pink-500 hover:bg-pink-600 text-white p-3 font-semibold uppercase rounded-md shadow-md transition"
             onClick={onClickRun}
           >
-            Run
+            Connect
           </button>
         {/* </div> */}
       {/* </div> */}
