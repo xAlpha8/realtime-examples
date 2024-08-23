@@ -19,7 +19,7 @@ import { ConnectionStatusOverlay } from "./components/ConnectionStatusOverlay";
 function App() {
   const [config, setConfig] = useState(null);
 
-  const { options, setters, values, dump } = useConfig(DEFAULT_CONFIG);
+  const { options, setters, values } = useConfig(DEFAULT_CONFIG);
   const { audioOptions } = options;
   const { setAudioInput, setFunctionUrl } = setters;
   const { audioInput, functionUrl } = values;
@@ -43,34 +43,46 @@ function App() {
   }
 
   return (
-    <div className="h-screen w-screen m-0 bg-[#000000] overflow-hidden flex flex-col">
-      {status === "connecting" && <ConnectionStatusOverlay />}
-      {status !== "connected" && (
-        <InputForm
-          audioOptions={audioOptions}
-          audioInput={audioInput}
-          setAudioInput={setAudioInput}
-          functionUrl={functionUrl}
-          setFunctionUrl={setFunctionUrl}
-          onClickRun={() => start(functionUrl)}
-        />
-      )}
-      <Loader />
-      <div className="flex-1">
-        {/* {status === "connected" && (
-          <MessageInput inputRef={ref} sendMessage={sendMessage} />
-        )} */}
-        <Canvas
-          style={{ pointerEvents: "none" }}
-          shadows
-          camera={{ position: [0, 0, 1], fov: 60 }}
-        >
-          <Avatar
-            messages={messages}
-            removeFirstMessage={removeFirstMessage}
-            newAudioStartTime={newAudioStartTime}
+    <div className="h-screen w-screen m-0 bg-[#000000] overflow-hidden flex">
+      {/* Left Side: 3D Canvas and Chat */}
+      <div className="flex-1 flex flex-col">
+        {status === "connecting" && <ConnectionStatusOverlay />}
+        {status !== "connected" && (
+          <InputForm
+            audioOptions={audioOptions}
+            audioInput={audioInput}
+            setAudioInput={setAudioInput}
+            functionUrl={functionUrl}
+            setFunctionUrl={setFunctionUrl}
+            onClickRun={() => start(functionUrl)}
           />
-        </Canvas>
+        )}
+        <Loader />
+        <div className="flex-1">
+          {/* {status === "connected" && (
+            <MessageInput inputRef={ref} sendMessage={sendMessage} />
+          )} */}
+          <Canvas
+            style={{ pointerEvents: "none" }}
+            shadows
+            camera={{ position: [0, 0, 1], fov: 60 }}
+          >
+            <Avatar
+              messages={messages}
+              removeFirstMessage={removeFirstMessage}
+              newAudioStartTime={newAudioStartTime}
+            />
+          </Canvas>
+        </div>
+      </div>
+
+      {/* Right Side: Iframe */}
+      <div className="flex-1">
+        <iframe
+          src="https://viewer.hal51.ai/"
+          className="w-full h-full"
+          title="HAL51 AI Viewer"
+        />
       </div>
     </div>
   );
