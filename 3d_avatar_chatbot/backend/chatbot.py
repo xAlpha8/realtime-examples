@@ -7,11 +7,13 @@ from realtime.ops.map import map
 from realtime.ops.merge import merge
 from realtime.plugins.azure_tts import AzureTTS
 from realtime.plugins.deepgram_stt import DeepgramSTT
-from realtime.plugins.fireworks_llm import FireworksLLM
+from realtime.plugins.groq_llm import GroqLLM
 from realtime.server import RealtimeServer
 from realtime.streams import AudioStream, TextStream
 
 logging.basicConfig(level=logging.INFO)
+
+
 @realtime.App()
 class ReplayBot:
     """
@@ -22,13 +24,14 @@ class ReplayBot:
         run(ws: WebSocket): Handles the WebSocket connection and processes data.
         teardown(): Cleans up any resources or configurations.
     """
+
     async def setup(self):
         pass
 
     @realtime.websocket()
     async def run(audio_input_stream: AudioStream, message_stream: TextStream):
         deepgram_node = DeepgramSTT(sample_rate=audio_input_stream.sample_rate)
-        llm_node = FireworksLLM(
+        llm_node = GroqLLM(
             system_prompt="You are a virtual assistant.\
             You will always reply with a JSON object.\
             Each message has a text, facialExpression, and animation property.\
@@ -38,7 +41,7 @@ class ReplayBot:
             temperature=0.9,
             response_format={"type": "json_object"},
             stream=False,
-            model="accounts/fireworks/models/llama-v3-8b-instruct",
+            model="llama-3.1-8b-instant",
         )
         tts_node = AzureTTS(stream=False, voice_id="en-US-EricNeural")
 
@@ -59,6 +62,7 @@ class ReplayBot:
 
     async def teardown(self):
         pass
+
 
 if __name__ == "__main__":
     v = ReplayBot()
