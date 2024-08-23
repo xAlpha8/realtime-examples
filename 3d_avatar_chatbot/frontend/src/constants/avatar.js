@@ -86,13 +86,13 @@ export const FACIAL_EXPRESSIONS = {
  * that should be activated on the avatar mesh in response to that cue.
  */
 export const MAP_MESSAGE_CUES_TO_AVATAR_MESH = {
-  A: "viseme_PP",
-  B: "viseme_kk",
-  C: "viseme_I",
-  D: "viseme_AA",
-  E: "viseme_O",
-  F: "viseme_U",
-  G: "viseme_FF",
-  H: "viseme_TH",
-  X: "viseme_PP",
+  A: "PP",
+  B: "kk",
+  C: "I",
+  D: "AA",
+  E: "O",
+  F: "U",
+  G: "FF",
+  H: "TH",
+  X: "PP",
 };

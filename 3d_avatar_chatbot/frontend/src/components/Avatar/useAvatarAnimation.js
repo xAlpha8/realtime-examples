@@ -7,7 +7,7 @@ import { useEffect, useState, useRef } from "react";
  **/
 export function useAvatarAnimation() {
   // Load the animations from the GLTF model
-  const { animations } = useGLTF("/models/vinay-animations.glb");
+  const { animations } = useGLTF("/models/einstein-animations.glb");
 
   // Create a ref for the group that will hold the animated object
   const group = useRef();
