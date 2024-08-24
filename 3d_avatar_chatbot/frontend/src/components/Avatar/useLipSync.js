@@ -1,7 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { lerpMorphTarget } from "../../utils/morph";
-import { MAP_RHUBARB_VISEME_ID_TO_AVATAR_MESH } from "../../constants/avatar";
+import {
+  MAP_RHUBARB_VISEME_ID_TO_AVATAR_MESH,
+  MAP_AZURE_VISEME_ID_TO_AVATAR_MESH,
+} from "../../constants/avatar";
 
 /**
  * Custom hook to manage lip sync for an avatar based on audio cues.
@@ -28,7 +31,13 @@ export function useLipSync({ scene, newAudioStartTime }) {
             currentAudioTime >= mouthCue.start &&
             currentAudioTime < mouthCue.end
           ) {
-            const target = MAP_RHUBARB_VISEME_ID_TO_AVATAR_MESH[mouthCue.value];
+            let target;
+            if (mouthCue?.azure_viseme_id) {
+              target =
+                MAP_AZURE_VISEME_ID_TO_AVATAR_MESH[mouthCue.azure_viseme_id];
+            } else if (mouthCue?.value) {
+              target = MAP_RHUBARB_VISEME_ID_TO_AVATAR_MESH[mouthCue.value];
+            }
             if (target) {
               appliedMorphTargets.push(target);
               lerpMorphTarget(scene, target, 1, 0.2);
@@ -43,7 +52,7 @@ export function useLipSync({ scene, newAudioStartTime }) {
     }
 
     // Reset morph targets that are not currently being applied
-    Object.values(MAP_MESSAGE_CUES_TO_AVATAR_MESH).forEach((value) => {
+    Object.values(MAP_AZURE_VISEME_ID_TO_AVATAR_MESH).forEach((value) => {
       if (!appliedMorphTargets.includes(value)) {
         lerpMorphTarget(scene, value, 0, 0.1);
       }
