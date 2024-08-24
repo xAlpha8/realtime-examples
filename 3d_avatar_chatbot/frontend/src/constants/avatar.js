@@ -85,7 +85,7 @@ export const FACIAL_EXPRESSIONS = {
  * Each key represents a message cue, and the associated value is the name of the morph target
  * that should be activated on the avatar mesh in response to that cue.
  */
-export const MAP_MESSAGE_CUES_TO_AVATAR_MESH = {
+export const MAP_RHUBARB_VISEME_ID_TO_AVATAR_MESH = {
   A: "viseme_PP",
   B: "viseme_kk",
   C: "viseme_I",
@@ -95,4 +95,29 @@ export const MAP_MESSAGE_CUES_TO_AVATAR_MESH = {
   G: "viseme_FF",
   H: "viseme_TH",
   X: "viseme_PP",
+};
+
+export const MAP_AZURE_VISEME_ID_TO_AVATAR_MESH = {
+  0: "viseme_sil",
+  1: "viseme_AA",
+  2: "viseme_AA",
+  3: "viseme_O",
+  4: "viseme_E",
+  5: "viseme_RR",
+  6: "viseme_I",
+  7: "viseme_O",
+  8: "viseme_O",
+  9: "viseme_U",
+  10: "viseme_O",
+  11: "viseme_AA",
+  12: "viseme_CH",
+  13: "viseme_U",
+  14: "viseme_nn",
+  15: "viseme_SS",
+  16: "viseme_CH",
+  17: "viseme_TH",
+  18: "viseme_FF",
+  19: "viseme_DD",
+  20: "viseme_kk",
+  21: "viseme_PP",
 };
