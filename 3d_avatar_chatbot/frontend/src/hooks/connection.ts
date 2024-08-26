@@ -165,9 +165,15 @@ export const useConversation = () => {
     setError(undefined);
     let socket = null;
     if (functionUrl) {
-      const resp = await fetch(functionUrl);
-      const payload = await resp.json();
-      socket = await retryableConnect(payload.address, {}, 7);
+      try {
+        const resp = await fetch(functionUrl);
+        const payload = await resp.json();
+        socket = await retryableConnect(payload.address, {}, 7);
+      } catch (e) {
+        console.error("Error connecting to socket", e);
+        stopConversation(new Error("Error connecting to socket"));
+        return;
+      }
     } else {
       socket = new WebSocket("ws://0.0.0.0:8080");
     }
@@ -177,15 +183,22 @@ export const useConversation = () => {
       error = new Error("See console for error details");
     };
     socket.onmessage = (event) => {
-      const message = JSON.parse(event.data);
-      if (message.type === "audio") {
-        setAudioQueue((prev) => [...prev, Buffer.from(message.data, "base64")]);
-      } else if (message.type === "message") {
-        const messageData = JSON.parse(message.data);
-        console.log("Received message", messageData);
-        setMessages((prev) => [...prev, messageData]);
-      } else if (message.type === "audio_end") {
-        setAudioQueue((prev) => [...prev, "audio_end"]);
+      try {
+        const message = JSON.parse(event.data);
+        if (message.type === "audio") {
+          setAudioQueue((prev) => [
+            ...prev,
+            Buffer.from(message.data, "base64"),
+          ]);
+        } else if (message.type === "message") {
+          const messageData = JSON.parse(message.data);
+          console.log("Received message", messageData);
+          setMessages((prev) => [...prev, messageData]);
+        } else if (message.type === "audio_end") {
+          setAudioQueue((prev) => [...prev, "audio_end"]);
+        }
+      } catch (e) {
+        console.error("Error parsing message", e);
       }
     };
     socket.onclose = () => {
