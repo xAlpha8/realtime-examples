@@ -37,7 +37,6 @@ export function Avatar(props) {
 
   useProcessMessages({
     messages,
-    newAudioStartTime,
     removeFirstMessage,
     speaking,
     setAnimation,
