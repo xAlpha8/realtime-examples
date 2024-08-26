@@ -31,6 +31,7 @@ function App() {
     start,
     status,
     newAudioStartTime,
+    processing,
   } = useConversation();
 
   // useEffect(() => {
@@ -71,6 +72,7 @@ function App() {
               messages={messages}
               removeFirstMessage={removeFirstMessage}
               newAudioStartTime={newAudioStartTime}
+              isProcessingAudio={processing}
             />
           </Canvas>
         </div>
