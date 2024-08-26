@@ -30,6 +30,7 @@ export function Avatar(props) {
     removeFirstMessage,
     isLoading,
     newAudioStartTime,
+    isProcessingAudio,
     ...rest
   } = props;
 
@@ -41,6 +42,7 @@ export function Avatar(props) {
     messages,
     removeFirstMessage,
     speaking,
+    isProcessingAudio,
     setAnimation,
     setFacialExpression,
     setLipSync,
