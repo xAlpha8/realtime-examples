@@ -18,9 +18,11 @@ export function useProcessMessages({
   setLipSync,
   removeFirstMessage,
   messages,
+  isProcessingAudio,
 }) {
   useEffect(() => {
     if (!Array.isArray(messages) || messages.length === 0) return;
+    if (!isProcessingAudio) return;
 
     const message = messages[0];
     if (typeof message !== "object" || message === null) return;
@@ -45,6 +47,7 @@ export function useProcessMessages({
     setFacialExpression,
     setLipSync,
     removeFirstMessage,
+    isProcessingAudio,
   ]);
 
   useEffect(() => {

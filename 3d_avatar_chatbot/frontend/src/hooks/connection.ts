@@ -318,5 +318,6 @@ export const useConversation = () => {
     sendMessage, // Function to send a new message
     ref, // Reference to the input element
     newAudioStartTime,
+    processing,
   };
 };
