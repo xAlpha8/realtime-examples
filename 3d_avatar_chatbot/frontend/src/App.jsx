@@ -31,6 +31,7 @@ function App() {
     start,
     status,
     newAudioStartTime,
+    processing,
   } = useConversation();
 
   if (!isChrome && !isSafari) {
@@ -62,6 +63,7 @@ function App() {
             messages={messages}
             removeFirstMessage={removeFirstMessage}
             newAudioStartTime={newAudioStartTime}
+            isProcessingAudio={processing}
           />
         </Canvas>
       </div>
