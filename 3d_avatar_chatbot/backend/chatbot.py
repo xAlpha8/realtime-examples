@@ -15,7 +15,7 @@ logging.basicConfig(level=logging.INFO)
 
 
 @realtime.App()
-class ReplayBot:
+class Chatbot:
     """
     A bot that uses WebSocket to interact with clients, processing audio and text data.
 
@@ -36,7 +36,7 @@ class ReplayBot:
             You will always reply with a JSON object.\
             Each message has a text, facialExpression, and animation property.\
             The text property is a short response to the user (no emoji).\
-            The different facial expressions are: smile, sad, angry, surprised, funnyFace, and default.\
+            The different facial expressions are: smile, sad, angry, and default.\
             The different animations are: Talking_0, Talking_1, Talking_2, Crying, Laughing, Rumba, Idle, Terrified, and Angry.",
             temperature=0.9,
             response_format={"type": "json_object"},
@@ -65,5 +65,5 @@ class ReplayBot:
 
 
 if __name__ == "__main__":
-    v = ReplayBot()
+    v = Chatbot()
     asyncio.run(RealtimeServer().start())
