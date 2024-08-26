@@ -102,9 +102,11 @@ export const useConversation = () => {
 
   // Effect to play queued audio
   React.useEffect(() => {
-    const playArrayBuffer = (arrayBuffer: ArrayBuffer) => {
-      audioContext &&
-        audioContext.decodeAudioData(arrayBuffer, (buffer) => {
+    const playArrayBuffer = async (arrayBuffer: ArrayBuffer) => {
+      console.log("playArrayBuffer", arrayBuffer);
+      try {
+        if (!audioContext) return;
+        await audioContext.decodeAudioData(arrayBuffer, (buffer) => {
           const source = audioContext.createBufferSource();
           source.buffer = buffer;
           source.connect(audioContext.destination);
@@ -113,6 +115,11 @@ export const useConversation = () => {
             setProcessing(false);
           };
         });
+      } catch (e) {
+        console.error("Error playing audio", e);
+        setProcessing(false);
+        newAudioStartTime.current = 0;
+      }
     };
     if (!processing && audioQueue.length > 0) {
       setProcessing(true);
