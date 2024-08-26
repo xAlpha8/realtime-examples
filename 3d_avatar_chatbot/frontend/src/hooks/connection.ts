@@ -120,9 +120,11 @@ export const useConversation = () => {
       if (typeof audio === "string" && audio === "audio_end") {
         newAudioStartTime.current = 0;
         setProcessing(false);
+        console.log("Setting new audio start time to 0");
         return;
       } else if (audio instanceof Buffer && newAudioStartTime.current === 0) {
         newAudioStartTime.current = new Date().getTime() / 1000;
+        console.log("New audio start time", newAudioStartTime.current);
       }
       audio &&
         fetch(URL.createObjectURL(new Blob([audio])))

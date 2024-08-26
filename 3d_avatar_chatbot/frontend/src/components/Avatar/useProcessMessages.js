@@ -40,7 +40,6 @@ export function useProcessMessages({
       setLipSync(message.mouthCues);
     }
 
-    newAudioStartTime.current = new Date().getTime() / 1000;
     removeFirstMessage();
   }, [
     messages,
