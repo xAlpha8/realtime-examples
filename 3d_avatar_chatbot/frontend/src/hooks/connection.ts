@@ -192,7 +192,9 @@ export const useConversation = () => {
           ]);
         } else if (message.type === "message") {
           const messageData = JSON.parse(message.data);
-          console.log("Received message", messageData);
+          if (messageData?.text) {
+            console.log("Received text", messageData.text);
+          }
           setMessages((prev) => [...prev, messageData]);
         } else if (message.type === "audio_end") {
           setAudioQueue((prev) => [...prev, "audio_end"]);
