@@ -19,7 +19,7 @@
  * @property {boolean} useStun - Indicates if a STUN server should be used for the connection.
  */
 export const DEFAULT_CONFIG = {
-  functionUrl: "https://infra.getadapt.ai/run/2e0aa278b5471c709631b4498e73fb99", // Function endpoint URL
+  functionUrl: "https://infra.getadapt.ai/run/5c5b63cc1b5506085d85339bd0cf503b", // Function endpoint URL
   offerUrl: "http://0.0.0.0:8080/", // URL to make offers for connections
   isDataEnabled: true, // Enable or disable data channels
   dataParameters: { ordered: true }, // Data channel parameters, e.g., ordered delivery
