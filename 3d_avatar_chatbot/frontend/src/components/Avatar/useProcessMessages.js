@@ -5,7 +5,6 @@ import { useEffect } from "react";
  *
  * @param {Object} params - The parameters for the hook.
  * @param {boolean} params.speaking - Whether avatar is already speaking.
- * @param {React.MutableRefObject<number>} params.newAudioStartTime - Reference to the timestamp when audio started.
  * @param {Function} params.setAnimation - Function to set the current animation for the avatar.
  * @param {Function} params.setFacialExpression - Function to set the current facial expression for the avatar.
  * @param {Function} params.setLipSync - Function to set the lip sync cues for the avatar.
@@ -14,7 +13,6 @@ import { useEffect } from "react";
  */
 export function useProcessMessages({
   speaking,
-  newAudioStartTime,
   setAnimation,
   setFacialExpression,
   setLipSync,
@@ -47,7 +45,6 @@ export function useProcessMessages({
     setFacialExpression,
     setLipSync,
     removeFirstMessage,
-    newAudioStartTime,
   ]);
 
   useEffect(() => {
