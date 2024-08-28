@@ -6,8 +6,9 @@ authors = ["Janak <janak2@users.noreply.github.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = ">=3.9 <3.12"
-realtime-client = {extras = ["plugins"], version = "^0.1.116"}
+python = ">=3.10 <3.12"
+realtime-client = {extras = ["plugins"], version = "^0.1.125"}
+numpy = "^2.1.0"
 
 [tool.poetry.group.plugins]
 optional = true
