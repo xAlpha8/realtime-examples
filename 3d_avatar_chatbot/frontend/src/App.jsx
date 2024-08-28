@@ -39,7 +39,7 @@ function App() {
   }
 
   return (
-    <div className="w-screen h-screen m-0 overflow-hidden flex flex-col justify-center items-center">
+    <div className="w-screen h-screen m-0 overflow-hidden flex flex-col justify-center items-center gap-4">
       {status === "connecting" && <ConnectionStatusOverlay />}
       <Loader />
       <div className="flex-col flex justify-center items-center">
