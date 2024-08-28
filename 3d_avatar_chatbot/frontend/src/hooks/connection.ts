@@ -90,13 +90,21 @@ export const useConversation = () => {
   React.useEffect(() => {
     if (!recorder || !socket) return;
     if (status === "connected" && active) {
-      recorder.resume()
+      try {
+        recorder.resume();
+      } catch (error) {
+        console.error("Error resuming recorder", error);
+      }
       recorder.addEventListener("dataavailable", recordingDataListener);
     }
 
     return () => {
       if (recorder) {
-        recorder.pause()
+        try {
+          recorder.pause();
+        } catch (error) {
+          console.error("Error pausing recorder", error);
+        }
         recorder.removeEventListener("dataavailable", recordingDataListener);
       }
     };
