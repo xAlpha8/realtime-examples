@@ -23,10 +23,9 @@ export function InputForm(props) {
   } = props;
 
   return (
-    <div className="p-6">
-      <div className="space-y-6 p-6 bg-gradient-to-r from-[#faaca8] to-[#ddd6f3] rounded-lg shadow-lg">
+      <div className="space-y-6 p-6 rounded-lg shadow-lg">
         {/* Form Section */}
-        <div className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4">
+        <div className="flex flex-col">
           {/* Audio Options */}
           <div className="flex-1">
             <h2 className="text-xl font-semibold text-gray-800 mb-2">
@@ -70,6 +69,5 @@ export function InputForm(props) {
           </button>
         </div>
       </div>
-    </div>
   );
 }

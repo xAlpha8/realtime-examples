@@ -18,6 +18,8 @@ import { useAvatarAnimation } from "./useAvatarAnimation";
  * @param {Array} props.messages - Array of message objects for controlling animations, facial expressions, and lip sync.
  * @param {Function} props.removeFirstMessage - Function to remove the first message after processing.
  * @param {boolean} props.isLoading - Boolean indicating if the model is still loading.
+ * @param {number} [props.scale=1] - Scale factor for the avatar model. Defaults to 1.
+ * @param {[number, number, number]} [props.position=[0,0,0]] - Position of the avatar in [x, y, z] coordinates. Defaults to [0,0,0].
  * @param {...Object} rest - Additional props to be spread to the root group element.
  * @returns {JSX.Element} The rendered Avatar component.
  */
@@ -31,6 +33,8 @@ export function Avatar(props) {
     isLoading,
     newAudioStartTime,
     isProcessingAudio,
+    scale = 1,
+    position = [0, 0, 0],
     ...rest
   } = props;
 
@@ -56,7 +60,7 @@ export function Avatar(props) {
       <Suspense>
         <Dots loading={isLoading} position-y={1.75} position-x={-0.02} />
       </Suspense>
-      <group {...rest} dispose={null} ref={group}>
+      <group {...rest} dispose={null} ref={group} scale={scale} position={position}>
         <primitive object={nodes.Hips} />
         <skinnedMesh
           name="Wolf3D_Body"
