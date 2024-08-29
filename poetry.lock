@@ -2874,13 +2874,13 @@ dev = ["coverage[toml] (>=7.2.2)"]
 
 [[package]]
 name = "realtime-client"
-version = "0.1.127"
+version = "0.1.128"
 description = ""
 optional = false
 python-versions = "<3.12,>=3.9"
 files = [
-    {file = "realtime_client-0.1.127-py3-none-any.whl", hash = "sha256:b440440469da339e1cac54161e9f8da9265abf9a7c82a384d0c5dec5055f33b0"},
-    {file = "realtime_client-0.1.127.tar.gz", hash = "sha256:a442c2fae68fbb9d867107513637e5e01dbb30c8dc21256de90cf066c54540bd"},
+    {file = "realtime_client-0.1.128-py3-none-any.whl", hash = "sha256:f4db84b38ec8cc3dd5755b6590c6d0e2987b17825456020da2e467622d617907"},
+    {file = "realtime_client-0.1.128.tar.gz", hash = "sha256:e85acfb341a39fc42026a7b2538cdb5e0d23c41a3f821a515212052763ad91ea"},
 ]
 
 [package.dependencies]
@@ -3518,4 +3518,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9 <3.12"
-content-hash = "93e39c0ce3b1eacab96b3e0b49198e8e5327576e204d605ae3f6b38e64a8c08d"
+content-hash = "ad59ed25f4142d04386f66357edd2cd3874d66a69b62ad3b7f342f624faf6c5b"
