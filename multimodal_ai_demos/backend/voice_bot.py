@@ -1,99 +1,98 @@
-import asyncio
 import logging
-import os
-import time
-from typing import Tuple
 
-import realtime
-from realtime.plugins.deepgram_stt import DeepgramSTT
-from realtime.plugins.eleven_labs_tts import ElevenLabsTTS
-from realtime.plugins.fireworks_llm import FireworksLLM
-from realtime.plugins.silero_vad import SileroVAD
-from realtime.plugins.token_aggregator import TokenAggregator
-from realtime.streams import AudioStream, VideoStream, Stream, TextStream, ByteStream
-from realtime.plugins.audio_convertor import AudioConverter
+import realtime as rt
 
+# Set up basic logging configuration
 logging.basicConfig(level=logging.INFO)
 
 """
-Wrapping your class with @realtime.App() will tell the realtime server which functions to run.
+The @realtime.App() decorator is used to wrap the VoiceBot class.
+This tells the realtime server which functions to run.
 """
 
 
-@realtime.App()
+@rt.App()
 class VoiceBot:
-    async def setup(self):
+    """
+    VoiceBot class represents a voice-based AI assistant.
+
+    This class handles the setup, running, and teardown of various AI services
+    used to process audio input, generate responses, and convert text to speech.
+    """
+
+    async def setup(self) -> None:
         """
-        This function will be called when the app starts.
-        This function should be used to setup services, load models, etc.
+        Initialize the VoiceBot.
+
+        This method is called when the app starts. It should be used to set up
+        services, load models, and perform any necessary initialization.
         """
-        # ------ Initialize the services ------
-        self.deepgram_node = DeepgramSTT(
-            api_key=os.environ.get("DEEPGRAM_API_KEY"), sample_rate=8000
-        )
-        self.llm_node = FireworksLLM(
-            # api_key=os.environ.get("OPENAI_API_KEY"),
+        pass
+
+    @rt.streaming_endpoint()
+    async def run(self, audio_input_queue: rt.AudioStream) -> rt.AudioStream:
+        """
+        Handle the main processing loop for the VoiceBot.
+
+        This method is called for each new connection request. It sets up and
+        runs the various AI services in a pipeline to process audio input and
+        generate audio output.
+
+        Args:
+            audio_input_queue (rt.AudioStream): The input stream of audio data.
+
+        Returns:
+            rt.AudioStream: The output stream of generated audio responses.
+        """
+        # Initialize the AI services
+        self.deepgram_node = rt.DeepgramSTT(sample_rate=8000)
+        self.llm_node = rt.GroqLLM(
             system_prompt="You are a helpful assistant. Keep your answers very short.",
-            model="accounts/fireworks/models/llama-v3-8b-instruct",
         )
-        self.token_aggregator_node = TokenAggregator()
-        self.tts_node = ElevenLabsTTS(
-            api_key=os.environ.get("ELEVEN_LABS_API_KEY"), model="eleven_turbo_v2_5"
+        self.token_aggregator_node = rt.TokenAggregator()
+        self.tts_node = rt.CartesiaTTS(
+            voice_id="95856005-0332-41b0-935f-352e296aa0df",
         )
-        self.audio_convertor_node = AudioConverter()
 
-        # Silero for voice activity detection to handle interrupts while bot is talking
-        self.vad_node = SileroVAD()
+        # Uncomment the following lines to enable voice activity detection for handling interrupts
+        # self.vad_node = rt.SileroVAD()
+        # audio_input_queue_copy = audio_input_queue.clone()
 
-    @realtime.streaming_endpoint()
-    async def run(self, audio_input_queue: AudioStream) -> Tuple[Stream, ...]:
-        """
-        This function will handle the connection to the frontend. Whenever, a new connection request comes in, this function will be called (after setup finishes).
-        The type hint (AudioStream/VideoStream/TextStream) is used to tell the realtime server which type of stream to expect.
-        """
-        # Clone the audio input queue. Every time something is put in the original queue, it is also put in the clone automatically.
-        audio_input_queue_copy = await audio_input_queue.clone()
+        # Set up the AI service pipeline
+        deepgram_stream: rt.TextStream = self.deepgram_node.run(audio_input_queue)
+        # vad_output_queue: rt.TextStream = self.vad_node.run(audio_input_queue_copy)
 
-        # ------ Run the services ------
+        llm_token_stream: rt.TextStream
+        chat_history_stream: rt.TextStream
+        llm_token_stream, chat_history_stream = self.llm_node.run(deepgram_stream)
 
-        # Each service takes one or more input queues and returns one or more output queues
-        # These processes run in a separate thread/task, so won't block the main thread
-        deepgram_stream: TextStream = await self.deepgram_node.run(audio_input_queue)
-        vad_output_queue: TextStream = await self.vad_node.run(audio_input_queue_copy)
-        llm_token_stream: TextStream
-        chat_history_stream: TextStream
-        llm_token_stream, chat_history_stream = await self.llm_node.run(deepgram_stream)
-        token_aggregator_stream: TextStream = await self.token_aggregator_node.run(
+        token_aggregator_stream: rt.TextStream = self.token_aggregator_node.run(
             llm_token_stream
         )
-        tts_stream: ByteStream = await self.tts_node.run(token_aggregator_stream)
-        audio_stream: AudioStream = await self.audio_convertor_node.run(tts_stream)
+        tts_stream: rt.AudioStream = self.tts_node.run(token_aggregator_stream)
 
-        # Set the interrupts for the services
-        # These are used to handle interrupts while the bot is talking
-        await self.llm_node.set_interrupt(vad_output_queue)
-        await self.token_aggregator_node.set_interrupt(await vad_output_queue.clone())
-        await self.tts_node.set_interrupt(await vad_output_queue.clone())
+        # Uncomment the following lines to set up interrupt handling
+        # await self.llm_node.set_interrupt(vad_output_queue)
+        # await self.token_aggregator_node.set_interrupt(await vad_output_queue.clone())
+        # await self.tts_node.set_interrupt(await vad_output_queue.clone())
 
-        return (audio_stream, chat_history_stream)
+        return tts_stream
 
-    async def teardown(self):
+    async def teardown(self) -> None:
         """
-        This function will be called when the app stops or is shutdown unexpectedly.
-        This function should be used to clean up resources, etc.
+        Clean up resources when the VoiceBot is shutting down.
+
+        This method is called when the app stops or is shut down unexpectedly.
+        It should be used to release resources and perform any necessary cleanup.
         """
         await self.deepgram_node.close()
         await self.llm_node.close()
         await self.token_aggregator_node.close()
         await self.tts_node.close()
-        await self.vad_node.close()
-        await self.audio_convertor_node.close()
+        # Uncomment the following line if using VAD
+        # await self.vad_node.close()
 
 
 if __name__ == "__main__":
-    while True:
-        try:
-            asyncio.run(VoiceBot().run())
-        except Exception as e:
-            print(e)
-            time.sleep(1)
+    # Start the VoiceBot when the script is run directly
+    VoiceBot().start()
