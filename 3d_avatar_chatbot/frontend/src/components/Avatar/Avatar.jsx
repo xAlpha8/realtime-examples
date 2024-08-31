@@ -18,6 +18,8 @@ import { useAvatarAnimation } from "./useAvatarAnimation";
  * @param {Array} props.messages - Array of message objects for controlling animations, facial expressions, and lip sync.
  * @param {Function} props.removeFirstMessage - Function to remove the first message after processing.
  * @param {boolean} props.isLoading - Boolean indicating if the model is still loading.
+ * @param {number} [props.scale=1] - Scale factor for the avatar model. Defaults to 1.
+ * @param {[number, number, number]} [props.position=[0,0,0]] - Position of the avatar in [x, y, z] coordinates. Defaults to [0,0,0].
  * @param {...Object} rest - Additional props to be spread to the root group element.
  * @returns {JSX.Element} The rendered Avatar component.
  */
@@ -29,6 +31,8 @@ export function Avatar(props) {
     isLoading,
     newAudioStartTime,
     isProcessingAudio,
+    scale = 1,
+    position = [0, 0, 0],
     ...rest
   } = props;
 
@@ -55,83 +59,83 @@ export function Avatar(props) {
         <Dots loading={isLoading} position-y={1.75} position-x={-0.02} />
       </Suspense>
       <group {...props} dispose={null} ref={group} position={[0, 0.55, -0.45]}>
-      <group rotation={[Math.PI / 2, 0, 0]}>
-        <skinnedMesh
-          geometry={nodes.AvatarBody.geometry}
-          material={materials.AvatarBody}
-          skeleton={nodes.AvatarBody.skeleton}
-        />
-        <skinnedMesh
-          name="AvatarEyelashes"
-          geometry={nodes.AvatarEyelashes.geometry}
-          material={materials.AvatarEyelashes}
-          skeleton={nodes.AvatarEyelashes.skeleton}
-          morphTargetDictionary={nodes.AvatarEyelashes.morphTargetDictionary}
-          morphTargetInfluences={nodes.AvatarEyelashes.morphTargetInfluences}
-        />
-        <skinnedMesh
-          name="AvatarHead"
-          geometry={nodes.AvatarHead.geometry}
-          material={materials.AvatarHead}
-          skeleton={nodes.AvatarHead.skeleton}
-          morphTargetDictionary={nodes.AvatarHead.morphTargetDictionary}
-          morphTargetInfluences={nodes.AvatarHead.morphTargetInfluences}
-        />
-        <skinnedMesh
-          geometry={nodes.AvatarLeftCornea.geometry}
-          material={materials.AvatarLeftCornea}
-          skeleton={nodes.AvatarLeftCornea.skeleton}
-        />
-        <skinnedMesh
-          geometry={nodes.AvatarLeftEyeball.geometry}
-          material={materials.AvatarLeftEyeball}
-          skeleton={nodes.AvatarLeftEyeball.skeleton}
-        />
-        <skinnedMesh
-          geometry={nodes.AvatarRightCornea.geometry}
-          material={materials.AvatarRightCornea}
-          skeleton={nodes.AvatarRightCornea.skeleton}
-        />
-        <skinnedMesh
-          geometry={nodes.AvatarRightEyeball.geometry}
-          material={materials.AvatarRightEyeball}
-          skeleton={nodes.AvatarRightEyeball.skeleton}
-        />
-        <skinnedMesh
-          name="AvatarTeethLower"
-          geometry={nodes.AvatarTeethLower.geometry}
-          material={materials.AvatarTeethLower}
-          skeleton={nodes.AvatarTeethLower.skeleton}
-          morphTargetDictionary={nodes.AvatarTeethLower.morphTargetDictionary}
-          morphTargetInfluences={nodes.AvatarTeethLower.morphTargetInfluences}
-        />
-        <skinnedMesh
-          geometry={nodes.AvatarTeethUpper.geometry}
-          material={materials.AvatarTeethUpper}
-          skeleton={nodes.AvatarTeethUpper.skeleton}
-        />
-        <skinnedMesh
-          geometry={nodes.haircut.geometry}
-          material={materials.haircut}
-          skeleton={nodes.haircut.skeleton}
-        />
-        <skinnedMesh
-          geometry={nodes.outfit_bottom.geometry}
-          material={materials.outfit_bottom}
-          skeleton={nodes.outfit_bottom.skeleton}
-        />
-        <skinnedMesh
-          geometry={nodes.outfit_shoes.geometry}
-          material={materials.outfit_shoes}
-          skeleton={nodes.outfit_shoes.skeleton}
-        />
-        <skinnedMesh
-          geometry={nodes.outfit_top.geometry}
-          material={materials.outfit_top}
-          skeleton={nodes.outfit_top.skeleton}
-        />
-        <primitive object={nodes.Hips} />
-      </group>
+        <group rotation={[Math.PI / 2, 0, 0]}>
+          <skinnedMesh
+            geometry={nodes.AvatarBody.geometry}
+            material={materials.AvatarBody}
+            skeleton={nodes.AvatarBody.skeleton}
+          />
+          <skinnedMesh
+            name="AvatarEyelashes"
+            geometry={nodes.AvatarEyelashes.geometry}
+            material={materials.AvatarEyelashes}
+            skeleton={nodes.AvatarEyelashes.skeleton}
+            morphTargetDictionary={nodes.AvatarEyelashes.morphTargetDictionary}
+            morphTargetInfluences={nodes.AvatarEyelashes.morphTargetInfluences}
+          />
+          <skinnedMesh
+            name="AvatarHead"
+            geometry={nodes.AvatarHead.geometry}
+            material={materials.AvatarHead}
+            skeleton={nodes.AvatarHead.skeleton}
+            morphTargetDictionary={nodes.AvatarHead.morphTargetDictionary}
+            morphTargetInfluences={nodes.AvatarHead.morphTargetInfluences}
+          />
+          <skinnedMesh
+            geometry={nodes.AvatarLeftCornea.geometry}
+            material={materials.AvatarLeftCornea}
+            skeleton={nodes.AvatarLeftCornea.skeleton}
+          />
+          <skinnedMesh
+            geometry={nodes.AvatarLeftEyeball.geometry}
+            material={materials.AvatarLeftEyeball}
+            skeleton={nodes.AvatarLeftEyeball.skeleton}
+          />
+          <skinnedMesh
+            geometry={nodes.AvatarRightCornea.geometry}
+            material={materials.AvatarRightCornea}
+            skeleton={nodes.AvatarRightCornea.skeleton}
+          />
+          <skinnedMesh
+            geometry={nodes.AvatarRightEyeball.geometry}
+            material={materials.AvatarRightEyeball}
+            skeleton={nodes.AvatarRightEyeball.skeleton}
+          />
+          <skinnedMesh
+            name="AvatarTeethLower"
+            geometry={nodes.AvatarTeethLower.geometry}
+            material={materials.AvatarTeethLower}
+            skeleton={nodes.AvatarTeethLower.skeleton}
+            morphTargetDictionary={nodes.AvatarTeethLower.morphTargetDictionary}
+            morphTargetInfluences={nodes.AvatarTeethLower.morphTargetInfluences}
+          />
+          <skinnedMesh
+            geometry={nodes.AvatarTeethUpper.geometry}
+            material={materials.AvatarTeethUpper}
+            skeleton={nodes.AvatarTeethUpper.skeleton}
+          />
+          <skinnedMesh
+            geometry={nodes.haircut.geometry}
+            material={materials.haircut}
+            skeleton={nodes.haircut.skeleton}
+          />
+          <skinnedMesh
+            geometry={nodes.outfit_bottom.geometry}
+            material={materials.outfit_bottom}
+            skeleton={nodes.outfit_bottom.skeleton}
+          />
+          <skinnedMesh
+            geometry={nodes.outfit_shoes.geometry}
+            material={materials.outfit_shoes}
+            skeleton={nodes.outfit_shoes.skeleton}
+          />
+          <skinnedMesh
+            geometry={nodes.outfit_top.geometry}
+            material={materials.outfit_top}
+            skeleton={nodes.outfit_top.skeleton}
+          />
+          <primitive object={nodes.Hips} />
+        </group>
       </group>
       <ContactShadows opacity={0.7} />
     </>
