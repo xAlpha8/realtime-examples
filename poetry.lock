@@ -360,13 +360,13 @@ files = [
 
 [[package]]
 name = "certifi"
-version = "2024.7.4"
+version = "2024.8.30"
 description = "Python package for providing Mozilla's CA Bundle."
 optional = false
 python-versions = ">=3.6"
 files = [
-    {file = "certifi-2024.7.4-py3-none-any.whl", hash = "sha256:c198e21b1289c2ab85ee4e67bb4b4ef3ead0892059901a8d5b622f24a1101e90"},
-    {file = "certifi-2024.7.4.tar.gz", hash = "sha256:5a1e7645bc0ec61a09e26c36f6106dd4cf40c6db3a1fb6352b0244e7fb057c7b"},
+    {file = "certifi-2024.8.30-py3-none-any.whl", hash = "sha256:922820b53db7a7257ffbda3f597266d435245903d80737e34f8a45ff3e3230d8"},
+    {file = "certifi-2024.8.30.tar.gz", hash = "sha256:bec941d2aa8195e248a60b31ff9f0558284cf01a52591ceda73ea9afffd69fd9"},
 ]
 
 [[package]]
@@ -1948,31 +1948,27 @@ dev = ["meson-python (>=0.13.1)", "numpy (>=1.25)", "pybind11 (>=2.6)", "setupto
 
 [[package]]
 name = "mediapipe"
-version = "0.10.14"
+version = "0.10.15"
 description = "MediaPipe is the simplest way for researchers and developers to build world-class ML solutions and applications for mobile, edge, cloud and the web."
 optional = false
 python-versions = "*"
 files = [
-    {file = "mediapipe-0.10.14-cp310-cp310-macosx_11_0_universal2.whl", hash = "sha256:1166935be26df23f6c6f6369dd7a79f0337ce882364acb986a377c4951bf7c34"},
-    {file = "mediapipe-0.10.14-cp310-cp310-macosx_11_0_x86_64.whl", hash = "sha256:113e264c38616ff23ff261b70cbcad2a2ae34b8335d055787b10bc09b2175adf"},
-    {file = "mediapipe-0.10.14-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:255e46a9f29b9739b10997d2c48657bdb0823a5d7052c0246522bcfd73873477"},
-    {file = "mediapipe-0.10.14-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:aecd2fdf603f741a43beb61d8686ce1c3a72c88e3880053e62d33c712c3df6e6"},
-    {file = "mediapipe-0.10.14-cp310-cp310-win_amd64.whl", hash = "sha256:10c670ea5c556ddae4ca941e511970278ce5632f9e24234368c6e91132c04e31"},
-    {file = "mediapipe-0.10.14-cp311-cp311-macosx_11_0_universal2.whl", hash = "sha256:4737fce6107bd21e420a6b2aad2c721fbc4cc318f1258b68f0665f10225bde1d"},
-    {file = "mediapipe-0.10.14-cp311-cp311-macosx_11_0_x86_64.whl", hash = "sha256:e5f8fdf512da074c225219f4e09723f612cdd3449c4793693fd360dc817c9261"},
-    {file = "mediapipe-0.10.14-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:1061d499d341e7f11dd7f18d5bee747e862db8ef47665ff777323282225d4315"},
-    {file = "mediapipe-0.10.14-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:a807328339e7356fda0bb14df12fedbf1d33bdf81649c5f8666b0026b1cc30b4"},
-    {file = "mediapipe-0.10.14-cp311-cp311-win_amd64.whl", hash = "sha256:1b7687d3b63590bcc601ad195b923b80a1b2d6be5cdf43711edc661cecd3dd47"},
-    {file = "mediapipe-0.10.14-cp312-cp312-macosx_11_0_universal2.whl", hash = "sha256:aa2298c1886716cde6bd7ce96aba1505d67d52edaba856f6c2e1ab905de52b0d"},
-    {file = "mediapipe-0.10.14-cp312-cp312-macosx_11_0_x86_64.whl", hash = "sha256:5c97e32cbb9e9d72b78a33f011257b3cdb55b60fef70a8a864c5d2a4b6652425"},
-    {file = "mediapipe-0.10.14-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:3e30ed2f39f925924de58adeec6a8e61ba6beb6959325dc0d8a1aa487a74377b"},
-    {file = "mediapipe-0.10.14-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:9b1e72d754cd9e1b4b88d80ec9ead2f1cbe8424b7f883d3bda53341b982a9f8b"},
-    {file = "mediapipe-0.10.14-cp312-cp312-win_amd64.whl", hash = "sha256:ebb8350e860c8e00b7c84d71e15090fc3ac4cc9d4249892f85fb35011590e372"},
-    {file = "mediapipe-0.10.14-cp39-cp39-macosx_11_0_universal2.whl", hash = "sha256:8e6cad0c9606930dcb1b09bc5f92b4b935e00813ac0b2e525dd2dbce191125c0"},
-    {file = "mediapipe-0.10.14-cp39-cp39-macosx_11_0_x86_64.whl", hash = "sha256:db59b272235689769dec1ed7c745d419f5d8a249f41e2b0c6e1b4dbe8ea073e2"},
-    {file = "mediapipe-0.10.14-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:419a2591be13cd92b74d4ca19bfcc146b114f4d5feb41dd1cbe838dcbc63cd75"},
-    {file = "mediapipe-0.10.14-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:e4c7a8ef124870ac181242dec7052ea781fde28b484bdf2033b8c1a295c67b1f"},
-    {file = "mediapipe-0.10.14-cp39-cp39-win_amd64.whl", hash = "sha256:8da20a8d16c8b4d9b71ea1ee8ded50200fb17bf93ef1cea9a343ff71b0d71525"},
+    {file = "mediapipe-0.10.15-cp310-cp310-macosx_11_0_universal2.whl", hash = "sha256:bad50dccb42fc4757d36cbd66ddd6221a78b01074956fd8e35f38b22a0924557"},
+    {file = "mediapipe-0.10.15-cp310-cp310-macosx_11_0_x86_64.whl", hash = "sha256:52ded396a854d57d86a724c5fa613e94b11b2a2ed6e717f97227171a9ce04f73"},
+    {file = "mediapipe-0.10.15-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:f36e4139b1dab145a4ab57bb58064dbaabf05d69213b80f0dc48bcbea9ddcd6c"},
+    {file = "mediapipe-0.10.15-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:57e9396b408cc9ffc919ab2a830c6bb0dd12f217482154a8d64ca2eda50f7562"},
+    {file = "mediapipe-0.10.15-cp311-cp311-macosx_11_0_universal2.whl", hash = "sha256:2adb0898e3a3c7daaebee1d760c99695c667ef53417cdaef750e842b9240131a"},
+    {file = "mediapipe-0.10.15-cp311-cp311-macosx_11_0_x86_64.whl", hash = "sha256:30b7c9c81ac1841cf70bd7559c878d6c238a9371499195abe67984eada2c924c"},
+    {file = "mediapipe-0.10.15-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:9f20086c79c4605cc552f95252dee19891990acbeb348fcba03acda0bfebfd0f"},
+    {file = "mediapipe-0.10.15-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:f35cd73c0f3a19c7b8c58cee771d396abbb16991761cbb73459c9ed73d51652a"},
+    {file = "mediapipe-0.10.15-cp312-cp312-macosx_11_0_universal2.whl", hash = "sha256:67a04fc8462f9c19738f564e2b0c298d8714d955c8bc2c6f70a7d046dc264fe2"},
+    {file = "mediapipe-0.10.15-cp312-cp312-macosx_11_0_x86_64.whl", hash = "sha256:d79624e895c51414fe677a97a042544b83d3e99613350505a1424d9d4ce7f907"},
+    {file = "mediapipe-0.10.15-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:2e227be74169b6445d318e6751dca958f26a55554603fca75f5100d055368709"},
+    {file = "mediapipe-0.10.15-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:c7fee5088df68f2f3ab44f688e059ef85859669f8307207cbe19337a7c35b8b9"},
+    {file = "mediapipe-0.10.15-cp39-cp39-macosx_11_0_universal2.whl", hash = "sha256:5db8cd9958fdd963d96e23261b3ea80eb42294792963b4f6da92d1f7f6c0b22b"},
+    {file = "mediapipe-0.10.15-cp39-cp39-macosx_11_0_x86_64.whl", hash = "sha256:8f653fa30cb3302ef7c425fe514254e8cdb8bd29dfe5ee37c6ca05e3fb79e3d6"},
+    {file = "mediapipe-0.10.15-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:d0ee9dd32508ffb5c1b4b3560a85753cdc2bb4c42f56c050c383af17fe884967"},
+    {file = "mediapipe-0.10.15-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:73a763f04d2e9a3e3c2c2a4260799c848492782d348c4c2c3af64f6e7d4e6966"},
 ]
 
 [package.dependencies]
@@ -1982,7 +1978,7 @@ flatbuffers = ">=2.0"
 jax = "*"
 jaxlib = "*"
 matplotlib = "*"
-numpy = "*"
+numpy = "<2"
 opencv-contrib-python = "*"
 protobuf = ">=4.25.3,<5"
 sounddevice = ">=0.4.4"
@@ -2325,14 +2321,14 @@ files = [
 
 [[package]]
 name = "nvidia-nvjitlink-cu12"
-version = "12.6.20"
+version = "12.6.68"
 description = "Nvidia JIT LTO Library"
 optional = false
 python-versions = ">=3"
 files = [
-    {file = "nvidia_nvjitlink_cu12-12.6.20-py3-none-manylinux2014_aarch64.whl", hash = "sha256:84fb38465a5bc7c70cbc320cfd0963eb302ee25a5e939e9f512bbba55b6072fb"},
-    {file = "nvidia_nvjitlink_cu12-12.6.20-py3-none-manylinux2014_x86_64.whl", hash = "sha256:562ab97ea2c23164823b2a89cb328d01d45cb99634b8c65fe7cd60d14562bd79"},
-    {file = "nvidia_nvjitlink_cu12-12.6.20-py3-none-win_amd64.whl", hash = "sha256:ed3c43a17f37b0c922a919203d2d36cbef24d41cc3e6b625182f8b58203644f6"},
+    {file = "nvidia_nvjitlink_cu12-12.6.68-py3-none-manylinux2014_aarch64.whl", hash = "sha256:b3fd0779845f68b92063ab1393abab1ed0a23412fc520df79a8190d098b5cd6b"},
+    {file = "nvidia_nvjitlink_cu12-12.6.68-py3-none-manylinux2014_x86_64.whl", hash = "sha256:125a6c2a44e96386dda634e13d944e60b07a0402d391a070e8fb4104b34ea1ab"},
+    {file = "nvidia_nvjitlink_cu12-12.6.68-py3-none-win_amd64.whl", hash = "sha256:a55744c98d70317c5e23db14866a8cc2b733f7324509e941fc96276f9f37801d"},
 ]
 
 [[package]]
@@ -2348,13 +2344,13 @@ files = [
 
 [[package]]
 name = "openai"
-version = "1.42.0"
+version = "1.43.0"
 description = "The official Python library for the openai API"
 optional = false
 python-versions = ">=3.7.1"
 files = [
-    {file = "openai-1.42.0-py3-none-any.whl", hash = "sha256:dc91e0307033a4f94931e5d03cc3b29b9717014ad5e73f9f2051b6cb5eda4d80"},
-    {file = "openai-1.42.0.tar.gz", hash = "sha256:c9d31853b4e0bc2dc8bd08003b462a006035655a701471695d0bfdc08529cde3"},
+    {file = "openai-1.43.0-py3-none-any.whl", hash = "sha256:1a748c2728edd3a738a72a0212ba866f4fdbe39c9ae03813508b267d45104abe"},
+    {file = "openai-1.43.0.tar.gz", hash = "sha256:e607aff9fc3e28eade107e5edd8ca95a910a4b12589336d3cbb6bfe2ac306b3c"},
 ]
 
 [package.dependencies]
@@ -2741,13 +2737,13 @@ typing-extensions = ">=4.6.0,<4.7.0 || >4.7.0"
 
 [[package]]
 name = "pyee"
-version = "11.1.0"
+version = "12.0.0"
 description = "A rough port of Node.js's EventEmitter to Python with a few tricks of its own"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "pyee-11.1.0-py3-none-any.whl", hash = "sha256:5d346a7d0f861a4b2e6c47960295bd895f816725b27d656181947346be98d7c1"},
-    {file = "pyee-11.1.0.tar.gz", hash = "sha256:b53af98f6990c810edd9b56b87791021a8f54fd13db4edd1142438d44ba2263f"},
+    {file = "pyee-12.0.0-py3-none-any.whl", hash = "sha256:7b14b74320600049ccc7d0e0b1becd3b4bd0a03c745758225e31a59f4095c990"},
+    {file = "pyee-12.0.0.tar.gz", hash = "sha256:c480603f4aa2927d4766eb41fa82793fe60a82cbfdb8d688e0d08c55a534e145"},
 ]
 
 [package.dependencies]
@@ -2874,13 +2870,13 @@ dev = ["coverage[toml] (>=7.2.2)"]
 
 [[package]]
 name = "realtime-client"
-version = "0.1.128"
+version = "0.1.132"
 description = ""
 optional = false
 python-versions = "<3.12,>=3.9"
 files = [
-    {file = "realtime_client-0.1.128-py3-none-any.whl", hash = "sha256:f4db84b38ec8cc3dd5755b6590c6d0e2987b17825456020da2e467622d617907"},
-    {file = "realtime_client-0.1.128.tar.gz", hash = "sha256:e85acfb341a39fc42026a7b2538cdb5e0d23c41a3f821a515212052763ad91ea"},
+    {file = "realtime_client-0.1.132-py3-none-any.whl", hash = "sha256:7cefa71f2ae6b8a681deb6ac0502f1a658f143b34fcf5f135f021c59987c0efc"},
+    {file = "realtime_client-0.1.132.tar.gz", hash = "sha256:a59360d8360f8c22ef08d5d40499c8edc1d9e8646a819c96b015697f8bf72a62"},
 ]
 
 [package.dependencies]
@@ -3279,13 +3275,13 @@ files = [
 
 [[package]]
 name = "urllib3"
-version = "1.26.19"
+version = "1.26.20"
 description = "HTTP library with thread-safe connection pooling, file post, and more."
 optional = false
 python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*,>=2.7"
 files = [
-    {file = "urllib3-1.26.19-py2.py3-none-any.whl", hash = "sha256:37a0344459b199fce0e80b0d3569837ec6b6937435c5244e7fd73fa6006830f3"},
-    {file = "urllib3-1.26.19.tar.gz", hash = "sha256:3e3d753a8618b86d7de333b4223005f68720bcd6a7d2bcb9fbd2229ec7c1e429"},
+    {file = "urllib3-1.26.20-py2.py3-none-any.whl", hash = "sha256:0ed14ccfbf1c30a9072c7ca157e4319b70d65f623e91e7b32fadb2853431016e"},
+    {file = "urllib3-1.26.20.tar.gz", hash = "sha256:40c2dc0c681e47eb8f90e7e27bf6ff7df2e677421fd46756da1161c39ca70d32"},
 ]
 
 [package.extras]
@@ -3518,4 +3514,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9 <3.12"
-content-hash = "ad59ed25f4142d04386f66357edd2cd3874d66a69b62ad3b7f342f624faf6c5b"
+content-hash = "afb5f6fcaf009cfad1f6401569a121e5f51be4f8a8e62ba0a9849b59683529f4"
