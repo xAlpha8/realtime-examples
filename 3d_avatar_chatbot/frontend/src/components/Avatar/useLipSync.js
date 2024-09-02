@@ -40,7 +40,7 @@ export function useLipSync({ scene, newAudioStartTime }) {
             }
             if (target) {
               appliedMorphTargets.push(target);
-              lerpMorphTarget(scene, target, 1, 0.2);
+              lerpMorphTarget(scene, target, 1, 0.1);
             }
           }
         });
