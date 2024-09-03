@@ -21,12 +21,12 @@ export function useProcessMessages({
   isProcessingAudio,
 }) {
   useEffect(() => {
-    if (!Array.isArray(messages) || messages.length === 0) return;
     if (!isProcessingAudio) {
       setAnimation("Idle");
       setFacialExpression("default");
       return;
     }
+    if (!Array.isArray(messages) || messages.length === 0) return;
 
     const message = messages[0];
     if (typeof message !== "object" || message === null) return;
