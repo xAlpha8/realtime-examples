@@ -51,6 +51,7 @@ export const useConversation = () => {
         if (event.data === "agent_start_talking") {
           console.log("agent_start_talking");
           setProcessing(true);
+          setActive(false);
           newAudioStartTime.current = new Date().getTime() / 1000;
           // Set a timeout to mark processing as complete after the audio duration
         } else if (event.data === "agent_stop_talking") {
@@ -118,12 +119,26 @@ export const useConversation = () => {
   // Effect to handle the recorder and socket connection status
   React.useEffect(() => {
     if (!recorder || !socket) return;
-    if (status === "connected") {
-      if (active)
-        recorder.addEventListener("dataavailable", recordingDataListener);
-      else recorder.removeEventListener("dataavailable", recordingDataListener);
+    if (status === "connected" && active && !processing) {
+      try {
+        recorder.resume();
+      } catch (error) {
+        console.error("Error resuming recorder", error);
+      }
+      recorder.addEventListener("dataavailable", recordingDataListener);
     }
-  }, [recorder, socket, status, active]);
+
+    return () => {
+      if (recorder) {
+        try {
+          recorder.pause();
+        } catch (error) {
+          console.error("Error pausing recorder", error);
+        }
+        recorder.removeEventListener("dataavailable", recordingDataListener);
+      }
+    };
+  }, [recorder, socket, status, active, processing]);
 
   // Register WAV encoder for the media recorder
   React.useEffect(() => {
