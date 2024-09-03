@@ -4,7 +4,7 @@ import {
   register,
 } from "extendable-media-recorder";
 import { connect } from "extendable-media-recorder-wav-encoder";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { blobToBase64, stringify, retryableConnect } from "../utils/utils";
 import { isSafari, isChrome } from "react-device-detect";
 import { Buffer } from "buffer";
@@ -36,12 +36,49 @@ export const useConversation = () => {
   const ref = useRef(null);
   // Timestamp for when new audio starts
   const newAudioStartTime = useRef(0);
+  const [audioWorkletNode, setAudioWorkletNode] =
+    useState<AudioWorkletNode | null>(null);
+
+  // Initialize the audio context and AudioWorklet when the component mounts
+  useEffect(() => {
+    const initAudio = async () => {
+      const context = new AudioContext({ sampleRate: 16000 });
+      console.log("context", context);
+      await context.audioWorklet.addModule("/audioProcessor.js");
+      console.log("context.audioWorklet", context.audioWorklet);
+      const workletNode = new AudioWorkletNode(context, "audio-processor");
+      workletNode.connect(context.destination);
+
+      workletNode.port.onmessage = (event) => {
+        if (event.data.type === "decodingComplete") {
+          setProcessing(true);
+          // Set a timeout to mark processing as complete after the audio duration
+          setTimeout(() => {
+            setProcessing(false);
+            newAudioStartTime.current = 0;
+          }, event.data.duration * 1000);
+        } else if (event.data.type === "error") {
+          console.error(event.data.message);
+          setProcessing(false);
+          newAudioStartTime.current = 0;
+        }
+      };
+
+      setAudioContext(context);
+      setAudioWorkletNode(workletNode);
+    };
+    try {
+      initAudio();
+    } catch (e) {
+      console.error(e);
+    }
+  }, []);
 
   // Initialize the audio context when the component mounts
-  React.useEffect(() => {
-    const audioContext = new AudioContext();
-    setAudioContext(audioContext);
-  }, []);
+  // React.useEffect(() => {
+  //   const audioContext = new AudioContext();
+  //   setAudioContext(audioContext);
+  // }, []);
 
   // Listener for recording data available events
   const recordingDataListener = ({ data }: { data: Blob }) => {
@@ -104,22 +141,10 @@ export const useConversation = () => {
   React.useEffect(() => {
     const playArrayBuffer = async (arrayBuffer: ArrayBuffer) => {
       console.log("playArrayBuffer", arrayBuffer);
-      try {
-        if (!audioContext) return;
-        await audioContext.decodeAudioData(arrayBuffer, (buffer) => {
-          const source = audioContext.createBufferSource();
-          source.buffer = buffer;
-          source.connect(audioContext.destination);
-          source.start(0);
-          source.onended = () => {
-            setProcessing(false);
-          };
-        });
-      } catch (e) {
-        console.error("Error playing audio", e);
-        setProcessing(false);
-        newAudioStartTime.current = 0;
-      }
+      audioWorkletNode.port.postMessage({
+        type: "arrayBuffer",
+        buffer: arrayBuffer,
+      });
     };
     if (!processing && audioQueue.length > 0) {
       setProcessing(true);
