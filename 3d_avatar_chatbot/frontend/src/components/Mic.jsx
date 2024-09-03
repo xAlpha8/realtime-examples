@@ -1,12 +1,13 @@
 import React from "react";
 
 export function Mic(props) {
-  const { isActive = true, setIsActive } = props;
+  const { isActive = true, setIsActive, isProcessingAudio } = props;
 
   return (
     <div className="my-4">
       <button
         onClick={() => setIsActive(!isActive)}
+        disabled={isProcessingAudio}
         className={
           "p-2 rounded-full " +
           (isActive
