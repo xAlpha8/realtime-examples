@@ -23,7 +23,7 @@ class Chatbot:
     @rt.websocket()
     async def run(audio_input_stream: rt.AudioStream, message_stream: rt.TextStream):
         deepgram_node = rt.DeepgramSTT(sample_rate=audio_input_stream.sample_rate)
-        llm_node = rt.GroqLLM(
+        llm_node = rt.FireworksLLM(
             system_prompt="You are a virtual assistant.\
             You will always reply with a JSON object.\
             Each message has a text, facialExpression, and animation property.\
