@@ -66,8 +66,16 @@ function App() {
         </div>
         {status === "connected" && (
           <>
-            <Mic isActive={active} setIsActive={setActive} />
-            <MessageInput inputRef={ref} sendMessage={sendMessage} />
+            <Mic
+              isActive={active}
+              setIsActive={setActive}
+              isProcessingAudio={processing}
+            />
+            <MessageInput
+              inputRef={ref}
+              sendMessage={sendMessage}
+              isProcessingAudio={processing}
+            />
           </>
         )}
       </div>
