@@ -33,7 +33,7 @@ class Chatbot:
             response_format={"type": "json_object"},
             stream=False,
         )
-        tts_node = rt.AzureTTS(stream=False)
+        tts_node = rt.AzureTTS(stream=True)
 
         deepgram_stream = deepgram_node.run(audio_input_stream)
         deepgram_stream = rt.merge([deepgram_stream, message_stream])
