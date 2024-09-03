@@ -43,22 +43,18 @@ export const useConversation = () => {
   useEffect(() => {
     const initAudio = async () => {
       const context = new AudioContext({ sampleRate: 16000 });
-      console.log("context", context);
       await context.audioWorklet.addModule("/audioProcessor.js");
-      console.log("context.audioWorklet", context.audioWorklet);
       const workletNode = new AudioWorkletNode(context, "audio-processor");
       workletNode.connect(context.destination);
 
       workletNode.port.onmessage = (event) => {
-        if (event.data.type === "decodingComplete") {
+        if (event.data === "agent_start_talking") {
+          console.log("agent_start_talking");
           setProcessing(true);
+          newAudioStartTime.current = new Date().getTime() / 1000;
           // Set a timeout to mark processing as complete after the audio duration
-          setTimeout(() => {
-            setProcessing(false);
-            newAudioStartTime.current = 0;
-          }, event.data.duration * 1000);
-        } else if (event.data.type === "error") {
-          console.error(event.data.message);
+        } else if (event.data === "agent_stop_talking") {
+          console.log("agent_stop_talking");
           setProcessing(false);
           newAudioStartTime.current = 0;
         }
@@ -158,30 +154,23 @@ export const useConversation = () => {
   // Effect to play queued audio
   React.useEffect(() => {
     const playArrayBuffer = async (arrayBuffer: ArrayBuffer) => {
-      console.log("playArrayBuffer", arrayBuffer);
-      audioWorkletNode.port.postMessage({
+      audioWorkletNode?.port.postMessage({
         type: "arrayBuffer",
         buffer: arrayBuffer,
       });
     };
-    if (!processing && audioQueue.length > 0) {
-      setProcessing(true);
-      const audio = audioQueue.shift();
-      if (typeof audio === "string" && audio === "audio_end") {
-        newAudioStartTime.current = 0;
-        setProcessing(false);
-        console.log("Setting new audio start time to 0");
-        return;
-      } else if (audio instanceof Buffer && newAudioStartTime.current === 0) {
-        newAudioStartTime.current = new Date().getTime() / 1000;
-        console.log("New audio start time", newAudioStartTime.current);
-      }
-      audio &&
-        fetch(URL.createObjectURL(new Blob([audio])))
-          .then((response) => response.arrayBuffer())
-          .then(playArrayBuffer);
+    if (audioQueue.length === 0) {
+      return;
     }
-  }, [audioQueue, processing]);
+    const audio = audioQueue.shift();
+    if (typeof audio === "string" && audio === "audio_end") {
+      return;
+    }
+    audio &&
+      fetch(URL.createObjectURL(new Blob([audio])))
+        .then((response) => response.arrayBuffer())
+        .then(playArrayBuffer);
+  }, [audioQueue]);
 
   // Function to stop the conversation
   const stopConversation = (error?: Error) => {

@@ -1,10 +1,10 @@
 class AudioProcessor extends AudioWorkletProcessor {
   constructor() {
-    console.log("AudioProcessor constructor");
     super();
     this.port.onmessage = this.handleMessage.bind(this);
     this.audioData = [];
     this.index = 0;
+    this.isTalking = false;
   }
 
   /**
@@ -16,18 +16,14 @@ class AudioProcessor extends AudioWorkletProcessor {
       try {
         // Decode the audio data
         const audioData = await this.decodeAudio(event.data.buffer);
-        console.log("audioData", audioData);
         this.audioData.push(audioData);
-        // Notify the main thread that decoding is complete
-        this.port.postMessage({
-          type: "decodingComplete",
-          duration: audioData.duration,
-        });
       } catch (error) {
         this.port.postMessage({
           type: "error",
           message: "Audio decoding failed: " + error,
         });
+        this.isTalking = false;
+        this.port.postMessage("agent_stop_talking");
       }
     }
   }
@@ -56,6 +52,10 @@ class AudioProcessor extends AudioWorkletProcessor {
       const outputChannel = output[channel];
       for (let i = 0; i < outputChannel.length; ++i) {
         if (this.audioData.length > 0) {
+          if (!this.isTalking) {
+            this.isTalking = true;
+            this.port.postMessage("agent_start_talking");
+          }
           outputChannel[i] = this.audioData[0][this.index];
           this.index++;
           if (this.index == this.audioData[0].length) {
@@ -64,6 +64,10 @@ class AudioProcessor extends AudioWorkletProcessor {
           }
         } else {
           outputChannel[i] = 0;
+          if (this.isTalking) {
+            this.isTalking = false;
+            this.port.postMessage("agent_stop_talking");
+          }
         }
       }
     }
