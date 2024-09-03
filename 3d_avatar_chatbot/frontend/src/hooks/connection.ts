@@ -166,6 +166,9 @@ export const useConversation = () => {
     const audio = audioQueue[0];
     setAudioQueue(audioQueue.slice(1));
     if (typeof audio === "string" && audio === "audio_end") {
+      audioWorkletNode?.port.postMessage({
+        type: "audio_end",
+      });
       return;
     }
     audio &&
@@ -249,9 +252,6 @@ export const useConversation = () => {
     socket.onclose = () => {
       stopConversation(error);
     };
-    socket.onopen = () => {
-      setStatus("connected");
-    };
     setSocket(socket);
 
     let audioStream;
@@ -291,6 +291,7 @@ export const useConversation = () => {
         }
       }, 100);
     });
+    setStatus("connected");
 
     socket!.send(
       stringify({
