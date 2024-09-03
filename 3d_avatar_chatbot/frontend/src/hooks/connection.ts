@@ -162,7 +162,8 @@ export const useConversation = () => {
     if (audioQueue.length === 0) {
       return;
     }
-    const audio = audioQueue.shift();
+    const audio = audioQueue[0];
+    setAudioQueue(audioQueue.slice(1));
     if (typeof audio === "string" && audio === "audio_end") {
       return;
     }
