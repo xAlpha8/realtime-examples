@@ -10,7 +10,7 @@ import { Avatar } from "./components/Avatar/Avatar";
 import { MessageInput } from "./components/MessageInput";
 import { useConversation } from "./hooks/connection";
 import { ConnectionStatusOverlay } from "./components/ConnectionStatusOverlay";
-
+import { Mic } from "./components/Mic";
 /**
  * Main application component.
  *
@@ -32,6 +32,8 @@ function App() {
     status,
     newAudioStartTime,
     processing,
+    active,
+    setActive,
   } = useConversation();
 
   // useEffect(() => {
@@ -46,7 +48,7 @@ function App() {
   return (
     <div className="h-screen w-screen m-0 bg-[#000000] overflow-hidden flex">
       {/* Left Side: 3D Canvas and Chat */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col relative">
         {status === "connecting" && <ConnectionStatusOverlay />}
         {status !== "connected" && (
           <InputForm
@@ -59,10 +61,7 @@ function App() {
           />
         )}
         <Loader />
-        <div className="flex-1">
-          {/* {status === "connected" && (
-            <MessageInput inputRef={ref} sendMessage={sendMessage} />
-          )} */}
+        <div className="flex-1 relative">
           <Canvas
             style={{ pointerEvents: "none" }}
             shadows
@@ -75,6 +74,15 @@ function App() {
               isProcessingAudio={processing}
             />
           </Canvas>
+          {status === "connected" && (
+            <div className="absolute inset-0 z-10">
+              <Mic
+                isActive={active}
+                setIsActive={setActive}
+                isProcessingAudio={processing}
+              />
+            </div>
+          )}
         </div>
       </div>
 

@@ -1,24 +1,30 @@
 import React from "react";
 
-export function Mic(props) {
-  const { isActive = true, setIsActive, isProcessingAudio } = props;
-
+/**
+ * Mic component for audio recording control
+ * @param {Object} props - Component props
+ * @param {boolean} props.isActive - Whether the mic is active
+ * @param {function} props.setIsActive - Function to toggle mic active state
+ * @param {boolean} props.isProcessingAudio - Whether audio is being processed
+ */
+export function Mic({ isActive = true, setIsActive, isProcessingAudio }) {
   return (
-    <div className="my-4">
+    // Position the mic at the bottom center
+    <div className="fixed bottom-40 left-1/4 transform -translate-x-1/2">
       <button
         onClick={() => setIsActive(!isActive)}
         disabled={isProcessingAudio}
-        className={
-          "p-2 rounded-full " +
-          (isActive
+        className={`p-4 rounded-full ${
+          isActive
             ? "bg-pink-500 hover:bg-pink-600"
-            : "bg-gray-400 hover:bg-gray-600")
-        }
-        aria-label="Start recording"
+            : "bg-gray-400 hover:bg-gray-600"
+        }`}
+        aria-label="Toggle recording"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className="h-8 w-8 text-white"
+          // Increase the size of the icon
+          className="h-12 w-12 text-white"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
