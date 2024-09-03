@@ -164,19 +164,18 @@ export const useConversation = () => {
       return;
     }
     const audio = audioQueue[0];
+    setAudioQueue(audioQueue.slice(1));
     if (typeof audio === "string" && audio === "audio_end") {
-      if (processing) {
-        return;
-      }
-      setAudioQueue(audioQueue.slice(1));
+      audioWorkletNode?.port.postMessage({
+        type: "audio_end",
+      });
       return;
     }
-    setAudioQueue(audioQueue.slice(1));
     audio &&
       fetch(URL.createObjectURL(new Blob([audio])))
         .then((response) => response.arrayBuffer())
         .then(playArrayBuffer);
-  }, [audioQueue, processing]);
+  }, [audioQueue]);
 
   // Function to stop the conversation
   const stopConversation = (error?: Error) => {
