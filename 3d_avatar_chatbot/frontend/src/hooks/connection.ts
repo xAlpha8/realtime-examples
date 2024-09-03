@@ -235,16 +235,6 @@ export const useConversation = () => {
     };
     setSocket(socket);
 
-    // wait for socket to be ready
-    await new Promise((resolve) => {
-      const interval = setInterval(() => {
-        if (socket.readyState === WebSocket.OPEN) {
-          clearInterval(interval);
-          resolve(null);
-        }
-      }, 100);
-    });
-
     let audioStream;
     try {
       const trackConstraints: MediaTrackConstraints = {
@@ -286,7 +276,8 @@ export const useConversation = () => {
     socket!.send(
       stringify({
         type: "audio_metadata",
-        sampleRate: inputAudioMetadata.samplingRate,
+        inputSampleRate: inputAudioMetadata.samplingRate,
+        outputSampleRate: audioContext.sampleRate,
       })
     );
 
