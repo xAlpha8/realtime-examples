@@ -22,7 +22,11 @@ export function useProcessMessages({
 }) {
   useEffect(() => {
     if (!Array.isArray(messages) || messages.length === 0) return;
-    if (!isProcessingAudio) return;
+    if (!isProcessingAudio) {
+      setAnimation("Idle");
+      setFacialExpression("default");
+      return;
+    }
 
     const message = messages[0];
     if (typeof message !== "object" || message === null) return;
@@ -49,11 +53,4 @@ export function useProcessMessages({
     removeFirstMessage,
     isProcessingAudio,
   ]);
-
-  useEffect(() => {
-    if (!speaking) {
-      setAnimation("Idle");
-      setFacialExpression("default");
-    }
-  }, [speaking]);
 }
