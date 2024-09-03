@@ -8,7 +8,7 @@ import React from "react";
  * @param {Function} props.sendMessage - Function to send the message.
  * @returns {JSX.Element} The rendered input and button.
  */
-export function MessageInput({ inputRef, sendMessage }) {
+export function MessageInput({ inputRef, sendMessage, isProcessingAudio }) {
   return (
     <div className="fixed left-0 right-0 bottom-0 z-10 flex justify-between p-4 flex-col pointer-events-none">
       <div className="flex items-center gap-2 pointer-events-auto max-w-screen-sm w-full mx-auto">
@@ -21,10 +21,12 @@ export function MessageInput({ inputRef, sendMessage }) {
               sendMessage();
             }
           }}
+          disabled={isProcessingAudio}
         />
         <button
           onClick={sendMessage}
           className="bg-pink-500 hover:bg-pink-600 text-white p-4 px-10 font-semibold uppercase rounded-md"
+          disabled={isProcessingAudio}
         >
           Send
         </button>

@@ -52,7 +52,11 @@ function App() {
       <Loader />
       <div className="flex-1">
         {status === "connected" && (
-          <MessageInput inputRef={ref} sendMessage={sendMessage} />
+          <MessageInput
+            inputRef={ref}
+            sendMessage={sendMessage}
+            isProcessingAudio={processing}
+          />
         )}
         <Canvas
           style={{ pointerEvents: "none" }}
