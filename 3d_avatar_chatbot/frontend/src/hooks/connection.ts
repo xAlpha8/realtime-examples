@@ -34,6 +34,7 @@ export const useConversation = () => {
   const [messages, setMessages] = useState([]);
 
   const index = useRef(0);
+  const indexWebsocket = useRef(0);
   // Ref to the input element for typing messages
   const ref = useRef(null);
   // Timestamp for when new audio starts
@@ -237,7 +238,13 @@ export const useConversation = () => {
       try {
         const message = JSON.parse(event.data);
         if (message.type === "audio") {
-          console.log("Received audio", message.index, message.data.length);
+          console.log(
+            "Received audio",
+            indexWebsocket.current,
+            message.index,
+            message.data.length
+          );
+          indexWebsocket.current += 1;
           setAudioQueue((prev) => [
             ...prev,
             Buffer.from(message.data, "base64"),
