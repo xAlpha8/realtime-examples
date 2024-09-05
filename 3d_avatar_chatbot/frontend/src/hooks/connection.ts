@@ -171,7 +171,7 @@ export const useConversation = () => {
       audioWorkletNode?.port.postMessage({
         type: "audio_end",
       });
-      setAudioQueue(audioQueue.slice(1));
+      setAudioQueue((prev) => prev.slice(1));
       return;
     }
     console.log("Playing audio", index.current, audioQueue.length);
@@ -180,7 +180,7 @@ export const useConversation = () => {
       fetch(URL.createObjectURL(new Blob([audio])))
         .then((response) => response.arrayBuffer())
         .then(playArrayBuffer);
-    setAudioQueue(audioQueue.slice(1));
+    setAudioQueue((prev) => prev.slice(1));
   }, [audioQueue]);
 
   // Function to stop the conversation
