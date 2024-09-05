@@ -78,18 +78,22 @@ export const useConversation = () => {
   // }, []);
 
   // Listener for recording data available events
-  const recordingDataListener = ({ data }: { data: Blob }) => {
-    blobToBase64(data).then((base64Encoded: string | null) => {
-      if (!base64Encoded) return;
-      const audioMessage = {
-        type: "audio",
-        data: base64Encoded,
-      };
-      // Send audio data to the server if the WebSocket is open
-      socket!.readyState === WebSocket.OPEN &&
-        socket!.send(stringify(audioMessage));
-    });
-  };
+  const recordingDataListener = React.useCallback(
+    ({ data }: { data: Blob }) => {
+      blobToBase64(data).then((base64Encoded: string | null) => {
+        if (!base64Encoded) return;
+        const audioMessage = {
+          type: "audio",
+          data: base64Encoded,
+        };
+
+        // Send audio data to the server if the WebSocket is open
+        socket!.readyState === WebSocket.OPEN &&
+          socket!.send(stringify(audioMessage));
+      });
+    },
+    [socket]
+  );
 
   // Function to send a text message
   const sendMessage = () => {

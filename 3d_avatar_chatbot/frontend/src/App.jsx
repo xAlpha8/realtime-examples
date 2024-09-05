@@ -10,6 +10,7 @@ import { Avatar } from "./components/Avatar/Avatar";
 import { MessageInput } from "./components/MessageInput";
 import { useConversation } from "./hooks/connection";
 import { ConnectionStatusOverlay } from "./components/ConnectionStatusOverlay";
+import { Mic } from "./components/Mic";
 
 /**
  * Main application component.
@@ -32,6 +33,8 @@ function App() {
     status,
     newAudioStartTime,
     processing,
+    active,
+    setActive,
   } = useConversation();
 
   if (!isChrome && !isSafari) {
@@ -39,38 +42,56 @@ function App() {
   }
 
   return (
-    <div className="h-screen w-screen m-0 bg-[#faaca8] bg-gradient-to-r from-[#faaca8] to-[#ddd6f3] overflow-hidden flex flex-col">
+    <div className="w-screen h-screen m-0 overflow-hidden flex flex-col justify-center items-center gap-4">
       {status === "connecting" && <ConnectionStatusOverlay />}
-      <InputForm
-        audioOptions={audioOptions}
-        audioInput={audioInput}
-        setAudioInput={setAudioInput}
-        functionUrl={functionUrl}
-        setFunctionUrl={setFunctionUrl}
-        onClickRun={() => start(functionUrl)}
-      />
       <Loader />
-      <div className="flex-1">
+      <div className="flex-col flex justify-center items-center">
+        <div className="w-80 h-[300px] bg-white rounded-3xl shadow-lg overflow-hidden">
+          <Canvas
+            style={{ width: "100%", height: "100%", pointerEvents: "none" }}
+            shadows
+            camera={{ position: [0, 0, 1], fov: 30 }}
+          >
+            <group position={[-0.05, -0.05, 0]}>
+              <Avatar
+                messages={messages}
+                removeFirstMessage={removeFirstMessage}
+                newAudioStartTime={newAudioStartTime}
+                isProcessingAudio={processing}
+                scale={2}
+                position={[0, -1.7, 0]}
+              />
+            </group>
+          </Canvas>
+        </div>
         {status === "connected" && (
-          <MessageInput
-            inputRef={ref}
-            sendMessage={sendMessage}
-            isProcessingAudio={processing}
-          />
+          <>
+            <Mic
+              isActive={active}
+              setIsActive={setActive}
+              isProcessingAudio={processing}
+            />
+            <MessageInput
+              inputRef={ref}
+              sendMessage={sendMessage}
+              isProcessingAudio={processing}
+            />
+          </>
         )}
-        <Canvas
-          style={{ pointerEvents: "none" }}
-          shadows
-          camera={{ position: [0, 0, 1], fov: 30 }}
-        >
-          <Avatar
-            messages={messages}
-            removeFirstMessage={removeFirstMessage}
-            newAudioStartTime={newAudioStartTime}
-            isProcessingAudio={processing}
-          />
-        </Canvas>
       </div>
+
+      {status !== "connected" && (
+        <div className="flex justify-center items-center">
+          <InputForm
+            audioOptions={audioOptions}
+            audioInput={audioInput}
+            setAudioInput={setAudioInput}
+            functionUrl={functionUrl}
+            setFunctionUrl={setFunctionUrl}
+            onClickRun={() => start(functionUrl)}
+          />
+        </div>
+      )}
     </div>
   );
 }
