@@ -5,6 +5,7 @@ class AudioProcessor extends AudioWorkletProcessor {
     this.audioData = [];
     this.index = 0;
     this.isTalking = false;
+    this.i = 0;
   }
 
   /**
@@ -15,8 +16,10 @@ class AudioProcessor extends AudioWorkletProcessor {
     if (event.data.type === "arrayBuffer") {
       try {
         // Decode the audio data
+        console.log("Decoding audio", this.i, event.data.buffer);
         const audioData = await this.decodeAudio(event.data.buffer);
         this.audioData.push(audioData);
+        this.i += 1;
       } catch (error) {
         this.port.postMessage({
           type: "error",

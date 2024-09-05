@@ -32,6 +32,8 @@ export const useConversation = () => {
   const [active, setActive] = React.useState(true);
   // Array to store messages received from the server
   const [messages, setMessages] = useState([]);
+
+  const index = useRef(0);
   // Ref to the input element for typing messages
   const ref = useRef(null);
   // Timestamp for when new audio starts
@@ -171,6 +173,8 @@ export const useConversation = () => {
       setAudioQueue(audioQueue.slice(1));
       return;
     }
+    console.log("Playing audio", index.current, audioQueue.length);
+    index.current += 1;
     audio &&
       fetch(URL.createObjectURL(new Blob([audio])))
         .then((response) => response.arrayBuffer())
@@ -233,6 +237,7 @@ export const useConversation = () => {
       try {
         const message = JSON.parse(event.data);
         if (message.type === "audio") {
+          console.log("Received audio", message.index, message.data.length);
           setAudioQueue((prev) => [
             ...prev,
             Buffer.from(message.data, "base64"),
