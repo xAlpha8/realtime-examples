@@ -24,12 +24,11 @@ class Chatbot:
     async def run(audio_input_stream: rt.AudioStream, message_stream: rt.TextStream):
         deepgram_node = rt.DeepgramSTT(sample_rate=audio_input_stream.sample_rate)
         llm_node = rt.GroqLLM(
-            system_prompt="You are a virtual assistant.\
+            system_prompt="You are a language tutor who teaches English.\
             You will always reply with a JSON object.\
-            Each message has a text, facialExpression, and animation property.\
+            Each message has a text and facialExpression property.\
             The text property is a short response to the user (no emoji).\
-            The different facial expressions are: smile, sad, angry, and default.\
-            The different animations are: Talking_0, Talking_1, Talking_2, Crying, Laughing, Rumba, Idle, Terrified, and Angry.",
+            The different facial expressions are: smile, sad, angry, and default.",
             temperature=0.9,
             response_format={"type": "json_object"},
             stream=False,

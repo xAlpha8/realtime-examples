@@ -32,6 +32,9 @@ export const useConversation = () => {
   const [active, setActive] = React.useState(true);
   // Array to store messages received from the server
   const [messages, setMessages] = useState([]);
+
+  const index = useRef(0);
+  const indexWebsocket = useRef(0);
   // Ref to the input element for typing messages
   const ref = useRef(null);
   // Timestamp for when new audio starts
@@ -78,18 +81,22 @@ export const useConversation = () => {
   // }, []);
 
   // Listener for recording data available events
-  const recordingDataListener = ({ data }: { data: Blob }) => {
-    blobToBase64(data).then((base64Encoded: string | null) => {
-      if (!base64Encoded) return;
-      const audioMessage = {
-        type: "audio",
-        data: base64Encoded,
-      };
-      // Send audio data to the server if the WebSocket is open
-      socket!.readyState === WebSocket.OPEN &&
-        socket!.send(stringify(audioMessage));
-    });
-  };
+  const recordingDataListener = React.useCallback(
+    ({ data }: { data: Blob }) => {
+      blobToBase64(data).then((base64Encoded: string | null) => {
+        if (!base64Encoded) return;
+        const audioMessage = {
+          type: "audio",
+          data: base64Encoded,
+        };
+
+        // Send audio data to the server if the WebSocket is open
+        socket!.readyState === WebSocket.OPEN &&
+          socket!.send(stringify(audioMessage));
+      });
+    },
+    [socket]
+  );
 
   // Function to send a text message
   const sendMessage = () => {
@@ -167,6 +174,8 @@ export const useConversation = () => {
       setAudioQueue((prev) => prev.slice(1));
       return;
     }
+    console.log("Playing audio", index.current, audioQueue.length);
+    index.current += 1;
     audio &&
       fetch(URL.createObjectURL(new Blob([audio])))
         .then((response) => response.arrayBuffer())
@@ -229,6 +238,13 @@ export const useConversation = () => {
       try {
         const message = JSON.parse(event.data);
         if (message.type === "audio") {
+          console.log(
+            "Received audio",
+            indexWebsocket.current,
+            message.index,
+            message.data.length
+          );
+          indexWebsocket.current += 1;
           setAudioQueue((prev) => [
             ...prev,
             Buffer.from(message.data, "base64"),
